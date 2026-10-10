@@ -179,3 +179,32 @@ nennen mindestens zwei CPUs/4 GB und empfehlen vier CPUs/8 GB. Collector-Request
 auf Cluster 2 betragen 10m CPU je Node-Prozess; das behebt Scheduling-Engpässe,
 aber keinen Speichermangel des API-Servers. Prometheus-Konfigurationsänderungen
 benötigen im bestehenden eigenständigen Deployment zusätzlich SIGHUP oder Pod-Rollout.
+
+### Wiederanlauf nach VM-Erweiterung
+
+`cp-2` wurde auf vier vCPU/6 GB erweitert und meldete nach der Reparatur Ready.
+Beim ersten Boot war die Systemzeit rund acht Stunden voraus. Kubelet-, Kube-Proxy-
+und RKE2-Controller-Zertifikate hatten dadurch `notBefore=11.10.2026 04:37 UTC`,
+während nach NTP-Abgleich der 10.10.2026 21:42 UTC galt. Kubelet wurde mit Unauthorized
+abgewiesen. Nach Prüfung aller drei gesunden etcd-Endpunkte wurde ausschließlich auf
+`cp-2` RKE2 gestoppt, `rke2 certificate rotate --service kubelet --service kube-proxy
+--service rke2-controller` ausgeführt und RKE2 gestartet. Die installierte CLI benötigt
+wiederholte `--service`-Optionen; eine kommaseparierte Liste wird abgewiesen.
+RKE2 legte seine Sicherung unter `/var/lib/rancher/rke2/server/tls-1791668592` an.
+Keine CA- oder etcd-Zertifikate wurden rotiert. Danach waren Node und alle drei
+etcd-Endpunkte gesund.
+
+`config/host-recovery/10-afi-wait-for-time.conf` wurde auf allen drei Control-Plane-
+Nodes unter `/etc/systemd/system/rke2-server.service.d/` installiert und mit
+`systemctl daemon-reload` geladen. Es verändert keinen laufenden Dienst, verhindert
+aber beim nächsten Start die Zertifikatsausstellung vor erfolgreichem Chrony-Abgleich.
+`chronyc waitsync 120 1 0 1` prüft bis zu 120-mal im Sekundenabstand Synchronisation
+und weniger als eine Sekunde Restkorrektur. Ohne erfolgreiche Synchronisation schlägt
+der Startversuch fehl; systemd versucht ihn gemäß bestehender Restart-Regel erneut.
+Die Datei ist Hostkonfiguration und kein Fleet-Bundle. Reproduktion: Datei mit Modus
+0644 installieren, `systemctl daemon-reload`; Rücknahme: nur dieses Drop-in entfernen
+und erneut daemon-reload. Ursache der falschen Zeit beim VM-Boot zusätzlich auf
+Hypervisor-/RTC-Ebene untersuchen.
+
+Quellen: [RKE2-Zertifikatsverwaltung](https://docs.rke2.io/security/certificates),
+[Chrony waitsync](https://chrony-project.org/doc/4.6.1/chronyc.html).
