@@ -39,6 +39,8 @@ spec:
   - bundles/infrastructure/secrets/platform/afi-logging
   - bundles/application/logging/monitoring
   - bundles/infrastructure/observability/logging-monitoring
+  - bundles/application/logging/storage
+  - bundles/infrastructure/logging/storage
   targets:
   - name: lab-infrastructure
     clusterSelector:
