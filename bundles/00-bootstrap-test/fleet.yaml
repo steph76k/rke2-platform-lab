@@ -1,5 +1,9 @@
 name: lab-bootstrap-test
 defaultNamespace: fleet-poc
+
+helm:
+  releaseName: lab-bootstrap-test
+
 overrideTargets:
   - name: lab-infrastructure
     clusterSelector:
