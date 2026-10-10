@@ -19,6 +19,7 @@ bestehen; Cluster 1 wurde nicht umgebaut. OpenBao bleibt auf K3s.
 - [Installationsreihenfolge, Löschliste und Rollback](docs/migration-plan.md)
 - [Reproduzierbare Schema-/Chart-Validierung](docs/validation.md)
 - [Reparatur des Logging-Systemfehlers](docs/logging-system-follow-up.md)
+- [Rancher-Logging-Installationswerte ohne doppelte Sammlung](docs/rancher-logging-installation.md)
 
 ## Betrieb
 

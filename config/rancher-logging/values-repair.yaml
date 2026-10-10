@@ -1,4 +1,9 @@
 # Overlay for the existing Rancher Helm release; use --reuse-values.
-# Keep the root logging pipeline on its existing empty loggingRef.
+# Rancher's root pipeline remains enabled and collects all container logs.
 logging:
-  loggingRef: rancher-logging
+  enabled: false
+  loggingRef: ""
+  fluentbitDisabled: false
+additionalLoggingSources:
+  rke2:
+    enabled: true
