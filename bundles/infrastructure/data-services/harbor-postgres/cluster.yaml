@@ -10,15 +10,6 @@ spec:
   enablePDB: true
   affinity:
     podAntiAffinityType: preferred
-  topologySpreadConstraints:
-  - maxSkew: 1
-    topologyKey: kubernetes.io/hostname
-    whenUnsatisfiable: DoNotSchedule
-    nodeTaintsPolicy: Honor
-    labelSelector:
-      matchLabels:
-        cnpg.io/cluster: harbor-ha-db
-        cnpg.io/podRole: instance
   resources:
     limits:
       cpu: 500m
