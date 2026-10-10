@@ -1,5 +1,13 @@
 antiAffinity: soft
 antiAffinityTopologyKey: kubernetes.io/hostname
+topologySpreadConstraints:
+- maxSkew: 1
+  topologyKey: kubernetes.io/hostname
+  whenUnsatisfiable: DoNotSchedule
+  nodeTaintsPolicy: Honor
+  labelSelector:
+    matchLabels:
+      app.kubernetes.io/instance: opensearch
 clusterName: opensearch-cluster
 config:
   opensearch.yml: |
