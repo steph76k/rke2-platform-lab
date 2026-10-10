@@ -23,6 +23,7 @@ spec:
   - bundles/infrastructure/data-services/harbor-postgres
   - bundles/infrastructure/data-services/redis-replication
   - bundles/infrastructure/data-services/harbor-storage
+  - bundles/infrastructure/applications/opensearch
   targets:
   - name: lab-infrastructure
     clusterSelector:
