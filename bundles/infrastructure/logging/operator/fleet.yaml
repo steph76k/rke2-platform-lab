@@ -16,6 +16,6 @@ overrideTargets:
       role: infrastructure
 dependsOn:
 - name: lab-infra-logging-crds
-- name: lab-infra-logging-storage
+- name: lab-infra-storage-class
 kustomize:
   dir: overlays/persistent-journal

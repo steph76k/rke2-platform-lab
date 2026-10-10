@@ -16,6 +16,5 @@ overrideTargets:
       role: applications
 dependsOn:
 - name: lab-app-logging-crds
-- name: lab-app-logging-storage
 kustomize:
   dir: overlays/persistent-journal
