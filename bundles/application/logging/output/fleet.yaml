@@ -10,4 +10,4 @@ overrideTargets:
       role: applications
 dependsOn:
 - name: lab-app-logging-operator
-- name: lab-app-logging-secrets
+- name: lab-app-afi-logging-secrets

@@ -48,6 +48,13 @@ fluentd:
     pvc:
       source:
         claimName: afi-fluentd-buffer
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: longhorn-platform
+        resources:
+          requests:
+            storage: 20Gi
   replicas: 1
   resources:
     requests:
