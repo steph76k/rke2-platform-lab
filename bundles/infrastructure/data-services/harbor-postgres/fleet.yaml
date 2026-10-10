@@ -1,0 +1,13 @@
+name: lab-infra-harbor-postgres
+defaultNamespace: harbor-ha
+helm:
+  releaseName: lab-infra-harbor-postgres
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
+dependsOn:
+- name: lab-infra-cnpg
+- name: lab-infra-postgresql-secrets

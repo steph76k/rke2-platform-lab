@@ -1,0 +1,12 @@
+name: lab-infra-harbor-storage
+defaultNamespace: harbor-ha
+helm:
+  releaseName: lab-infra-harbor-storage
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
+dependsOn:
+- name: lab-infra-secret-stores

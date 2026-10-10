@@ -1,0 +1,19 @@
+name: lab-infra-redis-replication
+defaultNamespace: harbor-ha
+helm:
+  releaseName: redis-replication
+  repo: https://ot-container-kit.github.io/helm-charts/
+  chart: redis-replication
+  version: 0.17.1
+  valuesFiles:
+  - values.yaml
+  timeoutSeconds: 900
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
+dependsOn:
+- name: lab-infra-redis-operator
+- name: lab-infra-redis-secrets

@@ -1,0 +1,16 @@
+name: lab-infra-cnpg
+defaultNamespace: cnpg-system
+helm:
+  releaseName: cnpg
+  repo: https://cloudnative-pg.github.io/charts
+  chart: cloudnative-pg
+  version: 0.29.1
+  valuesFiles:
+  - values.yaml
+  timeoutSeconds: 900
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure

@@ -1,0 +1,48 @@
+# INVENTORY ONLY – redacted; never deploy this file.
+pdb:
+  enabled: false
+  maxUnavailable: 1
+redisReplication:
+  clusterSize: 3
+  image: quay.io/opstree/redis
+  name: redis-replication
+  redisSecret:
+    secretKey: password
+    secretName: redis-secret
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  tag: v7.0.15
+sentinel:
+  announceHostnames: 'no'
+  downAfterMilliseconds: '5000'
+  enabled: true
+  failoverTimeout: '10000'
+  image: quay.io/opstree/redis-sentinel
+  parallelSyncs: '1'
+  redisSecret:
+    secretKey: password
+    secretName: redis-secret
+  resolveHostnames: 'no'
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+  size: 3
+  tag: v7.0.15
+storageSpec:
+  volumeClaimTemplate:
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
+      storageClassName: longhorn

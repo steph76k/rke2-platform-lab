@@ -1,0 +1,19 @@
+name: lab-infra-opensearch-dashboards
+defaultNamespace: opensearch
+helm:
+  releaseName: opensearch-dashboards
+  repo: https://opensearch-project.github.io/helm-charts/
+  chart: opensearch-dashboards
+  version: 3.9.0
+  valuesFiles:
+  - values.yaml
+  timeoutSeconds: 900
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
+dependsOn:
+- name: lab-infra-opensearch
+- name: lab-infra-opensearch-secrets

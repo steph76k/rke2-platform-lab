@@ -1,0 +1,79 @@
+core:
+  replicas: 2
+  existingSecret: platform-harbor-core
+  existingXsrfSecret: platform-harbor-core
+  existingXsrfSecretKey: CSRF_KEY
+  secretName: platform-harbor-token-tls
+database:
+  external:
+    coreDatabase: harbor-ha
+    existingSecret: platform-harbor-postgresql
+    host: harbor-ha-db-rw.harbor-ha.svc.cluster.local
+    port: '5432'
+    sslmode: require
+    username: harbor-ha
+  type: external
+existingSecretAdminPassword: platform-harbor-admin
+existingSecretSecretKey: platform-harbor-key
+expose:
+  ingress:
+    annotations: {}
+    className: cilium
+    hosts:
+      core: harbor-ha.berger.ph
+  tls:
+    enabled: true
+    certSource: secret
+    secret:
+      secretName: platform-harbor-ingress-tls
+  type: ingress
+externalURL: https://harbor-ha.berger.ph
+jobservice:
+  jobLoggers:
+  - database
+  replicas: 2
+  existingSecret: platform-harbor-jobservice
+  existingSecretKey: JOBSERVICE_SECRET
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+persistence:
+  enabled: true
+  imageChartStorage:
+    type: filesystem
+  persistentVolumeClaim:
+    registry:
+      existingClaim: harbor-registry
+    trivy:
+      storageClass: longhorn
+      accessMode: ReadWriteOnce
+      size: 5Gi
+  resourcePolicy: keep
+portal:
+  replicas: 2
+redis:
+  external:
+    addr: redis-replication-master.harbor-ha.svc.cluster.local:6379
+    existingSecret: platform-harbor-redis
+    sentinelMasterSet: ''
+  type: external
+registry:
+  replicas: 2
+  existingSecret: platform-harbor-registry
+  existingSecretKey: REGISTRY_HTTP_SECRET
+  credentials:
+    username: harbor_registry_user
+    existingSecret: platform-harbor-registry-auth
+trivy:
+  enabled: true
+  replicas: 1
+  resources:
+    limits:
+      cpu: '1'
+      memory: 2Gi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
+caSecretName: platform-harbor-ingress-tls

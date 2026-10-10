@@ -1,0 +1,30 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: harbor-ha-db
+  namespace: harbor-ha
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.3
+  instances: 3
+  enableSuperuserAccess: false
+  enablePDB: true
+  affinity:
+    podAntiAffinityType: preferred
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  storage:
+    size: 1Gi
+    storageClass: longhorn
+  primaryUpdateStrategy: unsupervised
+  primaryUpdateMethod: restart
+  bootstrap:
+    initdb:
+      database: harbor-ha
+      owner: harbor-ha
+      secret:
+        name: platform-harbor-postgresql

@@ -1,0 +1,16 @@
+name: lab-infra-external-secrets
+defaultNamespace: external-secrets
+helm:
+  releaseName: external-secrets
+  repo: https://charts.external-secrets.io
+  chart: external-secrets
+  version: 2.11.0
+  valuesFiles:
+  - values.yaml
+  timeoutSeconds: 900
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure

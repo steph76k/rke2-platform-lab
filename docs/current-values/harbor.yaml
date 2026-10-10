@@ -1,0 +1,65 @@
+# INVENTORY ONLY – redacted; never deploy this file.
+core:
+  replicas: 2
+database:
+  external:
+    coreDatabase: harbor-ha
+    existingSecret: harbor-ha-db-app
+    host: harbor-ha-db-rw.harbor-ha.svc.cluster.local
+    port: '5432'
+    sslmode: require
+    username: harbor-ha
+  type: external
+existingSecretAdminPassword: harbor-admin
+existingSecretSecretKey: harbor-secret-key
+expose:
+  ingress:
+    annotations: {}
+    className: cilium
+    hosts:
+      core: harbor-ha.berger.ph
+  tls:
+    certSource: auto
+    enabled: true
+  type: ingress
+externalURL: https://harbor-ha.berger.ph
+jobservice:
+  jobLoggers:
+  - database
+  replicas: 2
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+persistence:
+  enabled: true
+  imageChartStorage:
+    type: filesystem
+  persistentVolumeClaim:
+    registry:
+      existingClaim: harbor-registry
+  resourcePolicy: keep
+portal:
+  replicas: 2
+redis:
+  external:
+    addr: redis-replication-master.harbor-ha.svc.cluster.local:6379
+    existingSecret: harbor-redis
+    sentinelMasterSet: ''
+  type: external
+registry:
+  replicas: 2
+trivy:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClass: longhorn
+  replicas: 1
+  resources:
+    limits:
+      cpu: '1'
+      memory: 2Gi
+    requests:
+      cpu: 200m
+      memory: 512Mi

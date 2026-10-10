@@ -1,0 +1,57 @@
+antiAffinity: soft
+antiAffinityTopologyKey: kubernetes.io/hostname
+clusterName: opensearch-cluster
+config:
+  opensearch.yml: |
+    cluster.name: opensearch-cluster
+    network.host: 0.0.0.0
+    plugins.security.ssl.transport.pemcert_filepath: tls/tls.crt
+    plugins.security.ssl.transport.pemkey_filepath: tls/tls.key
+    plugins.security.ssl.transport.pemtrustedcas_filepath: tls/ca.crt
+    plugins.security.ssl.transport.enforce_hostname_verification: false
+    plugins.security.ssl.http.enabled: true
+    plugins.security.ssl.http.pemcert_filepath: tls/tls.crt
+    plugins.security.ssl.http.pemkey_filepath: tls/tls.key
+    plugins.security.ssl.http.pemtrustedcas_filepath: tls/ca.crt
+    plugins.security.nodes_dn:
+    - CN=opensearch-nodes
+    plugins.security.authcz.admin_dn:
+    - CN=opensearch-admin
+    plugins.security.allow_default_init_securityindex: true
+    plugins.security.restapi.roles_enabled:
+    - all_access
+    - security_rest_api_access
+extraEnvs:
+- name: DISABLE_INSTALL_DEMO_CONFIG
+  value: 'true'
+nodeGroup: master
+persistence:
+  accessModes:
+  - ReadWriteOnce
+  enabled: true
+  size: 10Gi
+  storageClass: longhorn
+replicas: 3
+resources:
+  limits:
+    cpu: '2'
+    memory: 2Gi
+  requests:
+    cpu: 250m
+    memory: 1Gi
+roles:
+- master
+- ingest
+- data
+- remote_cluster_client
+service:
+  type: ClusterIP
+securityConfig:
+  enabled: true
+  config:
+    securityConfigSecret: platform-opensearch-security
+    data: {}
+secretMounts:
+- name: opensearch-tls
+  secretName: platform-opensearch-tls
+  path: /usr/share/opensearch/config/tls
