@@ -56,7 +56,7 @@ Nach der Terraform-Projektbindung: Zugriff auf Mandant A HTTP 200, Zugriff auf d
 fremde Project-1 verweigert (403/404). Beide temporären Testidentitäten wurden nach
 Verwendung aus Keycloak und Rancher entfernt. Kein vorhandener Benutzer wurde geändert.
 
-Mandanten-Terraform liegt separat unter `/home/tanzu/manifest/rke2-tenants-lab`.
+Mandanten-Terraform liegt separat unter `/home/tanzu/manifest/fleet/rke2-tenants-lab`.
 Es importiert die bestehende Gruppe und das Projekt `c-m-prkskj2p:p-9nh78` und bindet
 `keycloakoidc_group://mandant-a` an `project-member`. Eine weitere Testkonfiguration
 wurde nur geplant, nicht provisioniert. Lokale Adminrechte gehören nicht zum Modul.

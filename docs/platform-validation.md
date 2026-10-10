@@ -4,7 +4,7 @@
 
 Am 10.10.2026 wurden die genehmigten Folgearbeiten umgesetzt: Cluster-1-Logging,
 Rancher-OIDC mit berger, MinIO-Lab auf Cluster 2 und Mandant-A-Terraform im separaten
-Repository `/home/tanzu/manifest/rke2-tenants-lab`.
+Repository `/home/tanzu/manifest/fleet/rke2-tenants-lab`.
 
 - Fleet: **28/28 Repository-Bundles Ready**; drei zusätzliche Fleet-Agent-Bundles separat.
 - Cluster 1: fünf Nodes Ready, zwei ClusterSecretStores Ready, fünf ExternalSecrets SecretSynced.
@@ -153,7 +153,10 @@ Upstream-Chart-Lint-Einschränkung stehen im [Logging-Bericht](logging-validatio
 | f00df90 (Tenant-Repo) | Verifizierte State-Sicherung dokumentiert |
 
 Der abschließende Dokumentations-Commit verändert keine aktiven Fleet-Bundle-Dateien.
-Das Tenant-Repository hat keinen Remote und wurde deshalb nur lokal committet.
+Das Tenant-Repository wurde zunächst nur lokal committet. Anschließend wurden Dateien,
+lokaler State und beide Commits in das vorhandene Repository unter
+`/home/tanzu/manifest/fleet/rke2-tenants-lab` übernommen; dessen Remote ist
+`git@github.com:steph76k/rke2-tenants-lab.git`. Der State bleibt von Git ausgeschlossen.
 
 Bekannte aktuelle Plattform-Zugangsdaten mit mindestens zwölf Zeichen wurden in
 Klartext-/Base64-Darstellung gegen die Dateien beider Arbeitsbäume geprüft: keine
