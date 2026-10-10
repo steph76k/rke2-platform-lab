@@ -17,7 +17,7 @@ config:
     - CN=opensearch-nodes
     plugins.security.authcz.admin_dn:
     - CN=opensearch-admin
-    plugins.security.allow_default_init_securityindex: true
+    plugins.security.allow_default_init_securityindex: false
     plugins.security.restapi.roles_enabled:
     - all_access
     - security_rest_api_access
@@ -54,4 +54,5 @@ securityConfig:
 secretMounts:
 - name: opensearch-tls
   secretName: platform-opensearch-tls
+  defaultMode: 288
   path: /usr/share/opensearch/config/tls
