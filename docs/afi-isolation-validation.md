@@ -3,12 +3,13 @@
 ## Stand und Abnahmegrenze
 
 Harbor-OIDC, OpenSearch-OIDC/Indexrechte, Mandanten A/B, Remote-State und Logging-
-Monitoring sind aktiv. Beide Terraform-Pläne zeigen keine Änderungen. Die persistente
-Pufferung wurde an einem separaten Collector funktional nachgewiesen. Die Umstellung
-der bestehenden Collector-Pipeline und das Namespace-Routing sind vorbereitet und
-warten auf die explizite Freigabe nach Auftrag §8.7. Daher ist die vollständige
-Produktionspipeline noch nicht abgenommen; bestehende Logs laufen weiterhin in die
-alten gemischten Indizes, die neue Mandantenrollen ausdrücklich nicht lesen dürfen.
+Monitoring sind aktiv. Die Terraform-Pläne zeigten bei der Abnahme keine Änderungen.
+Der anschließend freigegebene Live-Rollout ist auf Cluster 1 aktiv: persistente
+Collector-Puffer und echte Namespace-Routen wurden installiert; Routing/OIDC für
+A/B sind erfolgreich geprüft. Cluster 2 hat noch die alte zentrale Queue und wartet
+auf Ressourcenstabilisierung sowie vollständigen Drain. Die gesamte Plattform ist
+wegen dieser verbleibenden Cluster-2-Arbeiten noch nicht abschließend abgenommen.
+Details: [Logging-Rollout](afi-logging-rollout.md).
 
 ## Umgesetzte Konfiguration
 
@@ -33,8 +34,8 @@ alten gemischten Indizes, die neue Mandantenrollen ausdrücklich nicht lesen dü
 - Terraform: A übernommen, B zusätzlich erstellt, Gruppen/Rancher/Namespaces/Harbor/
   OpenBao/ESO/OpenSearch deklarativ verwaltet. Separate verschlüsselte und versionierte
   MinIO-States, eigene Backend-Zugänge, natives S3-Locking, geprüfte SOPS-Sicherungen.
-- Prometheus: fünf Fluent-Bit- und ein Fluentd-Target je Cluster, sieben Alertregeln.
-  Die PVC-Überwachung wird zusammen mit dem vorbereiteten Metrics-Sidecar wirksam.
+- Prometheus: zwölf erreichbare Targets auf Cluster 1 einschließlich Journald und
+  PVC-Metrics; sieben gesunde Alertregeln. Cluster 2 ist noch nicht vollständig ausgerollt.
 
 ## Funktionale Nachweise
 
@@ -77,8 +78,8 @@ nicht verwendet werden; dessen Systemkonfiguration wurde nicht verändert.
 | Terraform A/B | Kein Drift | `plan -detailed-exitcode`: jeweils 0 | PASS |
 | Monitoring | Targets/Regeln aktiv | Je sechs Targets Up, sieben Regeln gesund | PASS |
 | Alertlogik | Ausfall löst aus, Normalfall nicht | promtool: alle sieben Regeln mit positiven/negativen Reihen erfolgreich | PASS |
-| Reale Namespace-Routen und gefälschte Metadaten | Richtiger Tenant, keine Umgehung | Vorbereitet; Live-Rollout noch nicht freigegeben | OFFEN |
-| Persistenz der bestehenden Collector-Pipeline | Neustartfest | Konfiguration vorbereitet; separater Test ersetzt Live-Nachweis nicht | OFFEN |
+| Reale Namespace-Routen und gefälschte Metadaten | Richtiger Tenant, keine Umgehung | A/B: eigene reale Pod-Logs 200, fremde 403; Forward blockiert; Label-/JSON-Manipulation unwirksam | PASS Cluster 1 |
+| Persistenz des realen Cluster-1-Collectors | Neustartfest | Echter Pod ersetzt, gleicher PVC, Queue erhalten, 50/50 Marker, 0 Duplikate | PASS Cluster 1; Cluster 2 offen |
 
 Die 50-Record-Prüfung belegt die getestete Ausfall-/Neustartfolge und ist keine allgemeine
 Exactly-once- oder Kapazitätsgarantie. Ein vollständiger Cluster-Ausfall wurde nicht erzeugt.

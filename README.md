@@ -2,20 +2,21 @@
 
 Rancher Fleet verwaltet die Plattformkomponenten auf `rke2-cluster1` und
 `rke2-cluster2` aus `steph76k/rke2-platform-lab`, Branch `main`. Der aktuelle Stand
-umfasst 32 aktive Bundles für Plattformdienste, Secret-Zustellung, Logging und Monitoring.
+umfasst 34 aktive Bundles für Plattformdienste, Secret-Zustellung, Logging und Monitoring.
 OpenBao bleibt auf K3s; Mandanten und Berechtigungen verwaltet das separate
 Terraform-Repository `rke2-tenants-lab`.
 
 Die AFI-Erweiterung richtet OIDC und getrennte Zugriffe für Mandant A/B ein. Die
-Umstellung der bestehenden Logging-Collector auf persistente Puffer und neue
-Mandantenrouten liegt unter `config/afi-isolation/rollout/` zur Freigabe bereit.
+freigegebene Logging-Umstellung ist auf Cluster 1 aktiv; die realen Mandantenrouten
+und OIDC-Zugriffe wurden geprüft. Cluster 2 befindet sich wegen Speicherdruck auf
+den Control-Plane-Nodes noch im gestuften Rollout.
 Historische Migrationsberichte dokumentieren den zuvor freigegebenen Lab-Neuaufbau.
 
 ## Dokumentation
 
 - [AFI-Mandantentrennung: Umsetzung und Testnachweis](docs/afi-isolation-validation.md)
 - [AFI-Konzept und Zuständigkeiten](docs/afi-isolation-design.md)
-- [Vorbereitete Logging-Umstellung und Kapazität](docs/afi-logging-rollout.md)
+- [Logging-Umstellung, Betriebsbefunde und Kapazität](docs/afi-logging-rollout.md)
 
 - [Aktuelle Plattformvalidierung](docs/platform-validation.md)
 - [Logging-Abnahme und vorbereiteter Cluster-1-Rollout](docs/logging-validation.md)
