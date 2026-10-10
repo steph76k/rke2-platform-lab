@@ -5,11 +5,6 @@ P3 spätere Erweiterung. Alle Ergebnisse beziehen sich auf den aktuellen Lauf.
 
 | Priorität | Thema | Status | Konkreter nächster Schritt |
 | --- | --- | --- | --- |
-| P1 | Cluster-1-Logging nicht ausgerollt | Freigabe erforderlich | Ausschließlich neue OpenBao-Rolle auth/rke2-cluster1/role/eso-logging aus vorhandener JSON-Datei erlauben; bestehende Policy unverändert verwenden |
-| P1 | Clusterübergreifender Logtransport | Noch nicht getestet | Nach Rollenfreigabe gestufter Fleet-Rollout der fünf vorbereiteten Bundles; VIP 192.168.1.196 erneut prüfen, TLS/SNAT/Quelladressbegrenzung testen |
-| P1 | Cluster-1-Ingestion/Metadaten/Duplikate | Noch nicht getestet | Nach Deployment je Worker eigene nummerierte Marker, OpenSearch und Dashboards, erneute Zählung nach Pufferintervallen; nur Test-Pods entfernen |
-| P1 | Aktives Rancher-OIDC zeigt auf gelöschten Realm | Fehlgeschlagen | myrealm Discovery 404; im Realm berger fehlt Client rancher. Separat freizugebenden Reparaturplan in keycloak-rancher-integration.md ausführen |
-| P1 | Sicherer Notfallzugang | Noch nicht getestet | Frischen lokalen Admin-Passwortlogin und direkten nativen K3s-Adminzugang vor OIDC-Änderung nachweisen; Konfiguration/Binding existieren |
 | P1 | Log-Mandantentrennung | Freigabe erforderlich | Tenant-Index-/Leserechtemodell, vertrauenswürdige Namespace-Zuordnung und negative Zugriffstests beschließen; aktuelle gemeinsame Logging-Identität hat crud auf kubernetes-* |
 | P2 | Direkte Cluster-2-Kubeconfig | Fehlgeschlagen | Bestehende Datei liefert Unauthorized. Rancher-Proxy funktioniert; separat native kubeconfig erneuern, ohne Token in Git |
 | P2 | Dashboards HTTP / fehlende Index Patterns | Freigabe erforderlich | Öffentliche HTTPS-Route und dauerhaftes Discover-Index-Pattern festlegen. Aktueller Login/Suche ausschließlich geschützt getunnelt; keine gespeicherten Ansichten verändert |
@@ -19,34 +14,35 @@ P3 spätere Erweiterung. Alle Ergebnisse beziehen sich auf den aktuellen Lauf.
 | P2 | Worker-Ausfallsicherheit | Noch nicht getestet | PostgreSQL/OpenSearch auf Worker 2 konzentriert; vom Betreiber akzeptierte Lab-Einschränkung, Kapazität/Verteilung später planen |
 | P2 | Persistente Logging-Puffer | Freigabe erforderlich | Root-Fluentd flüchtig wie bisher, keine Zusage bei Podverlust. Persistenz/Positionsdaten/Retention separat entwerfen |
 | P2 | Cluster-2-Cluster-Metadatum | Freigabe erforderlich | Bestehende Pipeline enthält host, aber kein explizites cluster_name; Zusatzfeld nur in abgestimmter Änderung ergänzen |
-| P2 | Logging-CRD-Chart-Metadaten | Fehlgeschlagen (Lint) | Offizieller gepinnter Chart v1+type verursacht bekannten Lintfehler. Render und 38 Ressourcen-Schemas bestehen; vor Rollout Runtime-Abnahme verlangen |
+| P2 | Logging-CRD-Chart-Metadaten | Fehlgeschlagen (Lint) | Offizieller gepinnter Chart v1+type verursacht bekannten Lintfehler. Render und 38 Ressourcen-Schemas bestehen; Runtime-Abnahme erfolgreich; Metadatenfehler bei späterem Chart-Upgrade erneut prüfen |
 | P2 | Vollständige GitOps-Reproduktion | Noch nicht getestet | Cluster-/Netzwerk-/Longhorn-/OpenBao-Basis und Cluster-2-Logging-Systeminstallation als externe Bootstrap-Abhängigkeiten schließen |
 | P2 | Konsistente Backups und Restore | Noch nicht getestet | OpenBao, Harbor-DB+Blobs, OpenSearch und Keycloak konsistent sichern; später genehmigte isolierte Restore-Probe mit RPO/RTO |
 | P2 | Zertifikatsrotation | Noch nicht getestet | Lab-Zertifikate Harbor/OpenSearch laufen 10.10.2027 ab; koordinierte Rotation/Security-Index-Änderungen planen |
 | P2 | Keycloak-Altbindungen / Realm-Schutz | Freigabe erforderlich | Stale G_Admin/G_Developer/G_Viewer-Bindungen und unrestricted-Modus prüfen; keine automatische Neuanlage gleichnamiger Admin-Gruppe. Brute-force-Schutz derzeit aus |
 | P2 | Keycloak-Secret-Verwaltung | Freigabe erforderlich | Bootstrap-Admin-/DB-Zugangsdaten liegen als Literal-Env im bestehenden StatefulSet; später kontrolliert in Secret-Verwaltung überführen, ohne ungeprüfte Rotation |
-| P3 | Terraform-Mandanten | Freigabe erforderlich | Bestehende Gruppen/Projekte importieren, Provider pinnen, State schützen, Plan prüfen; kein Apply erfolgt |
-| P3 | MinIO | Freigabe erforderlich | Separate Folgephase; in diesem Lauf weder installiert noch konfiguriert. Bereits vorhandenes loki-minio auf Cluster 1 wurde nicht verändert |
 | P3 | Aktiver Redis-/PostgreSQL-Failover | Freigabe erforderlich | Kein Failover im aktuellen Lauf; Auswirkungen auf Harbor und Wartungsfenster zuerst genehmigen |
 
-## Erledigte Prüfungen
+## Aktuelle Ergänzungen
 
-Fleet 20/20 Repository-Bundles und 23/23 einschließlich Agenten Ready.
-Harbor TLS/Auth/Push/Pull/Trivy und Cleanup erfolgreich. PostgreSQL TLS/App-Login
-und Streaming-Replikation, Redis/Sentinel-Quorum, OpenSearch green sowie elf
-Longhorn-Plattformvolumes geprüft. ESO 4/4 und 18/18 SecretSynced; OpenBao-Login
-und erlaubter/verbotener KV-Zugriff geprüft. Cluster-2-Testlogs exakt einmal in
-OpenSearch und über Dashboards gefunden. Keine aktuellen Plattform-Secrets in
-Arbeitsbaum oder erreichbarer Git-Historie gefunden; Scan-Grenzen im Prüfbericht.
+| Priorität | Thema | Status / nächster Schritt |
+| --- | --- | --- |
+| P2 | Frühe Startlogs / Positionsdaten | Collector liest neu entdeckte Dateien ab Ende; frühe Meldungen kurzlebiger Pods können fehlen. Persistente Positionsdaten und Read_From_Head zusammen umsetzen und gegen Duplikate nach Neustarts testen |
+| P2 | MinIO-Betriebsgrenzen | Einzelne Instanz, keine HA-/Restore-Abnahme; Daten-PVC Retain auf StatefulSet-Lebenszyklus, StorageClass selbst reclaimPolicy=Delete. PVC nicht zur Neuinstallation löschen |
+| P2 | MinIO-Imagepflege | Archivierter Upstream, eigener dokumentierter Build; tatsächliche Scanresultate und Dependency-Korrekturen in minio-lab.md beachten |
+| P2 | Terraform-State | Geschützter lokaler State, kein Remote konfiguriert; vor Team-/CI-Nutzung verschlüsseltes Backend mit Locking und eingeschränkten Servicekonten einrichten |
+| P2 | Terraform-Mandantenumfang | Grundstruktur/ESO und Rancher-Rechte umgesetzt; Harbor-OIDC/Berechtigungen, OpenBao-Benutzer-OIDC für neue Mandanten, Quotas/NetworkPolicies und Log-Leserollen fehlen noch |
+| P2 | Dauerhafte Recovery-Ablage | Verifizierte lokale Backups liegen unter /home/tanzu/manifest/backups/platform-rollout-2026-10-10, neue Identität separat unter .local-recovery-keys. Off-host sichern. Alte konfigurierte SOPS-Identität ungültig; ursprünglicher Datenbankdump nicht verifizierbar. Nativer K3s-Token läuft nach zwei Stunden ab |
 
-## Rollout- und Push-Grenze
+## Erledigt
 
-Die neuen Logging-Verzeichnisse sind **nicht** in fleet/gitrepo.yaml aufgenommen.
-Der Dokumentations-/Vorbereitungs-Push ändert keinen aktiven Bundle-Pfad und löst
-keine Änderung bestehender Deployments aus. Die geplanten Pfade sind ausschließlich
-in config/rancher-logging/cluster1-paths-patch.yaml aufgeführt. Kein GitRepo-Apply,
-keine OpenBao-Rollenänderung und kein Auth-Wechsel in diesem Stand.
+Logging-Rolle nach Freigabe erstellt, fünf Logging-/Endpoint-Bundles ausgerollt,
+TLS-Transport und sechs eindeutige Testmeldungen inklusive Dashboards nachgewiesen.
+Rancher auf berger korrigiert, PKCE-Login und Projektzugriff getestet, lokaler Admin erhalten.
+MinIO mit Longhorn/TLS/ESO bereitgestellt und S3-Funktionen geprüft. Mandant A in separatem
+Terraform-Repository übernommen, abschließender Plan ohne Änderungen. 28/28 Plattform-
+Bundles Ready; ESO 5/5 beziehungsweise 21/21 SecretSynced; OpenSearch green und Harbor healthy.
+Frühere Harbor-/PostgreSQL-/Redis-/Sentinel-Prüfungen stehen in platform-validation.md.
 
-Nach Freigabe der Logging-Rolle zuerst Aufgabe A abschließen. Danach ausdrücklich
-über die Rancher-Keycloak-Reparatur und die anschließenden Phasen MinIO/Terraform
-entscheiden lassen. Diese Folgephasen bleiben bis zur Zustimmung gestoppt.
+Die Folgefreigaben sind erteilt und umgesetzt; ein erneuter Freigabestopp für diese
+bereits autorisierten Arbeiten besteht nicht. Nicht angeforderte Failover-/Restore-Tests
+und Änderungen bestehender Plattform-Berechtigungen wurden nicht ausgeführt.

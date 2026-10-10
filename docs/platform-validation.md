@@ -1,5 +1,32 @@
 # Plattformvalidierung – 10.10.2026
 
+## Abschluss nach Folgefreigabe
+
+Am 10.10.2026 wurden die genehmigten Folgearbeiten umgesetzt: Cluster-1-Logging,
+Rancher-OIDC mit berger, MinIO-Lab auf Cluster 2 und Mandant-A-Terraform im separaten
+Repository `/home/tanzu/manifest/rke2-tenants-lab`.
+
+- Fleet: **28/28 Repository-Bundles Ready**; drei zusätzliche Fleet-Agent-Bundles separat.
+- Cluster 1: fünf Nodes Ready, zwei ClusterSecretStores Ready, fünf ExternalSecrets SecretSynced.
+- Cluster 2: fünf Nodes Ready, sieben ClusterSecretStores Ready, 21 ExternalSecrets SecretSynced.
+- Sechs Cluster-1-Testmeldungen mit korrekten Metadaten genau einmal in OpenSearch und
+  über Dashboards gefunden; bestehende Cluster-2-Pipeline unverändert.
+- OIDC/PKCE-Login erfolgreich; lokale Adminrechte erhalten; Mandant-A-Projektzugriff
+  erlaubt und fremder Projektzugriff verweigert.
+- MinIO: 1/1 Ready, 20 GiB Longhorn-PVC Bound, TLS-S3 und Konsole; eigener S3-Test erfolgreich.
+- Terraform: bestehende Mandant-A-Ressourcen importiert, finales Plan-Ergebnis No changes;
+  neuer Mandant mit 16 Creates geplant, nicht angelegt.
+- OpenSearch weiterhin green; Harbor meldet alle acht Komponenten healthy.
+
+Details: [Logging](logging-validation.md), [OIDC](keycloak-rancher-integration.md),
+[MinIO](minio-lab.md), [offene Punkte](open-items.md),
+[Rollout-Evidenz](evidence/platform-rollout-2026-10-10.json).
+Die ursprüngliche Prüfung unten bleibt als zeitlich abgegrenzter Nachweis erhalten.
+Ihre Angaben zu fehlenden Freigaben und noch nicht installierten Folgekomponenten
+beschreiben ausschließlich den Zustand **vor** der späteren Umsetzung.
+
+## Ursprünglicher Audit vor Folgefreigabe
+
 Prüfung ab 16:54 UTC gegen den laufenden Bestand, ohne Failover oder Rebuild.
 Ausgangscommit: `38fda7680dfdb3310e40aac9886c6aeeb5aba811`.
 Statusbegriffe: **Erfolgreich getestet**, **Fehlgeschlagen**, **Noch nicht getestet**,
@@ -111,3 +138,25 @@ Lokale Prüfung: `scripts/validate.py` prüft einschließlich des inaktiven neue
 Endpoint-Bundles 19 Infrastruktur-Bundles, sieben Charts und 152 Ressourcen.
 Drei vorhandene Bootstrap-Tests erfolgreich. Neue Logging-Prüfung und bekannte
 Upstream-Chart-Lint-Einschränkung stehen im [Logging-Bericht](logging-validation.md).
+
+## Commit-Nachweise der freigegebenen Umsetzung
+
+| Commit | Änderung |
+| --- | --- |
+| c9426c3 | Cluster-1-CRDs/ESO und Cross-Cluster-Endpoint aktiviert |
+| edc731c | Cluster-1-Operator und TLS-OpenSearch-Ausgang aktiviert |
+| 588181a | Begrenztes Flush-Intervall für den neuen Ausgang |
+| 451cdb2 | MinIO/ESO/Harbor-CA auf Cluster 2 und gebündelte Log-Pufferung |
+| 750f707 | Eigentümerzuordnung des neuen MinIO-Namespace |
+| a1a8640 | MinIO-Abhängigkeiten korrigiert; Scan ohne Critical/High; Build-Rezept |
+| 7a64cb2 (Tenant-Repo) | Mandantenmodul und Import Mandant A |
+| f00df90 (Tenant-Repo) | Verifizierte State-Sicherung dokumentiert |
+
+Der abschließende Dokumentations-Commit verändert keine aktiven Fleet-Bundle-Dateien.
+Das Tenant-Repository hat keinen Remote und wurde deshalb nur lokal committet.
+
+Bekannte aktuelle Plattform-Zugangsdaten mit mindestens zwölf Zeichen wurden in
+Klartext-/Base64-Darstellung gegen die Dateien beider Arbeitsbäume geprüft: keine
+Treffer. Kurze allgemeine Zeichenfolgen sind aus diesem Substring-Test ausgeschlossen;
+der Test ist kein vollständiger Secret-Scanner. Provider-Anmeldedaten werden über
+Umgebungsvariablen verwendet, State/Pläne/Recovery-Schlüssel sind nicht in Git.

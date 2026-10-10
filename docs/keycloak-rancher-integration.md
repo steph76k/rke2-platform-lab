@@ -1,173 +1,96 @@
-# Rancher–Keycloak: Istzustand und Reparaturplan
+# Rancher–Keycloak – Umsetzung am 10.10.2026
 
-Stand: 10.10.2026, lesender Audit. **Keine Provider-, Client-, Gruppen-, Benutzer-
-oder Berechtigungsänderungen ausgeführt.** Eine spätere Umsetzung benötigt Freigabe.
+**Rancher verwendet jetzt den Realm berger. Vollständiger OIDC-Login erfolgreich getestet.**
+Die Umstellung erfolgte nach ausdrücklicher Folgefreigabe; der ursprüngliche Auftrag
+zur reinen Vorbereitung wurde damit erweitert. Rancher v2.14.3, Keycloak 26.3.4.
 
-## Tatsächlicher Istzustand
+## Fehlerbild und Umsetzung
 
-Die Annahme einer erst künftig zu aktivierenden Integration trifft nicht zu:
-Rancher **v2.14.3** hat `authconfig/keycloakoidc` bereits enabled=true.
-Der konfigurierte Realm existiert inzwischen nicht mehr. Lokale Anmeldung ist
-parallel aktiviert. Generic OIDC und Keycloak SAML enthalten keine aktivierte
-vergleichbare Konfiguration.
+Der bestehende, bereits aktivierte Provider `keycloakoidc` zeigte auf den nicht mehr
+vorhandenen Realm `myrealm` (HTTP 404). Im aktiven Realm `berger` fehlte der Client
+`rancher`. Der lokale Auth-Provider war parallel eingeschaltet.
 
-| Feld | Gefundener Wert / Ergebnis |
+Vor der Änderung wurden der lokale Admin-Passwortlogin (HTTP 201) und ein unabhängiger
+nativer K3s-API-Zugang nachgewiesen. Auth-Konfigurationen, lokaler Benutzer/Admin-Binding
+und Keycloak-Datenbank wurden zunächst geschützt gesichert. Bei der Abschlussprüfung
+erwies sich die zuvor konfigurierte SOPS-Identität als syntaktisch ungültig. Die noch
+vorhandenen ursprünglichen Auth-Konfigurationen und der nun funktionierende Nachher-Zustand
+wurden deshalb mit einer neuen Recovery-Identität erneut verschlüsselt und durch
+Entschlüsselung im Speicher geprüft. Verifizierte Backups liegen dauerhaft außerhalb
+beider Git-Repositories unter `/home/tanzu/manifest/backups/platform-rollout-2026-10-10`.
+Der native API-Token ist kurzlebig (zwei Stunden), kein dauerhafter Recovery-Zugang.
+
+Im Realm berger wurde ausschließlich der neue Client rancher angelegt. Der bestehende
+Rancher-Provider blieb aktiviert und wurde über die konkrete API
+`/v3/keyCloakOIDCConfigs/keycloakoidc` aktualisiert. Ein erster generischer API-Aufruf
+lieferte HTTP 500 und änderte die Konfiguration nicht; der konkrete Aufruf lieferte 200.
+
+| Einstellung | Aktiver Wert |
 | --- | --- |
-| Keycloak | https://idp.berger.ph; Cluster 1, Namespace keycloak; Image quay.io/keycloak/keycloak:26.3.4 |
-| Betriebszustand | StatefulSet 2/2 Ready, PostgreSQL 1/1 Ready; HTTPS geprüft |
-| Rancher-Provider | keycloakoidc, enabled=true, accessMode=unrestricted, groupSearchEnabled=true |
-| Rancher-Client-ID | rancher |
-| Alter Issuer | https://idp.berger.ph/realms/myrealm |
-| Alte Endpunkte | /realms/myrealm/protocol/openid-connect/auth und /userinfo |
-| Rancher-Callback | https://rancher.berger.ph/verify-auth |
-| Konfigurierter Scope | openid profile email |
-| Alter Realm | **Fehlgeschlagen:** Discovery und Admin-Abfrage liefern HTTP 404 |
-| Verfügbare Realms | master und berger, beide enabled |
-| Realm berger | **Erfolgreich getestet:** Discovery HTTP 200; sslRequired=external; Registrierung aus; bruteForceProtected=false |
-| Rancher-Client | **Nicht vorhanden:** Clientlisten in master und berger geprüft; in berger existiert unter anderem openbao |
-| Vorhandene Gruppen berger | /mandant-a und /openbao-platform-admins; keine Untergruppen und keine Realm-/Client-Rollenzuweisungen an diesen Gruppen |
-| Historische Gruppen | G_Admin/G_Developer/G_Viewer in Rancher-Bindungen vorhanden, in den aktuellen Keycloak-Gruppen nicht vorhanden |
-| Lokaler Notfallzugang | local auth enabled; Benutzer admin/user-bcld2 mit local://user-bcld2; GlobalRole admin durch globalrolebinding-dlck2 |
-| Lokales Passwortlogin | **Noch nicht getestet:** Konfiguration/Binding nachgewiesen, kein frisches Browser-Passwortlogin durchgeführt |
-| K3s-Notfallzugriff | **Noch nicht getestet:** vorhandene Management-Kontexte benutzen Rancher; unabhängiger direkter K3s-Adminzugriff vor Umschaltung sicherstellen |
-
-Der lokale Admin hat zusätzlich noch eine historische Keycloak-User-Principal-ID.
-Diese Verknüpfung bleibt unverändert. Alte User-UUIDs dürfen nicht auf neue Benutzer
-übertragen werden. Mangels altem Realm/Client sind frühere Client-Redirect-Listen,
-Mapper und Client-Scopes **nicht mehr aus Keycloak rekonstruierbar**. Der Callback
-und Scope oben stammen aus der erhaltenen Rancher-Konfiguration, nicht aus einem
-behaupteten alten Client-Export.
-
-Bestehende Rancher-Bindungen:
-
-| Principal | Bindung | Wirkung |
-| --- | --- | --- |
-| keycloakoidc_group://G_Admin | GlobalRoleBinding grb-8rwz4, admin | globale Administration |
-| keycloakoidc_group://G_Developer | GlobalRoleBinding grb-jf475, user-base | Basiszugriff |
-| keycloakoidc_group://G_Viewer | GlobalRoleBinding grb-p6xpn, user-base | Basiszugriff |
-| keycloakoidc_group://G_Developer | ProjectRoleTemplateBinding prtb-bdmdk | project-owner in c-m-prkskj2p:p-9gcht (Project-1) |
-
-Projekt **Mandant A** existiert bereits als `c-m-prkskj2p:p-9nh78`.
-Es wurde keine entsprechende Keycloak-Gruppen-Projektbindung gefunden.
-Die existierende Gruppe openbao-platform-admins erhält nicht automatisch Rancher-Adminrechte.
-Das Wiederanlegen von G_Admin könnte die alte globale Adminbindung wieder wirksam
-machen; diese Namen nicht ungeprüft für neue Gruppen verwenden.
-
-## Konkreter Sollstand nach separater Freigabe
-
-Empfehlung: den vorhandenen Realm **berger** verwenden und darin einen dedizierten
-Client **rancher** anlegen. Der vorhandene OpenBao-Client bleibt unverändert.
-Den bestehenden Rancher-Provider gezielt reparieren; keinen zweiten Provider als
-ungeprüften Ersatz aktivieren. Folgende Werte sind aus der funktionierenden
-Discovery abgeleitet:
-
-| Einstellung | Geplanter Wert |
-| --- | --- |
-| Client/Protokoll | rancher / OpenID Connect, confidential (Client authentication ON) |
-| Flow | Authorization Code / Standard Flow ON; Direct Access Grants OFF, Service Accounts OFF |
-| Redirect URI | exakt https://rancher.berger.ph/verify-auth, keine Wildcards |
-| Web Origin | exakt https://rancher.berger.ph |
+| Keycloak | https://idp.berger.ph |
 | Issuer | https://idp.berger.ph/realms/berger |
-| Authorization endpoint | https://idp.berger.ph/realms/berger/protocol/openid-connect/auth |
-| Token endpoint | https://idp.berger.ph/realms/berger/protocol/openid-connect/token |
-| Userinfo endpoint | https://idp.berger.ph/realms/berger/protocol/openid-connect/userinfo |
-| JWKS | https://idp.berger.ph/realms/berger/protocol/openid-connect/certs |
-| Scope | openid profile email; Gruppenmapper als dedizierte/default Client-Mapper |
-| Client Secret | neu für diesen Client, nur Secret-Speicher/geschützter Adminprozess; nie Git/Terraform-Variablendateien |
-| Endpunktmodus | manuelle/Discovery-basierte Endpunkte ohne historisches /auth-Präfix |
-| PKCE | S256 auf beiden Seiten konfigurieren und mit installierter Rancher-Version testen |
-| Zugangsmodus | bisher unrestricted; Einschränkung auf genehmigte Gruppen/Projektmitglieder als eigene geprüfte Berechtigungsänderung planen |
+| Client-ID | rancher, confidential |
+| Callback | https://rancher.berger.ph/verify-auth, exakt ohne Wildcard |
+| Web Origin | https://rancher.berger.ph |
+| Flow | Authorization Code, PKCE S256 |
+| Scopes | openid profile email |
+| Direct Password Grant / Service Account | ausgeschaltet |
+| Gruppenclaim | groups im UserInfo, kurze Gruppennamen |
+| Zusätzlicher Claim | full_group_path im ID-/Access-Token und UserInfo |
+| Audience | rancher im Access-Token |
+| Rancher accessMode | bestehendes unrestricted unverändert |
+| Lokaler Provider | weiterhin enabled=true |
 
-Vorgesehene Mapper entsprechend der [Rancher-Keycloak-OIDC-Anleitung](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-keycloak-oidc):
+Das Clientsecret wurde ausschließlich im Speicher zwischen den APIs übertragen.
+Keine Clientsecrets, Passwörter, Tokens oder privaten Schlüssel in Git.
+Der bestehende lokale Admin `user-bcld2`, seine Principals und
+`globalrolebinding-dlck2` blieben unverändert. Auch die historische OIDC-Verknüpfung
+am lokalen Admin wurde nicht umgebogen.
 
-- `groups`: Group Membership, Full group path OFF, Userinfo ON.
-- `full_group_path`: Group Membership, Full group path ON, ID-/Access-Token und Userinfo ON.
-- Audience: Client rancher im Access-Token.
+## End-to-End-Nachweis
 
-Claims müssen Arrays liefern. Nur genehmigte Gruppen verwenden; einen passenden
-Testbenutzer zur Freigabephase bestimmen. Für Rancher-Gruppensuche verlangt die
-Anleitung realm-management query-users/query-groups/view-users. Diese Leserechte
-nicht ungeprüft allen Mandanten geben: auf Plattform-Verantwortliche begrenzen und
-Gruppensuche/gebundene Anmeldung separat testen. Keine manage-users/realm-admin-Rechte
-als pauschale Lösung. Aktuelle Gruppen haben diese Rollen noch nicht.
+Eigener temporärer Benutzer in berger, Mitglied der bestehenden Gruppe mandant-a:
+normaler Keycloak-Login, Code-Callback und PKCE-Austausch durch Rancher HTTP 201.
+Rancher erkannte die neue Benutzer-UUID und `keycloakoidc_group://mandant-a`.
+Nach der Terraform-Projektbindung: Zugriff auf Mandant A HTTP 200, Zugriff auf das
+fremde Project-1 verweigert (403/404). Beide temporären Testidentitäten wurden nach
+Verwendung aus Keycloak und Rancher entfernt. Kein vorhandener Benutzer wurde geändert.
 
-## Projekt- und Rollenmodell
+Mandanten-Terraform liegt separat unter `/home/tanzu/manifest/rke2-tenants-lab`.
+Es importiert die bestehende Gruppe und das Projekt `c-m-prkskj2p:p-9nh78` und bindet
+`keycloakoidc_group://mandant-a` an `project-member`. Eine weitere Testkonfiguration
+wurde nur geplant, nicht provisioniert. Lokale Adminrechte gehören nicht zum Modul.
 
-Vorhandene /mandant-a zunächst als bestehende fachliche Gruppierung erhalten.
-Vor produktiver Bindung entscheiden, ob getrennte Gruppen für Viewer, Developer
-und Projektadministration nötig sind. Namensräume eindeutig halten, zum Beispiel
-mandant-a-viewers und mandant-a-developers; keine Wiederverwendung von G_Admin.
+## Rückfallweg
 
-Eine Pilotbindung soll ausschließlich Projekt Mandant A betreffen, mit der
-kleinsten benötigten Rancher-Rolle (zuerst read-only, danach gegebenenfalls
-project-member). project-owner und globale Administratorrechte sind separate
-Entscheidungen. Gruppenzugehörigkeit allein erzeugt keine Projektberechtigung.
-Der tatsächliche groupPrincipal muss nach funktionsfähigem Login aus Ranchers
-Principal-Suche ermittelt werden; UUID, Gruppenname und voller Pfad sind nicht
-beliebig austauschbar. Das alte Format keycloakoidc_group://G_Developer ist ein
-Istbefund, kein Beweis für das Format einer neuen verschachtelten Gruppe.
+Bei einem OIDC-Problem zuerst den lokalen Login über Rancher verwenden. Im Notfall
+über die native K3s-API auf `authconfigs.management.cattle.io` zugreifen. Der im Lauf
+verwendete Token läuft ab; vor einer späteren Änderung einen frischen unabhängigen
+Zugang prüfen. Gesicherte Providerkonfiguration entschlüsseln und ausschließlich
+betroffene Auth-Felder über die konkrete Rancher-API zurückspielen. Benutzer und
+GlobalRoleBindings nicht neu erzeugen und lokale Authentifizierung nicht deaktivieren.
 
-Abnahme: genehmigter Viewer sieht nur sein Projekt, Developer nur vereinbarte
-Aktionen, fremder Mandant keinen Zugriff; Benutzer ohne erlaubte Gruppe wird
-entsprechend beschlossenem accessMode abgewiesen. Gruppenentzug mit neuer Session
-prüfen. Tokens/Claims nur maskiert beurteilen, keine Tokens in Nachweisen speichern.
+Die alte Konfiguration mit myrealm stellt keine funktionierende OIDC-Anmeldung wieder her;
+der funktionale Rückfall ist der lokale Admin. Einen Keycloak-Datenbankrestore nur
+bei tatsächlicher Notwendigkeit mit eigenem Wartungs-/Recovery-Verfahren durchführen.
+Kein destruktiver Restore wurde getestet. Die neue Recovery-Identität liegt getrennt unter
+`/home/tanzu/manifest/.local-recovery-keys/platform-20261010.agekey` (0600, Verzeichnis 0700).
+Schlüssel und Backups getrennt außer Haus sichern. Der ursprüngliche Vorher-Datenbankdump
+liegt unter `unverified-original` und ist mit der ungültigen alten Identität derzeit
+nicht entschlüsselbar; er ist kein nachgewiesener Rückfallpunkt. Die Nachher-Datenbank
+mit funktionierendem berger-Client ist verifiziert gesichert. Keine bestehenden
+SOPS-Konfigurationen oder alten Schlüsseldateien wurden verändert.
 
-## Terraform-Vorbereitung
+## Verbleibende Punkte
 
-**Kein terraform apply, kein Mandant provisioniert.** Provider später auf mit
-Keycloak 26.3.4/Rancher 2.14.3 getestete Versionen pinnen und Lockfile einchecken.
+- Alte Bindungen für G_Admin/G_Developer/G_Viewer bestehen weiterhin. Diese Gruppen
+  nicht ungeprüft neu anlegen: G_Admin würde alte globale Adminrechte aktivieren.
+- Unrestricted-Zugang, Brute-force-Schutz im Realm und Gruppen-Suchrechte separat härten.
+  Gruppenclaim und Projektzugriff sind getestet, administrative Gruppensuche nicht.
+- Bestehende Keycloak-Bootstrap-/DB-Passwörter stehen noch als Literal-Env im StatefulSet.
+  Eine kontrollierte Secret-Migration ist eine eigene Änderung.
+- Das übermittelte lokale Lab-Passwort wurde weder wiederholt noch in Dateien/Git geschrieben.
 
-- `keycloak/keycloak`: vorhandene Realm-Gruppen importieren, anschließend
-  keycloak_group und gegebenenfalls Gruppenmitgliedschaften/Mapper deklarativ verwalten.
-  Für mandant-a ist die Importidentität
-  `berger/709d7143-bdd2-4264-b6f5-bcc926e80be3` bekannt. Kein Realm-Neuaufbau.
-- `rancher/rancher2`: vorhandenes Projekt importieren; Projektbindungen mit
-  rancher2_project_role_template_binding, project_id, role_template_id und dem
-  tatsächlich aufgelösten group_principal_id verwalten.
-- Bestehende Bindungen/Projekte zuerst importieren, Plan auf Ersetzungen/Löschungen
-  prüfen. Änderungen an project_id/Rolle/Principal können beim Provider ForceNew
-  auslösen; kein blindes Apply. Globale Adminbindungen und Break-glass-Konto
-  zunächst außerhalb des Mandantenmoduls belassen.
-- Terraform-State kann Client-Secrets enthalten: verschlüsseltes Remote-Backend,
-  restriktiver Zugriff/Locking, Zugangsdaten über Laufzeitumgebung oder Secret-Provider.
-  sensitive allein verschlüsselt den State nicht. Backend-Auswahl später gesondert;
-  kein MinIO dafür installiert.
-
-Quellen: [Keycloak-Gruppen und Import](https://registry.terraform.io/providers/keycloak/keycloak/latest/docs/resources/group),
-[Rancher-Projektbindungen](https://registry.terraform.io/providers/rancher/rancher2/latest/docs/resources/project_role_template_binding).
-
-## Umschaltung, Abnahme und Rückfallweg
-
-Alle Schritte dieses Abschnitts sind **Freigabe erforderlich**, noch nicht ausgeführt.
-
-1. Aktuelle AuthConfigs, lokale Benutzer-/Adminbindungen und zu ändernde
-   Projektbindungen geschützt außerhalb Git sichern; Client-Secrets verschlüsseln.
-   Keycloak-Realm-/Datenbanksicherung und Wiederherstellbarkeit prüfen.
-2. In einem separaten privaten Browserfenster mit dem **lokalen** Admin-Passwort
-   anmelden und tatsächliche Administration prüfen. Zweite lokale Sitzung offen
-   halten. Direkte native K3s-Kubeconfig/SSH-Zugang außerhalb Ranchers Proxy testen.
-   Ohne diese Nachweise kein Wechsel.
-3. Client/Mapper im Realm berger und genehmigte Pilotgruppierung vorbereiten.
-   Rollen-/Gruppenänderungen und alte verwaiste Bindungen einzeln freigeben.
-   Keine historische Admin-Gruppe automatisch rekonstruieren.
-4. Bestehenden keycloakoidc-Provider über den unterstützten Rancher-Konfigurationsweg
-   auf den neuen Issuer/Client umstellen und Callback mit Pilotbenutzer prüfen.
-   Lokaler Provider, lokaler Benutzer und lokale Adminbindung bleiben bestehen.
-5. Positiv-/Negativtests für Projektrollen, Gruppenclaims, Logout/erneuten Login
-   durchführen; anschließend erneut frischen lokalen Admin-Login prüfen.
-   Erst nach Abnahme auf weitere Benutzer ausdehnen.
-6. Bei fehlgeschlagenem Callback, fehlenden Gruppen, unerwarteten Rechten oder
-   Problemen beim lokalen Login sofort stoppen. Offene lokale Adminsitzung verwenden,
-   vorher gesicherte Providerwerte/Berechtigungen gezielt wiederherstellen.
-   Ist die UI nicht nutzbar, denselben begrenzten Restore über den vorher getesteten
-   nativen K3s-Adminzugang ausführen. Keine pauschale AuthConfig-/User-Löschung,
-   kein reset-password oder Neubootstrap.
-7. Der alte Providerzustand verweist auf einen fehlenden Realm: dessen Restore
-   stellt **nicht** funktionsfähiges altes SSO her. Der betriebliche Rückfall ist
-   der vorab getestete lokale Adminzugang; ein eventuell nötiges Deaktivieren des
-   defekten externen Providers muss ausdrücklich Teil der späteren Freigabe sein.
-   Erst stabilisieren, dann die neue Integration korrigieren.
-
-Offen bleiben interaktiver Login/Claims-Prüfung, explizite Rechteentscheidung,
-Break-glass-Passworttest und unabhängiger K3s-Zugang. Die reine Erreichbarkeit von
-Discovery ist kein erfolgreicher Rancher-SSO-Test.
+Quellen: versionsgenauer [Rancher OIDC-Code](https://github.com/rancher/rancher/tree/v2.14.3/pkg/auth/providers/oidc)
+und [Keycloak-Provider](https://github.com/rancher/rancher/tree/v2.14.3/pkg/auth/providers/keycloakoidc).
+Technischer Nachweis: [Rollout-Evidenz](evidence/platform-rollout-2026-10-10.json).

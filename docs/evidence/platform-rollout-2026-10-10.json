@@ -1,0 +1,1378 @@
+{
+  "app-logging-result": {
+    "probe": "codex-app-log-20261010175317",
+    "documents": [
+      {
+        "index": "kubernetes-rke2-cluster1-2026.10.10",
+        "source": {
+          "time": "2026-10-10T17:54:37.242471411Z",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-app-log-20261010175317-wk1 sequence=1",
+          "kubernetes": {
+            "pod_name": "codex-app-log-20261010175317-wk1",
+            "namespace_name": "default",
+            "pod_id": "89f7f63d-c65e-42c1-a48c-57879506b625",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-app-log-20261010175317"
+            },
+            "annotations": {
+              "cni_projectcalico_org/containerID": "31ac848c6b6cab88417256daa329bc3918826eef7d54cf795d33fc179504bbf8",
+              "cni_projectcalico_org/podIP": "10.42.247.37/32",
+              "cni_projectcalico_org/podIPs": "10.42.247.37/32"
+            },
+            "host": "rke2-cluster1-wk-1.berger.ph",
+            "container_name": "probe",
+            "docker_id": "df39b94f9c2c40d6512551906a025e13d14e347aa3c5c38f64bfbf69a4120116",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-hqrb7",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "cluster_name": "rke2-cluster1",
+          "cluster_role": "applications",
+          "environment": "lab",
+          "@timestamp": "2026-10-10T17:54:37.242471411+00:00"
+        }
+      },
+      {
+        "index": "kubernetes-rke2-cluster1-2026.10.10",
+        "source": {
+          "time": "2026-10-10T17:54:39.242499816Z",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-app-log-20261010175317-wk1 sequence=2",
+          "kubernetes": {
+            "pod_name": "codex-app-log-20261010175317-wk1",
+            "namespace_name": "default",
+            "pod_id": "89f7f63d-c65e-42c1-a48c-57879506b625",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-app-log-20261010175317"
+            },
+            "annotations": {
+              "cni_projectcalico_org/containerID": "31ac848c6b6cab88417256daa329bc3918826eef7d54cf795d33fc179504bbf8",
+              "cni_projectcalico_org/podIP": "10.42.247.37/32",
+              "cni_projectcalico_org/podIPs": "10.42.247.37/32"
+            },
+            "host": "rke2-cluster1-wk-1.berger.ph",
+            "container_name": "probe",
+            "docker_id": "df39b94f9c2c40d6512551906a025e13d14e347aa3c5c38f64bfbf69a4120116",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-hqrb7",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "cluster_name": "rke2-cluster1",
+          "cluster_role": "applications",
+          "environment": "lab",
+          "@timestamp": "2026-10-10T17:54:39.242499816+00:00"
+        }
+      },
+      {
+        "index": "kubernetes-rke2-cluster1-2026.10.10",
+        "source": {
+          "time": "2026-10-10T17:54:41.242825963Z",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-app-log-20261010175317-wk1 sequence=3",
+          "kubernetes": {
+            "pod_name": "codex-app-log-20261010175317-wk1",
+            "namespace_name": "default",
+            "pod_id": "89f7f63d-c65e-42c1-a48c-57879506b625",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-app-log-20261010175317"
+            },
+            "annotations": {
+              "cni_projectcalico_org/containerID": "31ac848c6b6cab88417256daa329bc3918826eef7d54cf795d33fc179504bbf8",
+              "cni_projectcalico_org/podIP": "10.42.247.37/32",
+              "cni_projectcalico_org/podIPs": "10.42.247.37/32"
+            },
+            "host": "rke2-cluster1-wk-1.berger.ph",
+            "container_name": "probe",
+            "docker_id": "df39b94f9c2c40d6512551906a025e13d14e347aa3c5c38f64bfbf69a4120116",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-hqrb7",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "cluster_name": "rke2-cluster1",
+          "cluster_role": "applications",
+          "environment": "lab",
+          "@timestamp": "2026-10-10T17:54:41.242825963+00:00"
+        }
+      },
+      {
+        "index": "kubernetes-rke2-cluster1-2026.10.10",
+        "source": {
+          "time": "2026-10-10T17:54:37.42469432Z",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-app-log-20261010175317-wk2 sequence=1",
+          "kubernetes": {
+            "pod_name": "codex-app-log-20261010175317-wk2",
+            "namespace_name": "default",
+            "pod_id": "fbc28959-0697-44a1-b664-037a1aa3eba5",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-app-log-20261010175317"
+            },
+            "annotations": {
+              "cni_projectcalico_org/containerID": "aa663456a136cd3124ffbdb218c5485420a7dbc1260e2f578593b00a692cdf7f",
+              "cni_projectcalico_org/podIP": "10.42.48.45/32",
+              "cni_projectcalico_org/podIPs": "10.42.48.45/32"
+            },
+            "host": "rke2-cluster1-wk-2.berger.ph",
+            "container_name": "probe",
+            "docker_id": "2f7bf6173561d6cdc1f56b6a8add75f3d7844a239598df62f182cf423bcdc223",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-hqrb7",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "cluster_name": "rke2-cluster1",
+          "cluster_role": "applications",
+          "environment": "lab",
+          "@timestamp": "2026-10-10T17:54:37.424694320+00:00"
+        }
+      },
+      {
+        "index": "kubernetes-rke2-cluster1-2026.10.10",
+        "source": {
+          "time": "2026-10-10T17:54:39.424782948Z",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-app-log-20261010175317-wk2 sequence=2",
+          "kubernetes": {
+            "pod_name": "codex-app-log-20261010175317-wk2",
+            "namespace_name": "default",
+            "pod_id": "fbc28959-0697-44a1-b664-037a1aa3eba5",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-app-log-20261010175317"
+            },
+            "annotations": {
+              "cni_projectcalico_org/containerID": "aa663456a136cd3124ffbdb218c5485420a7dbc1260e2f578593b00a692cdf7f",
+              "cni_projectcalico_org/podIP": "10.42.48.45/32",
+              "cni_projectcalico_org/podIPs": "10.42.48.45/32"
+            },
+            "host": "rke2-cluster1-wk-2.berger.ph",
+            "container_name": "probe",
+            "docker_id": "2f7bf6173561d6cdc1f56b6a8add75f3d7844a239598df62f182cf423bcdc223",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-hqrb7",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "cluster_name": "rke2-cluster1",
+          "cluster_role": "applications",
+          "environment": "lab",
+          "@timestamp": "2026-10-10T17:54:39.424782948+00:00"
+        }
+      },
+      {
+        "index": "kubernetes-rke2-cluster1-2026.10.10",
+        "source": {
+          "time": "2026-10-10T17:54:41.424947319Z",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-app-log-20261010175317-wk2 sequence=3",
+          "kubernetes": {
+            "pod_name": "codex-app-log-20261010175317-wk2",
+            "namespace_name": "default",
+            "pod_id": "fbc28959-0697-44a1-b664-037a1aa3eba5",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-app-log-20261010175317"
+            },
+            "annotations": {
+              "cni_projectcalico_org/containerID": "aa663456a136cd3124ffbdb218c5485420a7dbc1260e2f578593b00a692cdf7f",
+              "cni_projectcalico_org/podIP": "10.42.48.45/32",
+              "cni_projectcalico_org/podIPs": "10.42.48.45/32"
+            },
+            "host": "rke2-cluster1-wk-2.berger.ph",
+            "container_name": "probe",
+            "docker_id": "2f7bf6173561d6cdc1f56b6a8add75f3d7844a239598df62f182cf423bcdc223",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-hqrb7",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "cluster_name": "rke2-cluster1",
+          "cluster_role": "applications",
+          "environment": "lab",
+          "@timestamp": "2026-10-10T17:54:41.424947319+00:00"
+        }
+      }
+    ],
+    "duplicateCheck": "6 unique messages, six documents after additional 45 seconds"
+  },
+  "app-dashboards-result": {
+    "login": 200,
+    "search": 200,
+    "total": 6,
+    "probe": "codex-app-log-20261010175317",
+    "transport": "localhost port-forward through verified Rancher TLS"
+  },
+  "oidc-repair-result": {
+    "issuer": "https://idp.berger.ph/realms/berger",
+    "clientId": "rancher",
+    "keycloakClientId": "2283a821-fc16-4286-a10b-49b8aaa18f01",
+    "pkceMethod": "S256",
+    "localPasswordLogin": 201,
+    "nativeK3sRecovery": "tested with existing service account, two-hour token",
+    "localAdminBindingsUnchanged": true
+  },
+  "oidc-e2e-result": {
+    "loginHttp": 201,
+    "realm": "berger",
+    "pkce": "S256",
+    "groupPrincipal": "keycloakoidc_group://mandant-a",
+    "userPrincipalVerified": true,
+    "temporaryUserRemoved": true,
+    "mandantAProjectHttp": 200,
+    "otherProjectHttp": 403
+  },
+  "terraform-validation": {
+    "existingTenantPlan": "No changes",
+    "newTenantCreates": 16,
+    "newTenantApplied": false,
+    "existingResourcesUnchanged": true
+  },
+  "minio-e2e-result": {
+    "endpoint": "https://192.168.1.197:9000",
+    "tlsVerified": true,
+    "bucketCreate": true,
+    "objectPutGetDigestVerified": true,
+    "objectList": true,
+    "anonymousGet": 403,
+    "consoleHttp": 200,
+    "ownTestDataRemoved": true
+  },
+  "final-health": {
+    "fleet": {
+      "commit": "a1a86401f56d522758a977dcf72c326c4ab52461",
+      "summary": {
+        "desiredReady": 28,
+        "ready": 28
+      }
+    },
+    "cluster1": {
+      "nodes": [
+        {
+          "name": "rke2-cluster1-cp-1.berger.ph",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-09-20T10:30:16Z",
+              "lastTransitionTime": "2026-09-20T10:30:16Z",
+              "message": "Calico is running on this node",
+              "reason": "CalicoIsUp",
+              "status": "False",
+              "type": "NetworkUnavailable"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:55:47Z",
+              "lastTransitionTime": "2025-09-09T20:21:40Z",
+              "message": "Node is a voting member of the etcd cluster",
+              "reason": "MemberNotLearner",
+              "status": "True",
+              "type": "EtcdIsVoter"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:29Z",
+              "lastTransitionTime": "2026-09-12T06:48:46Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:29Z",
+              "lastTransitionTime": "2026-09-12T06:48:46Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:29Z",
+              "lastTransitionTime": "2026-09-12T06:48:46Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:29Z",
+              "lastTransitionTime": "2026-09-12T06:48:46Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "rke2-cluster1-cp-2.berger.ph",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-09-20T10:30:41Z",
+              "lastTransitionTime": "2026-09-20T10:30:41Z",
+              "message": "Calico is running on this node",
+              "reason": "CalicoIsUp",
+              "status": "False",
+              "type": "NetworkUnavailable"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:55:47Z",
+              "lastTransitionTime": "2025-09-09T20:17:40Z",
+              "message": "Node is a voting member of the etcd cluster",
+              "reason": "MemberNotLearner",
+              "status": "True",
+              "type": "EtcdIsVoter"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:23Z",
+              "lastTransitionTime": "2026-09-30T07:00:19Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:23Z",
+              "lastTransitionTime": "2026-09-30T07:00:19Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:23Z",
+              "lastTransitionTime": "2026-09-30T07:00:19Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:23Z",
+              "lastTransitionTime": "2026-09-30T07:00:19Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "rke2-cluster1-cp-3.berger.ph",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-09-20T10:31:16Z",
+              "lastTransitionTime": "2026-09-20T10:31:16Z",
+              "message": "Calico is running on this node",
+              "reason": "CalicoIsUp",
+              "status": "False",
+              "type": "NetworkUnavailable"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:55:47Z",
+              "lastTransitionTime": "2025-09-09T20:21:10Z",
+              "message": "Node is a voting member of the etcd cluster",
+              "reason": "MemberNotLearner",
+              "status": "True",
+              "type": "EtcdIsVoter"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:10Z",
+              "lastTransitionTime": "2026-09-02T06:22:57Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:10Z",
+              "lastTransitionTime": "2026-09-02T06:22:57Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:10Z",
+              "lastTransitionTime": "2026-09-02T06:22:57Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:10Z",
+              "lastTransitionTime": "2026-09-02T06:22:57Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "rke2-cluster1-wk-1.berger.ph",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-09-20T10:29:46Z",
+              "lastTransitionTime": "2026-09-20T10:29:46Z",
+              "message": "Calico is running on this node",
+              "reason": "CalicoIsUp",
+              "status": "False",
+              "type": "NetworkUnavailable"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:41Z",
+              "lastTransitionTime": "2026-09-30T06:18:06Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:41Z",
+              "lastTransitionTime": "2026-09-30T06:18:06Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:41Z",
+              "lastTransitionTime": "2026-09-30T06:18:06Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:54:41Z",
+              "lastTransitionTime": "2026-09-30T06:18:06Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "rke2-cluster1-wk-2.berger.ph",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-09-23T07:22:43Z",
+              "lastTransitionTime": "2026-09-23T07:22:43Z",
+              "message": "Calico is running on this node",
+              "reason": "CalicoIsUp",
+              "status": "False",
+              "type": "NetworkUnavailable"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:57:04Z",
+              "lastTransitionTime": "2026-09-26T22:30:06Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:57:04Z",
+              "lastTransitionTime": "2026-09-26T22:30:06Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:57:04Z",
+              "lastTransitionTime": "2026-09-26T22:30:06Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:57:04Z",
+              "lastTransitionTime": "2026-09-26T22:30:06Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        }
+      ],
+      "clustersecretstores": [
+        {
+          "name": "openbao-logging",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T17:25:56Z",
+              "message": "store validated",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "openbao-mandant-a",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-09-30T12:50:26Z",
+              "message": "store validated",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        }
+      ],
+      "externalsecrets": [
+        {
+          "name": "platform-opensearch-logging",
+          "namespace": "cattle-logging-system",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T17:25:57Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "mandant-a-demo",
+          "namespace": "mandant-a-dev",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-09-30T12:52:31Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "mandant-a-demo",
+          "namespace": "mandant-a-prod",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-01T06:13:47Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "mandant-a-demo",
+          "namespace": "mandant-a-test",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-01T06:13:46Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "demo",
+          "namespace": "openbao-demo",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-09-30T11:20:27Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        }
+      ]
+    },
+    "cluster2": {
+      "nodes": [
+        {
+          "name": "rke2-cluster2-cp-1.berger.ph",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-02-09T23:04:51Z",
+              "lastTransitionTime": "2026-02-09T23:04:51Z",
+              "message": "Cilium is running on this node",
+              "reason": "CiliumIsUp",
+              "status": "False",
+              "type": "NetworkUnavailable"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:57:58Z",
+              "lastTransitionTime": "2026-02-09T23:04:19Z",
+              "message": "Node is a voting member of the etcd cluster",
+              "reason": "MemberNotLearner",
+              "status": "True",
+              "type": "EtcdIsVoter"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:17Z",
+              "lastTransitionTime": "2026-10-06T21:00:43Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:17Z",
+              "lastTransitionTime": "2026-10-06T21:00:43Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:17Z",
+              "lastTransitionTime": "2026-10-06T21:00:43Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:17Z",
+              "lastTransitionTime": "2026-10-06T21:00:43Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "rke2-cluster2-cp-2.berger.ph",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-02-09T23:07:08Z",
+              "lastTransitionTime": "2026-02-09T23:07:08Z",
+              "message": "Cilium is running on this node",
+              "reason": "CiliumIsUp",
+              "status": "False",
+              "type": "NetworkUnavailable"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:57:58Z",
+              "lastTransitionTime": "2026-02-09T23:06:23Z",
+              "message": "Node is a voting member of the etcd cluster",
+              "reason": "MemberNotLearner",
+              "status": "True",
+              "type": "EtcdIsVoter"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:37Z",
+              "lastTransitionTime": "2026-10-10T11:16:37Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:37Z",
+              "lastTransitionTime": "2026-10-10T11:16:37Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:37Z",
+              "lastTransitionTime": "2026-10-10T11:16:37Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:37Z",
+              "lastTransitionTime": "2026-10-10T11:16:37Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "rke2-cluster2-cp-3.berger.ph",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-02-09T23:07:55Z",
+              "lastTransitionTime": "2026-02-09T23:07:55Z",
+              "message": "Cilium is running on this node",
+              "reason": "CiliumIsUp",
+              "status": "False",
+              "type": "NetworkUnavailable"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:57:57Z",
+              "lastTransitionTime": "2026-02-09T23:07:38Z",
+              "message": "Node is a voting member of the etcd cluster",
+              "reason": "MemberNotLearner",
+              "status": "True",
+              "type": "EtcdIsVoter"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:28Z",
+              "lastTransitionTime": "2026-10-08T02:54:20Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:28Z",
+              "lastTransitionTime": "2026-10-08T02:54:20Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:28Z",
+              "lastTransitionTime": "2026-10-08T02:54:20Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:58:28Z",
+              "lastTransitionTime": "2026-10-08T02:54:20Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "rke2-cluster2-wk-1.berger.ph",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-02-09T23:09:55Z",
+              "lastTransitionTime": "2026-02-09T23:09:55Z",
+              "message": "Cilium is running on this node",
+              "reason": "CiliumIsUp",
+              "status": "False",
+              "type": "NetworkUnavailable"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:55:50Z",
+              "lastTransitionTime": "2026-10-08T08:55:58Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:55:50Z",
+              "lastTransitionTime": "2026-10-08T08:55:58Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:55:50Z",
+              "lastTransitionTime": "2026-10-08T08:55:58Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:55:50Z",
+              "lastTransitionTime": "2026-10-08T08:55:58Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "rke2-cluster2-wk-2.berger.ph",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-02-09T23:10:19Z",
+              "lastTransitionTime": "2026-02-09T23:10:19Z",
+              "message": "Cilium is running on this node",
+              "reason": "CiliumIsUp",
+              "status": "False",
+              "type": "NetworkUnavailable"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:56:59Z",
+              "lastTransitionTime": "2026-10-08T09:10:40Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:56:59Z",
+              "lastTransitionTime": "2026-10-08T09:10:40Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:56:59Z",
+              "lastTransitionTime": "2026-10-08T09:10:40Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-10-10T17:56:59Z",
+              "lastTransitionTime": "2026-10-08T09:10:51Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        }
+      ],
+      "clustersecretstores": [
+        {
+          "name": "openbao-harbor",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:07:40Z",
+              "message": "store validated",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "openbao-infrastructure",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:07:40Z",
+              "message": "store validated",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "openbao-logging",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:13:14Z",
+              "message": "store validated",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "openbao-minio",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T17:52:42Z",
+              "message": "store validated",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "openbao-opensearch",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:07:40Z",
+              "message": "store validated",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "openbao-postgresql",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:07:40Z",
+              "message": "store validated",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "openbao-redis",
+          "namespace": null,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:07:40Z",
+              "message": "store validated",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        }
+      ],
+      "externalsecrets": [
+        {
+          "name": "platform-opensearch-logging",
+          "namespace": "cattle-logging-system",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:13:23Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "openbao-infrastructure-smoke",
+          "namespace": "external-secrets",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:07Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-harbor-admin",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:09Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-harbor-core",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:09Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-harbor-ingress-tls",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:09Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-harbor-jobservice",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:08Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-harbor-key",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:09Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-harbor-postgresql",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:07Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-harbor-redis",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:08Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-harbor-registry",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:09Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-harbor-registry-auth",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:09Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-harbor-token-tls",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:08Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-redis",
+          "namespace": "harbor-ha",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:08Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "minio-credentials",
+          "namespace": "minio",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T17:52:43Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "minio-registry",
+          "namespace": "minio",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T17:52:42Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "minio-tls",
+          "namespace": "minio",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T17:52:42Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-opensearch-admin",
+          "namespace": "opensearch",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:09Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-opensearch-ca",
+          "namespace": "opensearch",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:10Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-opensearch-dashboards",
+          "namespace": "opensearch",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:10Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-opensearch-security",
+          "namespace": "opensearch",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:10Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        },
+        {
+          "name": "platform-opensearch-tls",
+          "namespace": "opensearch",
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-10T11:09:10Z",
+              "message": "secret synced",
+              "reason": "SecretSynced",
+              "status": "True",
+              "type": "Ready"
+            }
+          ]
+        }
+      ]
+    },
+    "opensearch": {
+      "cluster_name": "opensearch-cluster",
+      "status": "green",
+      "timed_out": false,
+      "number_of_nodes": 3,
+      "number_of_data_nodes": 3,
+      "discovered_master": true,
+      "discovered_cluster_manager": true,
+      "active_primary_shards": 7,
+      "active_shards": 18,
+      "relocating_shards": 0,
+      "initializing_shards": 0,
+      "unassigned_shards": 0,
+      "delayed_unassigned_shards": 0,
+      "number_of_pending_tasks": 0,
+      "number_of_in_flight_fetch": 0,
+      "task_max_waiting_in_queue_millis": 0,
+      "active_shards_percent_as_number": 100.0
+    },
+    "minioScan": {
+      "application/vnd.security.vulnerability.report; version=1.1": {
+        "complete_percent": 100,
+        "duration": 8,
+        "end_time": "2026-10-10T18:11:32.000Z",
+        "report_id": "5e8c6736-6825-4893-9e2b-38de50554e27",
+        "scan_status": "Success",
+        "scanner": {
+          "name": "Trivy",
+          "vendor": "Aqua Security",
+          "version": "v0.72.0"
+        },
+        "severity": "Medium",
+        "start_time": "2026-10-10T18:11:24.000Z",
+        "summary": {
+          "fixable": 6,
+          "summary": {
+            "Low": 2,
+            "Medium": 3,
+            "Unknown": 2
+          },
+          "total": 7
+        }
+      }
+    },
+    "minioScanBefore": {
+      "application/vnd.security.vulnerability.report; version=1.1": {
+        "complete_percent": 100,
+        "duration": 14,
+        "end_time": "2026-10-10T17:49:19.000Z",
+        "report_id": "9664f59e-500f-4151-86af-4f75ac49a3bd",
+        "scan_status": "Success",
+        "scanner": {
+          "name": "Trivy",
+          "vendor": "Aqua Security",
+          "version": "v0.72.0"
+        },
+        "severity": "Critical",
+        "start_time": "2026-10-10T17:49:05.000Z",
+        "summary": {
+          "fixable": 82,
+          "summary": {
+            "Critical": 4,
+            "High": 39,
+            "Low": 3,
+            "Medium": 27,
+            "Unknown": 10
+          },
+          "total": 83
+        }
+      }
+    },
+    "bundleDeploymentsIncludingAgents": {
+      "ready": 31,
+      "total": 31
+    },
+    "validatedAt": "2026-10-10T18:14:23.486576+00:00"
+  },
+  "date": "2026-10-10",
+  "note": "Live validation after explicit follow-up approval; no credentials included.",
+  "minio-persistence-result": {
+    "image": "harbor-ha.berger.ph/platform-builds/minio@sha256:12758d79d4af633bc59d031956601baa2dcf6888737f80707170303987afdff9",
+    "newPodUid": "ca7fd9e6-3800-4b8a-bb43-b2554ff13f49",
+    "persistentBytesVerified": true,
+    "ownProbeRemoved": true
+  },
+  "final-secret-scan": {
+    "filesChecked": 149,
+    "credentialRepresentationsChecked": 40,
+    "matches": 0,
+    "scope": "Current tracked and nonignored working-tree files in both repositories; known live platform and Keycloak credentials of at least 12 characters only; short common strings excluded from substring scan"
+  },
+  "backupVerification": {
+    "verifiedAuthBeforeAndAfter": true,
+    "verifiedKeycloakAfterDatabase": true,
+    "verifiedMinioSecrets": true,
+    "verifiedTenantState": true,
+    "oldConfiguredAgeIdentityMalformed": true,
+    "oldBeforeDatabaseUnverified": true,
+    "backupDirectory": "/home/tanzu/manifest/backups/platform-rollout-2026-10-10",
+    "identityStoredSeparately": true
+  }
+}
