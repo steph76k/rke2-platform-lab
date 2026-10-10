@@ -110,7 +110,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: fluentd
-      app.kubernetes.io/instance: rancher-logging-root
+      app.kubernetes.io/managed-by: rancher-logging-root
   namespaceSelector:
     matchNames:
     - cattle-logging-system

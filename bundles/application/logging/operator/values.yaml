@@ -3,7 +3,7 @@ logging:
 additionalLoggingSources:
   rke2:
     enabled: true
-disablePvc: true
+disablePvc: false
 resources:
   requests:
     cpu: 50m
@@ -18,11 +18,11 @@ fluentbit:
     limits:
       cpu: 500m
       memory: 256Mi
-  bufferStorageVolume: &id002
+  bufferStorageVolume:
     hostPath:
       path: /var/lib/rancher/afi-logging/buffers
       type: DirectoryOrCreate
-  bufferStorage: &id001
+  bufferStorage:
     storage.path: /buffers
     storage.sync: full
     storage.checksum: 'on'
@@ -41,7 +41,23 @@ fluentd:
       cpu: 100m
       memory: 256Mi
     limits:
-      memory: 768Mi
+      memory: 2Gi
+  bufferStorageVolume:
+    pvc:
+      source:
+        claimName: afi-fluentd-buffer
+  replicas: 1
+  metrics:
+    port: 24231
+    prometheusAnnotations: true
+    serviceMonitor: false
+    prometheusRules: false
+loggingOverlay:
+  spec:
+    fluentd:
+      bufferVolumeMetrics:
+        port: 9100
+        prometheusAnnotations: true
 fluentbitAgentOverlay:
   spec:
     positiondb:
@@ -65,5 +81,3 @@ fluentbitAgentOverlay:
       Keep_Log: 'On'
       K8S-Logging.Parser: 'Off'
       K8S-Logging.Exclude: 'Off'
-    bufferStorage: *id001
-    bufferStorageVolume: *id002
