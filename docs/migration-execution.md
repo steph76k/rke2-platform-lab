@@ -63,8 +63,9 @@ K3s-Management-Cluster; die vorhandene Cluster-1-Installation wird nicht veränd
    normale Logging- und FluentbitAgent-Ressource über `loggingRef=rancher-logging`
    eindeutig zugeordnet. Der bestehende Helm-Release wurde mit identischer
    Chart-Version aktualisiert; der Render-Vergleich zeigte ausschließlich diese
-   zwei zusätzlichen Felder. Fleet verwaltet jetzt getrennte Flow-/Output-Paare
-   für die normale und die Root-Pipeline. Details siehe
+   zwei zusätzlichen Felder. Anschließend auf Betreiberwunsch die zusätzliche normale
+   Pipeline nach vollständiger Pufferleerung entfernt (`logging.enabled: false`,
+   Helm-Revision 5). Fleet verwaltet nur noch das Root-Flow-/Output-Paar. Details siehe
    [Logging-Reparatur](logging-system-follow-up.md).
 
 ## Daten und Sicherungen
@@ -98,7 +99,7 @@ aktuelle Volume- und Pod-Readiness werden davon getrennt beurteilt.
 | ESO | 6 ClusterSecretStores und 18 ExternalSecrets Ready/SecretSynced |
 | OpenBao Auth | positiver Login/Smoke-Read; fremder SA, falsche Audience und fremder KV-Pfad abgewiesen |
 | Logging-Konto | Schreiben auf kubernetes-* erfolgreich (201), fremder Index verweigert (403); normalisierte Labelschlüssel erfolgreich indizierbar |
-| Logging-Lieferung | Testmeldungen von beiden Workern einschließlich normalisierter Labels in OpenSearch; Operator und beide Fluentd-Pipelines im abschließenden Zwei-Minuten-Fenster ohne neue Fehler |
+| Logging-Lieferung | Nur Root-Pipeline + Journald; je drei Testmeldungen pro Worker exakt einmal mit normalisierten Labels in OpenSearch, neue Journald-Dokumente nachgewiesen; Operator/Root-Fluentd ohne neue Fehler im Vier-Minuten-Fenster |
 | PostgreSQL | App-Login über TLS; 3/3 Ready; replizierte Testzeile nach Wechsel db-1 → db-2 vorhanden |
 | Redis/Sentinel | AUTH/PING/ROLE; 3 Redis + 3 Sentinels; WAIT auf beide Replikas, Masterwechsel redis-0 → redis-2, Testwert erhalten |
 | Harbor | TLS/Admin-Login, alle acht Komponenten healthy; echtes Image-Push/Pull mit verifizierten Blob-/Manifest-Digests |
@@ -108,7 +109,7 @@ aktuelle Volume- und Pod-Readiness werden davon getrennt beurteilt.
 | Dashboards | öffentliche Route erreichbar; Admin-Login und authentifizierte Sitzung über lokalen Kubernetes-Tunnel erfolgreich |
 | Longhorn | alle 11 neuen Plattformvolumes Bound/healthy, jeweils 2 Replikate |
 | Cluster 1 | alle 4 ExternalSecrets und vorhandener ClusterSecretStore Ready; ursprüngliches Fleet-Bundle unverändert |
-| Statische Prüfung | 18 Infrastruktur-Bundles, 7 gepinnte Charts (lint/render), 153 Ressourcen gegen API-Schemas; Secret-Verweise, Targets und Abhängigkeiten geprüft |
+| Statische Prüfung | 18 Infrastruktur-Bundles, 7 gepinnte Charts (lint/render), 151 Ressourcen gegen API-Schemas; Secret-Verweise, Targets und Abhängigkeiten geprüft |
 | Bootstrap-Tests | 3 Tests erfolgreich, inklusive PKCS#1/PKCS#8-Vertrag, bcrypt-Konsistenz und Secret-Properties |
 
 Der Image-Manifest-Digest im Push/Pull-Test war
@@ -121,13 +122,15 @@ bestätigt hatten. Harbor Core/Jobservice starteten während der Failover-Tests 
 die Tests belegen Wiederherstellung, keine unterbrechungsfreie Verfügbarkeit.
 
 Der bestehende Logging-Systemfehler wurde im freigegebenen Nachgang behoben.
-Der Konflikt `app` versus `app.kubernetes.io/name` wird durch den rekursiven
-De-dot-Filter in beiden laufenden Fluentd-Pipelines vermieden. Je ein Test-Pod auf
-beiden Workern schrieb drei Meldungen mit genau dieser Labelkombination; alle
-Meldungen wurden mit normalisierten Labels in OpenSearch nachgewiesen. Die bereits
-vorhandenen zwei Agentensätze erfassen Worker-Pod-Logs doppelt (sechs Dokumente je
-Test-Pod). Historisch verworfene Logs werden dadurch nicht nachträglich restauriert.
-Ursache, Reparatur und Nachweise stehen in
+Anschließend wurden die beiden normalen Fluent-Bit-Agenten und deren zusätzlicher
+Fluentd entfernt. Dessen Restpuffer war vor der Entfernung vollständig leer;
+der zugehörige 20Gi-PVC wurde mit entfernt. Root-Fluent-Bit (fünf Pods),
+Root-Fluentd und RKE2-Journald-Aggregator (fünf Pods) bleiben bestehen.
+Der rekursive De-dot-Filter verhindert die bisherige Label-Mappingkollision.
+Die Root-Pipeline verwendet weiterhin ihren bestehenden flüchtigen Puffer.
+Historisch verworfene Logs werden nicht nachträglich restauriert.
+Installationswerte und Reparaturverlauf stehen in
+[rancher-logging-installation.md](rancher-logging-installation.md) und
 [logging-system-follow-up.md](logging-system-follow-up.md).
 
 ## Zugang und Wiederaufbau
