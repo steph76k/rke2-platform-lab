@@ -1,27 +1,27 @@
 # OpenBao und ESO: Bootstrap und Secret-Vertrag
 
-**Nur vorbereitet. Kein Befehl dieses Bootstrap-Ablaufs wurde ausgeführt.**
-Voraussetzungen: explizite Freigabe für Phase 5, gesonderte Freigabe für jede
-Datenlöschung und Bestätigung des vollständigen Neuaufbaus. Keine Secret-Rotation
+**Bootstrap am 10.10.2026 nach ausdrücklicher Umsetzungs- und Löschfreigabe ausgeführt.**
+Die folgenden Befehle dokumentieren einen frischen Aufbau; den vorhandenen Auth-Mount
+und die bereits gefüllten KV-Pfade nicht erneut initialisieren. Keine Secret-Rotation
 bei gleichzeitiger Weiterverwendung alter PostgreSQL-, Redis- oder OpenSearch-Daten.
 
 ## Authentifizierung für Cluster 2
 
 Root-Namespace in OpenBao; bestehendes KV-v2 `secret/`. Neuer Mount `rke2-cluster2`.
 Die Rollen/Policies unter `config/openbao` gehören nicht zu einem Fleet-Pfad.
-Fünf separate Rollen: `eso-harbor`, `eso-postgresql`, `eso-redis`, `eso-opensearch`
-und `eso-infrastructure` (nur Smoke-Test). Policies gestatten nur `read` auf exakt
+Sechs separate Rollen: `eso-harbor`, `eso-postgresql`, `eso-redis`, `eso-opensearch`,
+`eso-logging` und `eso-infrastructure` (nur Smoke-Test). Policies gestatten nur `read` auf exakt
 benannten KV-Datenpfaden, kein Schreiben und kein Wildcard-Zugriff auf Mandanten.
 TTL 15 Minuten, max. TTL 1 Stunde; `default` erlaubt Self-Lookup/Erneuerung.
 
 Wie bei Cluster 1 wird kein langlebiger Reviewer-JWT gespeichert. OpenBao verwendet
 den eingereichten kurzlebigen ServiceAccount-JWT auch für TokenReview.
-Nur die fünf gebundenen ServiceAccounts erhalten `create` auf `tokenreviews`;
+Nur die sechs gebundenen ServiceAccounts erhalten `create` auf `tokenreviews`;
 kein `cluster-admin` und keine SubjectAccessReview-Rechte. Die JWT-Audience muss
-von der RKE2-API akzeptiert werden. Geplant ist die in Cluster 1 bewährte Audience
-`https://kubernetes.default.svc.cluster.local`; das muss auf Cluster 2 positiv und
-mit falscher Audience negativ getestet werden. Bei abweichender API-Audience
-vor Aktivierung Rollen und Stores konsistent anpassen.
+von der RKE2-API akzeptiert werden. Die Audience
+`https://kubernetes.default.svc.cluster.local` wurde auf Cluster 2
+positiv und mit falscher Audience negativ geprüft. Auch fremde ServiceAccounts
+und nicht erlaubte KV-Pfade wurden erwartungsgemäß abgewiesen.
 
 Vorbereitung nach Freigabe:
 
@@ -47,7 +47,7 @@ bao write auth/rke2-cluster2/config \
   kubernetes_ca_cert=@"$cluster2_ca_file" \
   disable_local_ca_jwt=true
 rm -- "$cluster2_ca_file"
-for service in harbor postgresql redis opensearch infrastructure; do
+for service in harbor postgresql redis opensearch infrastructure logging; do
   bao policy write "eso-$service" "config/openbao/policies/eso-$service.hcl"
   bao write "auth/rke2-cluster2/role/eso-$service" \
     @"config/openbao/roles/eso-$service.json"
@@ -64,8 +64,9 @@ Dateien im Repo, Tickets oder Ausgaben. Keine `set -x`-Sessions verwenden.
 ## Sichere Erzeugung für den frischen Lab-Aufbau
 
 `scripts/bootstrap-new-lab-secrets.py` ist ein ausdrücklich auszuführendes Werkzeug,
-kein Fleet-Hook. Es erzeugt neue Zufallspasswörter, bcrypt-Hashes, PKCS#8-Schlüssel
-und Zertifikate in Speicher und übergibt die KV-Daten per stdin an `bao`.
+kein Fleet-Hook. Es erzeugt neue Zufallspasswörter, bcrypt-Hashes, RSA-Schlüssel
+(PKCS#1 für den Harbor-Token-Signer, sonst PKCS#8) und Zertifikate im Speicher.
+Die KV-Daten werden per stdin an `bao` übergeben.
 Kein Klartext in Kommandozeilen oder Logs, keine lokalen Secret-Dateien.
 Benötigt Python 3, PyYAML, bcrypt, cryptography und bao.
 
@@ -111,6 +112,7 @@ die Policies adressieren dagegen `secret/data/...`.
 | opensearch | platform-opensearch-security | config.yml, roles.yml, roles_mapping.yml, action_groups.yml, tenants.yml, nodes_dn.yml, allowlist.yml, internal_users.yml | platform/opensearch/security: gleichnamige Properties |
 | opensearch | platform-opensearch-tls | tls.crt, tls.key, ca.crt | platform/opensearch/tls: gleichnamige Properties |
 | opensearch | platform-opensearch-ca | ca.crt | platform/opensearch/tls: ca.crt; Dashboards mountet nur die öffentliche CA |
+| cattle-logging-system | platform-opensearch-logging | username, password, ca.crt | platform/opensearch/logging: gleichnamige Properties |
 | external-secrets | openbao-infrastructure-smoke | probe | platform/bootstrap/smoke: probe |
 
 OpenSearch `internal_users.yml` wird mit den bcrypt-Hashes der exakt gleichen
@@ -119,8 +121,9 @@ Sicherheitsindex wird aus dem vollständigen gemounteten Konfigurationssatz init
 (`plugins.security.allow_default_init_securityindex=true`). Das ist ausschließlich
 für einen frischen Datenbestand vorgesehen. Spätere Secret-Änderungen aktualisieren
 den existierenden Sicherheitsindex **nicht** automatisch; Security-Admin-Ablauf und
-koordinierte Passwortrotation sind dann separat erforderlich. Nach erfolgreichem
-Bootstrap die automatische Initialisierung in einem Folgecommit deaktivieren.
+koordinierte Passwortrotation sind dann separat erforderlich. Die automatische
+Initialisierung wurde nach erfolgreichem Bootstrap und Index-/Login-Test in einem
+Folgecommit deaktiviert.
 
 ## Eigentum und Rotation
 
@@ -145,7 +148,7 @@ der Trivy-URL sowie Neustarts der betroffenen Verbraucher. ESO-Refresh allein re
 
 ## Abnahme nach Freigabe
 
-1. Alle fünf Stores Ready, Smoke-ExternalSecret Ready/SecretSynced. Nur Key-Namen und
+1. Alle sechs Stores Ready, Smoke-ExternalSecret Ready/SecretSynced. Nur Key-Namen und
    Status prüfen, Werte nicht ausgeben. Smoke-Wert bei Bedarf nur intern vergleichen.
 2. Positive Login-/TokenReview-Prüfung mit kurzlebigem Token eines passenden SA;
    negative Prüfung mit fremdem SA, falscher Audience und nicht erlaubtem KV-Pfad.

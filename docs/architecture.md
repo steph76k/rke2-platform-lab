@@ -1,8 +1,9 @@
 # Zielarchitektur
 
-Status: vorbereiteter vollständiger Lab-Neuaufbau; noch nicht aktiviert.
-Entscheidung des Betreibers vom 10.10.2026: frische Daten, Löschung erst nach
-separater ausdrücklicher Freigabe. Kein In-place-Adoptionsversuch bestehender Releases.
+Status: vollständiger Lab-Neuaufbau am 10.10.2026 nach ausdrücklicher Umsetzungs-
+und Löschfreigabe aktiviert. Die bisherigen Anwendungsreleases wurden kontrolliert
+entfernt und anschließend durch Fleet neu installiert. Laufzeitnachweise stehen
+in [migration-execution.md](migration-execution.md).
 
 ```mermaid
 flowchart LR
@@ -44,14 +45,15 @@ Stores erlauben nur die jeweiligen Plattform-Namespaces. Die Rolle
 
 | Ressource | Verantwortlicher |
 | --- | --- |
-| Plattform-Helm-Releases, CNPG-Cluster-CR, Registry-PVC | Fleet nach Freigabe |
+| Plattform-Helm-Releases, CNPG-Cluster-CR, Registry-PVC | Fleet |
 | SecretStores, ExternalSecrets, Plattform-Auth-ServiceAccounts/RBAC | Fleet |
 | Synchronisierte `platform-*` Kubernetes-Secrets | ESO; keine parallele Chart-Verwaltung |
 | CNPG-Pods, DB-PVCs, Server-/Replikations-Zertifikate und CA | CNPG Operator |
 | Redis-/Sentinel-StatefulSets, Services und PVCs | Redis Operator |
 | OpenBao-Policies, Rollen, KV-Bootstrap | expliziter Admin-Bootstrap; künftig Terraform |
 | VMs, RKE2-Bootstrap, Rancher-Projekte, Mandanten, Quotas/RBAC | künftig Terraform/Ansible |
-| Cilium, Longhorn, cert-manager, Logging, NeuVector, Rancher-Systemressourcen | bestehende Controller; hier nur inventarisiert |
+| Cilium, Longhorn, cert-manager, Rancher Logging Operator, NeuVector, Rancher-Systemressourcen | bestehende Controller |
+| OpenSearch-ClusterOutput/ClusterFlow, longhorn-platform StorageClass | Fleet |
 
 Bei späterer Übernahme der OpenBao-Konfiguration durch Terraform zuerst den Iststand
 importieren und den manuellen Bootstrap außer Betrieb nehmen. Dieselbe Ressource darf
@@ -66,7 +68,13 @@ drei Instanzen mit 10Gi, Dashboards eine Instanz. Requests/Limits bleiben erhalt
 
 Harbor verbindet weiterhin über den durch den Redis-Operator aktualisierten
 Master-Service. Ein späterer direkter Sentinel-Umbau ist separat zu testen.
-Bestehende Cluster-1-Bundles und aktive GitRepo-Pfade bleiben bytegleich.
+Die beiden ursprünglichen Bundles bleiben bytegleich. Die expliziten GitRepo-Pfade
+wurden um die 18 Infrastruktur-Bundles erweitert. Neue Plattformvolumes verwenden
+`longhorn-platform` mit zwei Replikaten auf zwei Storage-Workern; die ursprüngliche
+StorageClass wurde nicht geändert. Worker 1 hat nur 1 CPU (bei der Abnahme
+995 mCPU reserviert), Worker 2 hat 4 CPUs. Deshalb lassen sich PostgreSQL und
+OpenSearch mit den übernommenen Requests derzeit nicht auf beide Worker verteilen.
+Die erfolgreichen Pod-Failover-Tests sind kein Nachweis von Worker-Ausfallsicherheit.
 
 Der frische OpenSearch-Aufbau ersetzt das Demo-Sicherheitssetup durch eine eigene
 Lab-CA, Node-Zertifikate und eine aus OpenBao geladene Security-Konfiguration.

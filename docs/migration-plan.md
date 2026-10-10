@@ -1,10 +1,14 @@
 # Migrationsplan – vollständiger Lab-Neuaufbau
 
-**Phase 1–4 sind Vorbereitung. Phase 5 benötigt eine neue ausdrückliche Freigabe.**
-Die Nutzerentscheidung lautet: frische Daten nach gesonderter Löschfreigabe.
-Dieser Commit erweitert keine aktiven Fleet-Pfade und startet keine Migration.
+**Phase 5 wurde am 10.10.2026 ausdrücklich freigegeben, einschließlich Datenlöschungen.**
+Die Migration setzt den gewählten vollständigen Lab-Neuaufbau mit frischen Daten um.
+Ausführungsnachweise und tatsächliche Einschränkungen stehen in [migration-execution.md](migration-execution.md).
 
-## Sperren vor Phase 5
+Die folgenden Prüfpunkte beschreiben den ursprünglichen Ablauf. Maßgeblich für
+den tatsächlich erreichten Stand und die bekannten Einschränkungen ist der
+Ausführungsbericht; insbesondere besteht kein vollständiges Alt-Daten-Backup.
+
+## Ursprüngliche Prüfpunkte vor Phase 5
 
 1. Longhorn-Release failed und mehrere Daten-Volumes degraded: Ursache und gewünschte
    Redundanz klären. Zwei Storage-Nodes versus Standard drei Replikas ist ein bekannter
@@ -59,7 +63,7 @@ Readiness, Kind-spezifische Bedingungen, echte Secret-Keys und CNPG-Instanzen pr
 Keine Annahme, dass die bloße Existenz eines CR alle operatorgenerierten Pods bestätigt.
 Helm `takeOwnership` und `force` werden nicht benutzt.
 
-## Kontrollierte Deinstallation (nicht ausgeführt)
+## Kontrollierte Deinstallation
 
 Zuerst Reconciliation der umzubauenden Komponenten ausschließen: neue Pfade bleiben
 inaktiv, keine andere Fleet-/Argo-/Flux-/Terraform-Übernahme. Alle Befehle mit

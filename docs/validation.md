@@ -1,4 +1,7 @@
-# Validierungsbericht
+# Validierungsbericht der Vorbereitung
+
+Die Laufzeitergebnisse der freigegebenen Migration stehen in [migration-execution.md](migration-execution.md).
+Die folgenden Angaben beschreiben den abgeschlossenen Stand **vor** Phase 5.
 
 Vorbereitung am 10.10.2026. Keine Installation, Deinstallation, API-Mutation,
 OpenBao-Konfigurationsänderung oder neue Token-Ausstellung ausgeführt. Lesende
@@ -50,7 +53,8 @@ Benötigte JSON-Schemas, jeweils über **lesendes** `kubectl get ... -o json`:
 
 - Management: `crd/bundles.fleet.cattle.io`.
 - Cluster 1: `crd/externalsecrets.external-secrets.io`, `crd/clustersecretstores.external-secrets.io`.
-- Cluster 2: `crd/clusters.postgresql.cnpg.io`, `crd/redisreplications.redis.redis.opstreelabs.in`.
+- Cluster 2: `crd/clusters.postgresql.cnpg.io`, `crd/redisreplications.redis.redis.opstreelabs.in`,
+  `crd/clusteroutputs.logging.banzaicloud.io`, `crd/clusterflows.logging.banzaicloud.io`.
 - Cluster 2: `kubectl --context=rke2-cluster2 get --raw=/openapi/v2`, gespeichert als `kubernetes-openapi.json`.
 
 Die CRD-Dateien können beliebige Dateinamen mit Endung `.json` haben. Bei Helm als

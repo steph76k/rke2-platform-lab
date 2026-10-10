@@ -1,40 +1,52 @@
 # RKE2 Platform Lab – Fleet
 
-GitHub: `steph76k/rke2-platform-lab`, Branch `main`.
+Die Infrastrukturplattform auf `rke2-cluster2` wird über Rancher Fleet aus
+`steph76k/rke2-platform-lab`, Branch `main`, verwaltet. Der vollständige Lab-Neuaufbau
+mit frischen Daten wurde am 10.10.2026 ausdrücklich freigegeben und umgesetzt.
 
-**Vorbereitung, keine aktivierte Infrastruktur-Migration.** Die Live-Pfade des
-GitRepo `fleet-default/rke2-platform` überwachen weiterhin ausschließlich
-`bundles/00-bootstrap-test` und `bundles/application/operators/external-secrets`.
-Cluster 1 betreibt ESO 2.11.0 bereits erfolgreich über Fleet.
-
-Der Bereich `bundles/infrastructure` enthält die inaktiven Cluster-2-Bundles für
-ESO, CNPG, Redis-Operator/Replication/Sentinel, PostgreSQL, Harbor, OpenSearch,
-Dashboards und OpenBao-Secret-Synchronisierung. Alle Targets sind auf
-`environment=lab, role=infrastructure` beschränkt. OpenBao bleibt auf K3s.
-
-Der Betreiber hat einen vollständigen Lab-Neuaufbau mit frischen Daten gewählt.
-Umsetzung und konkrete Löschung benötigen weiterhin getrennte ausdrückliche Freigaben.
-Ein Push dieser Vorbereitung aktiviert keine neuen Pfade.
+18 Infrastruktur-Bundles stellen ESO, CNPG/PostgreSQL, Redis Operator mit
+Replication/Sentinel, Harbor, OpenSearch, Dashboards, die Plattform-StorageClass
+und OpenBao-Secret-Synchronisierung bereit. Sie zielen ausschließlich auf
+`environment=lab, role=infrastructure`. Die beiden zuvor aktiven Bundles bleiben
+bestehen; Cluster 1 wurde nicht umgebaut. OpenBao bleibt auf K3s.
 
 ## Dokumentation
 
-- [Aktuelles Inventar und Befunde](docs/inventory.md)
-- [Zielarchitektur und Zuständigkeiten](docs/architecture.md)
-- [OpenBao-/ESO-Bootstrap und Secret-Vertrag](docs/secrets.md)
+- [Ausführung, Funktionstests und Einschränkungen](docs/migration-execution.md)
+- [Ausgangsinventar vor der Migration](docs/inventory.md)
+- [Architektur und Zuständigkeiten](docs/architecture.md)
+- [OpenBao-Bootstrap und Secret-Vertrag](docs/secrets.md)
 - [Installationsreihenfolge, Löschliste und Rollback](docs/migration-plan.md)
-- [Validierung und verbleibende Laufzeitprüfungen](docs/validation.md)
+- [Reproduzierbare Schema-/Chart-Validierung](docs/validation.md)
+- [Separater bestehender Logging-Systemfehler](docs/logging-system-follow-up.md)
 
-Longhorn-Release `failed` und mehrere `degraded` Volumes sind vor der Migration
-zu klären. Alle vorbereiteten Bundles und Bootstrap-Werkzeuge bleiben bis dahin inaktiv.
-Kein `kubectl apply`, Helm-Uninstall oder OpenBao-Bootstrap gehört zur Vorbereitung.
+## Betrieb
 
-## Verzeichnisstruktur
+Harbor: `https://harbor-ha.berger.ph`. Dashboards: `http://opensearch.berger.ph`.
+Zugangsdaten liegen ausschließlich in OpenBao; die genauen Pfade stehen im
+[Ausführungsbericht](docs/migration-execution.md#zugang-und-wiederaufbau).
+Harbor-Clients benötigen Vertrauen in die neue Lab-CA. Dashboards behält vorerst
+seinen bisherigen HTTP-Ingress; der Login wurde über einen geschützten lokalen
+Kubernetes-Tunnel getestet.
 
-`fleet/` enthält die unveränderte aktive GitRepo-Definition. `config/openbao/`
-enthält nicht aktivierte Rollen-/Policy-Vorlagen. `config/opensearch/security/`
-enthält ausschließlich nicht geheime Konfigurationsvorlagen aus Security 3.9.0.0
-bzw. auf den Lab-Umfang reduzierte Auth-Konfiguration. Passwörter/Hashes/Schlüssel
-werden erst beim ausdrücklich gestarteten Bootstrap in OpenBao erzeugt.
-`docs/current-values/` ist sanitisiertes Inventar, keine Installationsquelle.
+`fleet/gitrepo.yaml` enthält die explizit aktivierten Bundle-Pfade. Die Datei wird
+nicht selbst von Fleet ausgerollt: Eine Änderung daran benötigt nach Git-Push ein
+gezieltes Apply auf Rancher. Niemals pauschal das gesamte `bundles`-Verzeichnis
+aktivieren. `config/openbao/` dokumentiert den ausgeführten Admin-Bootstrap; später
+kann Terraform nach Import dieser Ressourcen deren Verwaltung übernehmen.
 
-Nie pauschal das ganze `bundles`-Verzeichnis als Fleet-Pfad hinzufügen.
+`scripts/bootstrap-new-lab-secrets.py` ist nur für leere KV-Pfade vorgesehen und
+verweigert das Überschreiben vorhandener Daten. OpenSearch-Security-Änderungen
+benötigen nach dem Bootstrap einen koordinierten Security-API-/Rolloutprozess.
+`docs/current-values/` enthält sanitisiertes Ausgangsinventar, keine Installationsquelle.
+
+## Lokale Prüfung
+
+```bash
+python3 scripts/validate.py --charts-dir /tmp/rke2-migration-audit/charts \
+  --schemas-dir /tmp/rke2-migration-audit/schemas
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -q
+```
+
+Die benötigten Chart-/Schema-Exporte und deren Erzeugung sind im
+[Validierungsbericht](docs/validation.md#reproduktion) beschrieben.
