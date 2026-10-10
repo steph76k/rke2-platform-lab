@@ -18,7 +18,7 @@ bestehen; Cluster 1 wurde nicht umgebaut. OpenBao bleibt auf K3s.
 - [OpenBao-Bootstrap und Secret-Vertrag](docs/secrets.md)
 - [Installationsreihenfolge, Löschliste und Rollback](docs/migration-plan.md)
 - [Reproduzierbare Schema-/Chart-Validierung](docs/validation.md)
-- [Separater bestehender Logging-Systemfehler](docs/logging-system-follow-up.md)
+- [Reparatur des Logging-Systemfehlers](docs/logging-system-follow-up.md)
 
 ## Betrieb
 

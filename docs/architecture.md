@@ -74,6 +74,8 @@ wurden um die 18 Infrastruktur-Bundles erweitert. Neue Plattformvolumes verwende
 StorageClass wurde nicht geändert. Worker 1 hat nur 1 CPU (bei der Abnahme
 995 mCPU reserviert), Worker 2 hat 4 CPUs. Deshalb lassen sich PostgreSQL und
 OpenSearch mit den übernommenen Requests derzeit nicht auf beide Worker verteilen.
+Der Betreiber akzeptiert diese gemeinsame Platzierung für den Lab-Test ausdrücklich;
+zusätzliche CPUs oder reduzierte Ressourcenanforderungen sind aktuell nicht vorgesehen.
 Die erfolgreichen Pod-Failover-Tests sind kein Nachweis von Worker-Ausfallsicherheit.
 
 Der frische OpenSearch-Aufbau ersetzt das Demo-Sicherheitssetup durch eine eigene

@@ -1,38 +1,81 @@
-# Separater bestehender Rancher-Logging-Fehler
+# Rancher-Logging-Reparatur – 10.10.2026
 
-Der Logging-Operator meldet bereits seit 09.10.2026, vor dieser Migration, einen
-unveränderlichen Selektor-Konflikt am DaemonSet
-`cattle-logging-system/rancher-logging-fluentbit`.
+Nach gesonderter Zustimmung wurde der seit 09.10.2026 bestehende Logging-Fehler
+auf Cluster 2 behoben. Die gemeinsame Platzierung von PostgreSQL und OpenSearch
+auf Worker 2 bleibt für den Lab-Test ausdrücklich akzeptiert; CPU-Zuteilungen,
+Requests und Scheduling-Regeln wurden bei dieser Reparatur nicht verändert.
 
-| Feld | Vorhanden | Vom Operator erwartet |
-| --- | --- | --- |
-| spec.selector.matchLabels.app.kubernetes.io/managed-by | rancher-logging-root | rancher-logging |
-| spec.template.metadata.labels.app.kubernetes.io/managed-by | rancher-logging-root | rancher-logging |
+## Ursache
 
-Die anderen Selektor-Labels bleiben `instance=rancher-logging`, `name=fluentbit`.
-Betroffen sind die beiden Fluent-Bit-Agenten auf den Infrastruktur-Workern.
-Der Fehler verhindert die vollständige Reconciliation des normalen Logging-Objekts
-und damit die Übernahme weiterer Flow-/Output-Konfigurationsänderungen.
+Die beiden `Logging`-Ressourcen `rancher-logging` und `rancher-logging-root`
+sowie ihre beiden `FluentbitAgent`-Ressourcen hatten alle eine leere `loggingRef`.
+Damit beanspruchten beide Reconciler dieselben Agenten und versuchten wechselweise,
+das unveränderliche DaemonSet-Selektorlabel `app.kubernetes.io/managed-by` auf
+`rancher-logging` beziehungsweise `rancher-logging-root` zu setzen.
 
-## Konkreter Reparaturvorschlag
+Die zuerst gezielt durchgeführte Neuerstellung von
+`cattle-logging-system/rancher-logging-fluentbit` korrigierte dessen Selektor,
+zeigte aber anschließend denselben Konflikt in Gegenrichtung. Sie allein war
+keine dauerhafte Lösung. Der neue DaemonSet hat UID
+`6bb16839-1417-4e77-8366-cf8f6f821dd3` und zwei bereite Agenten.
 
-Nur dieses DaemonSet löschen und vom bestehenden Rancher-Logging-Operator mit
-korrektem Selektor neu erstellen lassen. Keine Helm-Deinstallation, kein Löschen
-von Logging-CRs, Fluentd-StatefulSets, Secrets oder PVCs. Keine globale Freigabe
-`enableRecreateWorkloadOnImmutableFieldChange` setzen.
+Die notwendige Zuordnung über `loggingRef` ist in der
+[Operator-Dokumentation](https://kube-logging.dev/docs/logging-infrastructure/fluentbit-multiple/)
+beschrieben; der gleiche Fehler ist im
+[Upstream-Issue 1837](https://github.com/kube-logging/logging-operator/issues/1837)
+dokumentiert.
 
-```bash
-kubectl --kubeconfig=/home/tanzu/.kube/rke2-cluster2.yaml --context=rke2-cluster2 \
-  -n cattle-logging-system delete daemonset rancher-logging-fluentbit \
-  --cascade=foreground --wait=true --timeout=120s
-```
+## Dauerhafte Korrektur
 
-Danach 2/2 bereite Agenten, korrekte Selektoren, erfolgreiche Konfigurationsprüfung,
-den De-dot-Filter in der generierten Fluentd-Konfiguration und neue Pod-Logs im
-OpenSearch-Index nachweisen.
+Der vorhandene Helm-Release `rancher-logging` wurde mit unveränderter Chart-Version
+`109.0.1+up4.10.0-rancher.24`, `--reuse-values` und dem versionierten
+[Values-Overlay](../config/rancher-logging/values-repair.yaml) auf Revision 3
+aktualisiert. Der vorherige Vergleich aller gerenderten Ressourcen zeigte exakt
+zwei Änderungen: `spec.loggingRef: rancher-logging` in der normalen `Logging`-
+und `FluentbitAgent`-Ressource. Die Root-Pipeline behält ihre leere Referenz.
+Der Chart wurde dafür aus dem vorhandenen Helm-Release rekonstruiert.
 
-Die Agenten speichern Positionsdaten und lokale Puffer aktuell in `emptyDir`.
-Beim Ersetzen gehen diese flüchtigen Daten verloren; kurze Erfassungslücken oder
-Mehrfacheinträge sind möglich. Die persistenten Fluentd-Puffer bleiben erhalten.
-Dies betrifft eine Systemkomponente, die der ursprüngliche Auftrag ausdrücklich
-von Änderungen ausgenommen hat; daher separat zur Entscheidung vorgelegt.
+Für spätere Updates desselben Releases dieses Values-Overlay zusammen mit den
+bisherigen Values beibehalten. Die Systeminstallation bleibt außerhalb Fleet;
+das Overlay ist keine Anweisung, den Operator zusätzlich über Fleet zu installieren.
+
+Fleet verwaltet im bestehenden OpenSearch-Logging-Bundle jetzt vier Ressourcen:
+
+| Pipeline | loggingRef | ClusterFlow | ClusterOutput |
+| --- | --- | --- | --- |
+| Normal | `rancher-logging` | `all-logs-to-opensearch` | `opensearch` |
+| Root/System | leer | `all-logs-to-opensearch-root` | `opensearch-root` |
+
+Beide verwenden das bestehende ESO-Secret, verifiziertes TLS, das eingeschränkte
+OpenSearch-Konto und den rekursiven De-dot-Filter. Dadurch kollidieren Labelnamen
+wie `app` und `app.kubernetes.io/name` nicht mehr im OpenSearch-Mapping.
+
+Keine Helm-Deinstallation, keine Löschung von Logging-CRs, Fluentd-StatefulSets,
+Secrets, PVCs oder OpenSearch-Indizes. Die globale Option
+`enableRecreateWorkloadOnImmutableFieldChange` bleibt deaktiviert. Eine Annotation
+am normalen Logging-Objekt stieß nach der DaemonSet-Löschung die Reconciliation an.
+
+## Nachweise
+
+- Normale Agenten 2/2 bereit; Root-Agenten 5/5 bereit. Beide Agentengruppen zeigen
+  auf ihren jeweils eigenen Fluentd-Service.
+- Beide Konfigurationsprüfungen erfolgreich; `de_dot_nested true` und
+  `log_os_400_reason true` in den generierten Anwendungskonfigurationen.
+  Der De-dot-Filter ist auch in beiden laufenden Pods eingebunden.
+- Je ein temporärer Pod auf Worker 1 und Worker 2 schrieb drei Marker mit den
+  Labels `app` und `app.kubernetes.io/name`. Alle Marker wurden im Index
+  `kubernetes-*` mit dem normalisierten Schlüssel `app_kubernetes_io/name` gefunden.
+- Sechs Dokumente je Test-Pod: Die bestehenden normalen und Root-Agenten erfassen
+  Pod-Logs auf den Workern beide. Diese überlappende Erfassung bleibt bestehen;
+  der Test behauptet keine Exactly-once-Zustellung.
+- Test-Pods anschließend entfernt. Im abschließenden Zwei-Minuten-Fenster keine
+  neuen Operatorfehler, Mappingfehler oder Flush-Fehler in beiden Fluentd-Pipelines.
+  Kurze Verbindungsfehler während des vorherigen Konfigurationswechsels erholten sich.
+- Fleet 20/20 bereit; OpenSearch green. Statische Validierung: 18 Infrastruktur-
+  Bundles, 7 Charts, 153 Ressourcen einschließlich der zwei ergänzten Root-CRs.
+
+Die neu erstellten Fluent-Bit-Agenten hatten Positionsdaten und lokale Puffer in
+`emptyDir`; beim Ersetzen konnten deshalb Erfassungslücken oder Mehrfacheinträge
+entstehen. Der persistente normale Fluentd-Puffer blieb erhalten; Root-Fluentd
+verwendet wie zuvor `disablePvc: true`. Historisch verworfene Dokumente werden
+durch diese Reparatur nicht wiederhergestellt.
