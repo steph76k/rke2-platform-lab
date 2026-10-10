@@ -66,6 +66,7 @@ spec:
       retry_max_interval: 30s
       retry_forever: true
       flush_at_shutdown: true
+      chunk_limit_size: 8m
     request_timeout: 30s
     verify_os_version_at_startup: false
     default_opensearch_version: 3
