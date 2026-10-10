@@ -1,0 +1,156 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-headless
+  namespace: minio
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: minio
+  ports:
+  - name: https
+    port: 9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.197
+  allocateLoadBalancerNodePorts: false
+  selector:
+    app.kubernetes.io/name: minio
+  ports:
+  - name: https
+    port: 9000
+    targetPort: https
+  - name: console
+    port: 9001
+    targetPort: console
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  serviceName: minio-headless
+  replicas: 1
+  selector:
+    matchLabels: &id001
+      app.kubernetes.io/name: minio
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  template:
+    metadata:
+      labels: *id001
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      imagePullSecrets:
+      - name: minio-registry
+      containers:
+      - name: minio
+        image: harbor-ha.berger.ph/platform-builds/minio@sha256:bad99ef826a89d42b68fb872986a78b86ec1a42bf9f8d411c7d4aa19a0bcbe95
+        args:
+        - server
+        - /data
+        - --address
+        - :9000
+        - --console-address
+        - :9001
+        - --certs-dir
+        - /certs
+        ports:
+        - name: https
+          containerPort: 9000
+        - name: console
+          containerPort: 9001
+        env:
+        - name: MINIO_ROOT_USER
+          valueFrom:
+            secretKeyRef:
+              name: minio-credentials
+              key: root-user
+        - name: MINIO_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: minio-credentials
+              key: root-password
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: tls
+          mountPath: /certs
+          readOnly: true
+        - name: tmp
+          mountPath: /tmp
+        readinessProbe:
+          httpGet:
+            path: /minio/health/ready
+            port: https
+            scheme: HTTPS
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /minio/health/live
+            port: https
+            scheme: HTTPS
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /minio/health/live
+            port: https
+            scheme: HTTPS
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+      volumes:
+      - name: tls
+        secret:
+          secretName: minio-tls
+          items:
+          - key: tls.crt
+            path: public.crt
+          - key: tls.key
+            path: private.key
+          - key: ca.crt
+            path: CAs/lab-ca.crt
+      - name: tmp
+        emptyDir: {}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      storageClassName: longhorn-platform
+      resources:
+        requests:
+          storage: 20Gi

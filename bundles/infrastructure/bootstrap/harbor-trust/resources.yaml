@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: harbor-registry-trust
+  namespace: minio
+data:
+  lab-ca.crt: '-----BEGIN CERTIFICATE-----
+
+    MIID8jCCAlqgAwIBAgIUTUW+neKdfnn6YUaeaEaAxDT/J6MwDQYJKoZIhvcNAQEL
+
+    BQAwHzEdMBsGA1UEAwwUcmtlMi1wbGF0Zm9ybS1sYWItY2EwHhcNMjYxMDEwMTEw
+
+    MTI2WhcNMjcxMDEwMTEwNjI2WjAfMR0wGwYDVQQDDBRya2UyLXBsYXRmb3JtLWxh
+
+    Yi1jYTCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAJb8kpIucKn0RInO
+
+    pYdRKwtQbNFSYQvAKSATHPEE5sdu8CQAe2P9vmBo++LS8HtpwYYlZ35Eeg7RL1Tx
+
+    kFbIZdmd3CQR79mgHEw7nlgxkBzYnnNMnY2C4R/A50gdYLZiEzr9zsl7MtTArb5y
+
+    A1g9tM89tPM3Jh4q/8KeWY7Hf4AELeAjWP3k6GoO3GzwLIK354FIfT3dCeAN+kr/
+
+    W+9qa9Om/FvdLFkn+yhJNzVlq597L2rAfsq0RA6COvAOkYlX6bCUhUqFslDMcDmt
+
+    DeZfeebJcFBcPqTkocOKvUQKrcxsezcuj1tI8WBRURjuJSoC06gLQEsFTbNxBnOM
+
+    UlhrSwsGW3m3GCTj71zevUHwQAZikUi7fVOSVpo0SLEJmBA1khKfLQh4fTaAPwZz
+
+    u8GfTZkUcdcS0ol1nR63wJbsie/0h107Xem0Lp69UmNIRfafRVOxeg0/vmQWzIfB
+
+    xMvzWTfXqExJnRasrBR3t/qvbAdljGfjb2QcoCWMHgApRSyVNQIDAQABoyYwJDAS
+
+    BgNVHRMBAf8ECDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIBpjANBgkqhkiG9w0BAQsF
+
+    AAOCAYEAP6tdsVQibxiUSlcGGZhhV5ldpkOa4cC0CMnLhlyoWPXENLuBfnNMaL5p
+
+    uTw+LQomZ2pOj+ccGt9GqAXcLYsep27CJfXQMTtd4plfLfFcE+jLk0PO3n3ZnblC
+
+    AlCgBKPQXS9ynBtCzznVt40TANRr9E+vDSZBIC0Ok9+bPYkHrQRDV/ZOtGDC45pw
+
+    L7jwSBDFEgl1g317wmojHJEUnnj54jtfu0occfpzPH6jc/1CX7ghYa3TkjZ2xi1+
+
+    /8TSe1FqQkULLb5H6E4mrPVY8PweK4g6l4JBlOerQSdd9Os//X8tfjgeEA1jqb2R
+
+    gWB5gZQ5Z45v2OOuLd74yQKs/4z9S0U2I4MnZ8WWLCVyZo+IH2p6wAX/1ew8ut5i
+
+    9UiHNQjf10qGL5I9wY4Tk+zKJj5fi2atzgifBdrZ033w72FrVK3Ry2CXzuKJWbTc
+
+    bjcw80AGZX7A+r9+8jEIGitE+8t5OZ33Ufxmfn7fVvw1AyA/7uGS0Q5cvVNjgv5W
+
+    0zEwwXh2
+
+    -----END CERTIFICATE-----
+
+    '
+  hosts.toml: "# Managed by Fleet lab-infra-harbor-trust\nserver = \"https://harbor-ha.berger.ph\"\
+    \n[host.\"https://harbor-ha.berger.ph\"]\n  capabilities = [\"pull\", \"resolve\"\
+    ]\n  ca = \"/var/lib/rancher/rke2/agent/etc/containerd/certs.d/harbor-ha.berger.ph/lab-ca.crt\"\
+    \n"
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: harbor-registry-trust
+  namespace: minio
+spec:
+  selector:
+    matchLabels:
+      app: harbor-registry-trust
+  template:
+    metadata:
+      labels:
+        app: harbor-registry-trust
+    spec:
+      automountServiceAccountToken: false
+      tolerations:
+      - operator: Exists
+      containers:
+      - name: install-ca
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - "set -eu\nif [ -f /target/hosts.toml ] && ! grep -q '^# Managed by Fleet\
+          \ lab-infra-harbor-trust$' /target/hosts.toml; then\n  echo 'Refusing to\
+          \ overwrite existing registry configuration'; exit 1\nfi\ncp /source/lab-ca.crt\
+          \ /target/lab-ca.crt\ncp /source/hosts.toml /target/hosts.toml\nchmod 0644\
+          \ /target/lab-ca.crt /target/hosts.toml\necho 'Harbor CA trust installed;\
+          \ no runtime restart needed'\ntouch /tmp/ready\nexec sleep infinity\n"
+        securityContext:
+          runAsUser: 0
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            cpu: 1m
+            memory: 8Mi
+          limits:
+            cpu: 50m
+            memory: 32Mi
+        readinessProbe:
+          exec:
+            command:
+            - test
+            - -f
+            - /tmp/ready
+        volumeMounts:
+        - name: source
+          mountPath: /source
+          readOnly: true
+        - name: target
+          mountPath: /target
+      volumes:
+      - name: source
+        configMap:
+          name: harbor-registry-trust
+      - name: target
+        hostPath:
+          path: /var/lib/rancher/rke2/agent/etc/containerd/certs.d/harbor-ha.berger.ph
+          type: DirectoryOrCreate

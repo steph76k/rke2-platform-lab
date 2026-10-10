@@ -32,6 +32,9 @@ spec:
   - bundles/application/logging/secrets
   - bundles/application/logging/operator
   - bundles/application/logging/output
+  - bundles/infrastructure/secrets/platform/minio
+  - bundles/infrastructure/bootstrap/harbor-trust
+  - bundles/infrastructure/applications/minio
   targets:
   - name: lab-infrastructure
     clusterSelector:

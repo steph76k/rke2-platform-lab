@@ -54,6 +54,9 @@ spec:
     logstash_format: true
     logstash_prefix: kubernetes-rke2-cluster1
     buffer:
+      tags: time
+      flush_thread_burst_interval: 0.05s
+      queued_chunks_limit_size: 64
       flush_mode: interval
       flush_interval: 10s
       flush_thread_count: 2

@@ -68,6 +68,7 @@ def main():
     active_paths = gitrepo['spec']['paths']
     assert active_paths[:2] == EXPECTED_PATHS, 'Existing active paths changed'
     allowed_paths = {str(p.parent.relative_to(ROOT)) for p in (ROOT / 'bundles/infrastructure').rglob('fleet.yaml')}
+    allowed_paths |= {str(p.parent.relative_to(ROOT)) for p in (ROOT / 'bundles/application/logging').glob('*/fleet.yaml')}
     assert len(active_paths) == len(set(active_paths))
     assert set(active_paths[2:]) <= allowed_paths, 'Unknown or overly broad active path'
     if args.staged_only:

@@ -1,0 +1,14 @@
+name: lab-infra-minio
+defaultNamespace: minio
+helm:
+  releaseName: lab-infra-minio
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
+dependsOn:
+- name: lab-infra-minio-secrets
+- name: lab-infra-harbor-trust
+- name: lab-infra-storage-class
