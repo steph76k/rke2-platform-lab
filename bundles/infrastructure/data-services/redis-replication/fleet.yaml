@@ -18,3 +18,13 @@ dependsOn:
 - name: lab-infra-redis-operator
 - name: lab-infra-redis-secrets
 - name: lab-infra-storage-class
+# Operator 0.27 serializes the disabled exporter boolean differently from chart
+# 0.17.1. Ignore only this default field; all other Redis spec drift remains visible.
+diff:
+  comparePatches:
+  - apiVersion: redis.redis.opstreelabs.in/v1beta2
+    kind: RedisReplication
+    namespace: harbor-ha
+    name: redis-replication
+    jsonPointers:
+    - /spec/redisExporter/enabled
