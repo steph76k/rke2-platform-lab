@@ -1,0 +1,77 @@
+additionalLoggingSources:
+  rke2:
+    enabled: true
+fluentbit:
+  podPriorityClassName: null
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  bufferStorageVolume:
+    hostPath: &id001
+      path: /var/lib/rancher/afi-logging/buffers
+      type: DirectoryOrCreate
+  bufferStorage:
+    storage.path: /buffers
+    storage.sync: full
+    storage.checksum: 'on'
+    storage.max_chunks_up: 32
+    storage.backlog.mem_limit: 32M
+    storage.metrics: 'on'
+  metrics:
+    port: 2020
+    path: /api/v1/metrics/prometheus
+    prometheusAnnotations: true
+    serviceMonitor: false
+    prometheusRules: false
+global:
+  cattle:
+    clusterId: c-44q9v
+    clusterName: rke2-cluster2
+    rkePathPrefix: ''
+    rkeWindowsPathPrefix: ''
+    systemDefaultRegistry: ''
+    systemProjectId: p-6qghv
+    url: https://rancher.berger.ph
+  systemDefaultRegistry: ''
+logging:
+  controlNamespace: cattle-logging-system
+  enabled: false
+  fluentbitDisabled: false
+  loggingRef: ''
+disablePvc: true
+fluentbitAgentOverlay:
+  spec:
+    positiondb:
+      hostPath:
+        path: /var/lib/rancher/afi-logging/positions
+        type: DirectoryOrCreate
+    inputTail:
+      storage.type: filesystem
+      DB.journal_mode: WAL
+      DB.locking: true
+      Read_From_Head: true
+      Mem_Buf_Limit: 32M
+      Rotate_Wait: '30'
+      Skip_Long_Lines: 'On'
+    forwardOptions:
+      Require_ack_response: true
+      Retry_Limit: 'False'
+      storage.total_limit_size: 2G
+    filterKubernetes:
+      Merge_Log: 'Off'
+      Keep_Log: 'On'
+      K8S-Logging.Parser: 'Off'
+      K8S-Logging.Exclude: 'Off'
+    bufferStorage:
+      storage.path: /buffers
+      storage.sync: full
+      storage.checksum: 'on'
+      storage.max_chunks_up: 32
+      storage.backlog.mem_limit: 32M
+      storage.metrics: 'on'
+    bufferStorageVolume:
+      hostPath: *id001

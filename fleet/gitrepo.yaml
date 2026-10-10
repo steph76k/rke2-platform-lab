@@ -41,6 +41,8 @@ spec:
   - bundles/infrastructure/observability/logging-monitoring
   - bundles/application/logging/storage
   - bundles/infrastructure/logging/storage
+  - bundles/infrastructure/logging/crds
+  - bundles/infrastructure/logging/operator
   targets:
   - name: lab-infrastructure
     clusterSelector:

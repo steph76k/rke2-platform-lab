@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: rancher-logging-rke2-journald-aggregator
+  namespace: cattle-logging-system
+spec:
+  template:
+    metadata:
+      annotations:
+        afi.berger.ph/journal-config: 5c49ef2fe702b8099dbebd6b183e153093c8ee12c6650314b9f025cc6d5c119e
+    spec:
+      containers:
+      - name: fluentbit
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        ports:
+        - name: metrics
+          containerPort: 2020
+        volumeMounts:
+        - name: persistent-buffer
+          mountPath: /buffers
+      volumes:
+      - name: persistent-buffer
+        hostPath:
+          path: /var/lib/rancher/afi-logging/journald
+          type: DirectoryOrCreate

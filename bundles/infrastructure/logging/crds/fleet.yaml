@@ -1,0 +1,16 @@
+name: lab-infra-logging-crds
+defaultNamespace: cattle-logging-system
+helm:
+  releaseName: rancher-logging-crd
+  repo: https://charts.rancher.io
+  chart: rancher-logging-crd
+  version: 109.0.1+up4.10.0-rancher.24
+  valuesFiles:
+  - values.yaml
+  timeoutSeconds: 900
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
