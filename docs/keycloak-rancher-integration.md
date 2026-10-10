@@ -31,6 +31,7 @@ lieferte HTTP 500 und änderte die Konfiguration nicht; der konkrete Aufruf lief
 | Issuer | https://idp.berger.ph/realms/berger |
 | Client-ID | rancher, confidential |
 | Callback | https://rancher.berger.ph/verify-auth, exakt ohne Wildcard |
+| Rancher API Host | https://rancher.berger.ph (`rancherApiHost`) |
 | Web Origin | https://rancher.berger.ph |
 | Flow | Authorization Code, PKCE S256 |
 | Scopes | openid profile email |
@@ -49,12 +50,41 @@ am lokalen Admin wurde nicht umgebogen.
 
 ## End-to-End-Nachweis
 
-Eigener temporärer Benutzer in berger, Mitglied der bestehenden Gruppe mandant-a:
-normaler Keycloak-Login, Code-Callback und PKCE-Austausch durch Rancher HTTP 201.
+Der erste Test nutzte einen eigenen temporären Benutzer in berger, Mitglied der
+bestehenden Gruppe mandant-a. Er erzeugte PKCE-Challenge und Verifier-Cookie selbst;
+Keycloak-Login, Code-Callback und PKCE-Austausch durch Rancher lieferten HTTP 201.
+Damit war die tatsächliche Login-Weiterleitung der Rancher-Oberfläche noch nicht geprüft.
 Rancher erkannte die neue Benutzer-UUID und `keycloakoidc_group://mandant-a`.
 Nach der Terraform-Projektbindung: Zugriff auf Mandant A HTTP 200, Zugriff auf das
 fremde Project-1 verweigert (403/404). Beide temporären Testidentitäten wurden nach
 Verwendung aus Keycloak und Rancher entfernt. Kein vorhandener Benutzer wurde geändert.
+
+### Korrektur der Login-Weiterleitung am 10.10.2026
+
+Beim anschließenden Browser-Login trat `Missing parameter: code_challenge_method` auf.
+In der übernommenen Auth-Konfiguration fehlte `rancherApiHost`. Trotz `pkceMethod=S256`
+lieferte der öffentliche Provider deshalb einen direkten Keycloak-Link ohne PKCE.
+Der erste Test hatte diese Lücke durch selbst erzeugte PKCE-Parameter verdeckt.
+
+Gezielt wurde ausschließlich `rancherApiHost: https://rancher.berger.ph` am vorhandenen
+`authconfigs.management.cattle.io/keycloakoidc` ergänzt. Rancher liefert jetzt
+`https://rancher.berger.ph/v1-oidc/keycloakoidc` als Login-Einstieg. Dieser Handler setzt
+das Verifier-Cookie und leitet mit `code_challenge_method=S256` sowie passender Challenge
+zu Keycloak weiter. Die S256-Anforderung in Keycloak bleibt aktiv.
+
+Erneuter vollständiger HTTP-Test ab dem öffentlichen Rancher-Provider-Link, ohne
+selbst gesetzten Verifier oder selbst erzeugte Challenge: Keycloak-Loginformular 200,
+Rancher-Login 201, Mandant-A-Projekt 200, fremdes Projekt verweigert. Die Challenge
+wurde gegen das von Rancher gesetzte Cookie geprüft. Die temporäre Identität wurde
+in Keycloak und Rancher entfernt. Ein automatisierter Browser-/JavaScript-Test wurde
+nicht durchgeführt; geprüft wurde die tatsächliche HTTP-Weiterleitungs- und Login-Kette.
+Lokaler Auth-Provider und alle übrigen OIDC-Konfigurationsfelder blieben unverändert.
+
+Die zusätzlichen Backups `before-browser-pkce-keycloakoidc.sops.json` und
+`after-browser-pkce-keycloakoidc.sops.json` im oben genannten Backup-Verzeichnis wurden
+verschlüsselt und durch Entschlüsselung im Speicher geprüft. Für den aktuellen
+funktionierenden OIDC-Zustand das **after-browser-pkce**-Backup verwenden; das ältere
+`after-keycloakoidc.sops.json` enthält das ergänzte Feld noch nicht.
 
 Mandanten-Terraform liegt separat unter `/home/tanzu/manifest/fleet/rke2-tenants-lab`.
 Es importiert die bestehende Gruppe und das Projekt `c-m-prkskj2p:p-9nh78` und bindet

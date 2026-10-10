@@ -269,7 +269,8 @@
     "userPrincipalVerified": true,
     "temporaryUserRemoved": true,
     "mandantAProjectHttp": 200,
-    "otherProjectHttp": 403
+    "otherProjectHttp": 403,
+    "testLimitation": "Initial test supplied its own PKCE challenge and verifier cookie; actual Rancher redirect covered by oidc-browser-flow-result."
   },
   "terraform-validation": {
     "existingTenantPlan": "No changes",
@@ -1374,5 +1375,26 @@
     "oldBeforeDatabaseUnverified": true,
     "backupDirectory": "/home/tanzu/manifest/backups/platform-rollout-2026-10-10",
     "identityStoredSeparately": true
+  },
+  "oidc-browser-flow-result": {
+    "loginHttp": 201,
+    "realm": "berger",
+    "pkce": "S256",
+    "loginEntry": "Rancher public provider redirectUrl",
+    "verifierOrigin": "Rancher Set-Cookie",
+    "browserAutomation": false,
+    "groupPrincipal": "keycloakoidc_group://mandant-a",
+    "userPrincipalVerified": true,
+    "temporaryUserRemoved": true,
+    "mandantAProjectHttp": 200,
+    "otherProjectHttp": 403,
+    "validatedAt": "2026-10-10T18:57:11.153238+00:00",
+    "rancherApiHost": "https://rancher.berger.ph",
+    "publicRedirectUrl": "https://rancher.berger.ph/v1-oidc/keycloakoidc",
+    "challengeMatchesRancherCookie": true,
+    "keycloakLoginFormHttp": 200,
+    "localAuthConfigUnchanged": true,
+    "otherOIDCFieldsUnchanged": true,
+    "encryptedBeforeAfterVerified": true
   }
 }
