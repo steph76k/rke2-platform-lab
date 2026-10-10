@@ -1,0 +1,24 @@
+{
+  "nodes": {
+    "rke2-cluster2-cp-1.berger.ph": {
+      "cpu": 4,
+      "memoryKi": "5800608Ki",
+      "ready": true,
+      "ntpStartupGuardInstalled": true
+    },
+    "rke2-cluster2-cp-2.berger.ph": {
+      "cpu": 4,
+      "memoryKi": "5800608Ki",
+      "ready": true,
+      "ntpStartupGuardInstalled": true
+    },
+    "rke2-cluster2-cp-3.berger.ph": {
+      "cpu": 4,
+      "memoryKi": "5800608Ki",
+      "ready": true,
+      "ntpStartupGuardInstalled": true
+    }
+  },
+  "allThreeEtcdEndpointsHealthy": true,
+  "cp2FutureDatedNodeCertificatesReissued": true
+}

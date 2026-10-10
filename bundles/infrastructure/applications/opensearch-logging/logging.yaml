@@ -1,7 +1,7 @@
 apiVersion: logging.banzaicloud.io/v1beta1
 kind: ClusterOutput
 metadata:
-  name: opensearch-root
+  name: afi-platform
   namespace: cattle-logging-system
 spec:
   opensearch:
@@ -10,44 +10,59 @@ spec:
     scheme: https
     ssl_verify: true
     log_os_400_reason: true
-    ca_file:
-      mountFrom:
-        secretKeyRef:
-          name: platform-opensearch-logging
-          key: ca.crt
-    user: platform-logging
-    password:
-      valueFrom:
-        secretKeyRef:
-          name: platform-opensearch-logging
-          key: password
-    logstash_format: true
-    logstash_prefix: kubernetes
-    buffer:
-      timekey: 1m
-      timekey_wait: 30s
-      timekey_use_utc: true
-      flush_at_shutdown: true
-      chunk_limit_size: 2m
-      flush_thread_count: 8
-      flush_thread_burst_interval: 0.001s
+    verify_os_version_at_startup: false
+    default_opensearch_version: 3
+    request_timeout: 30s
     bulk_message_request_threshold: '2097152'
     reload_connections: false
     reload_on_failure: false
     reconnect_on_error: true
-    verify_os_version_at_startup: false
-    default_opensearch_version: 3
-    request_timeout: 30s
+    ca_file:
+      mountFrom:
+        secretKeyRef:
+          name: afi-opensearch-ingest
+          key: ca.crt
+    user: afi-ingest-rke2-cluster2
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: afi-opensearch-ingest
+          key: password
+    logstash_format: true
+    logstash_prefix: logs-rke2-cluster2-platform
+    buffer:
+      type: file
+      timekey: 1m
+      timekey_wait: 10s
+      timekey_use_utc: true
+      flush_mode: interval
+      flush_interval: 10s
+      flush_thread_count: 2
+      chunk_limit_size: 2m
+      total_limit_size: 4g
+      queued_chunks_limit_size: 8192
+      retry_forever: true
+      retry_max_interval: 30s
+      overflow_action: block
+      flush_at_shutdown: false
 ---
 apiVersion: logging.banzaicloud.io/v1beta1
 kind: ClusterFlow
 metadata:
-  name: all-logs-to-opensearch-root
+  name: afi-platform
   namespace: cattle-logging-system
 spec:
+  match:
+  - select: {}
   filters:
   - dedot:
       de_dot_nested: true
       de_dot_separator: _
+  - record_modifier:
+      records:
+      - cluster_name: rke2-cluster2
+        cluster_role: infrastructure
+        tenant_id: platform
+        environment: lab
   globalOutputRefs:
-  - opensearch-root
+  - afi-platform

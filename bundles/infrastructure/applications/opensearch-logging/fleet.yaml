@@ -10,4 +10,5 @@ overrideTargets:
       role: infrastructure
 dependsOn:
 - name: lab-infra-opensearch
-- name: lab-infra-logging-secrets
+- name: lab-infra-logging-operator
+- name: lab-infra-afi-logging-secrets

@@ -6,7 +6,7 @@ OIDC-Zugriff auf eigene/fremde Pod-Logs: PASS für A und B. Beim echten Fluentd-
 blieben PVC und Queue erhalten; anschließend wurden 50/50 Marker ohne Duplikate zugestellt.
 Cluster 2 ist noch nicht
 vollständig umgestellt: alte zentrale Queue auf `emptyDir` bleibt bis zum bestätigten
-Drain bestehen; Node-Collector werden gestuft aktualisiert. Die Freigabe nach §8.7
+Drain bestehen; Beide Node-Collector-DaemonSets verwenden bereits persistente Host-Pfade. Die Freigabe nach §8.7
 liegt vor. Fortschritt und Einschränkungen sind kein vollständiger Abnahmenachweis
 für Cluster 2.
 
@@ -82,7 +82,7 @@ maximal 30 s Retry-Intervall, Backpressure bei vollem Buffer. Versionsabfrage be
 OpenSearch-Verbindungsaufbau ist deaktiviert, damit Collector-Neustart auch während
 eines OpenSearch-Ausfalls möglich bleibt. Request-Timeout: 30 s.
 
-4 GiB reichen mit Sicherheitsfaktor 2 für vier Stunden bei etwa 149 KiB/s pro Ausgang
+4 GiB reichen mit Sicherheitsfaktor 2 für vier Stunden bei etwa 146 KiB/s pro Ausgang
 (4 GiB / 14.400 s / 2). Fluent Bit begrenzt seine node-lokale Forward-Queue zusätzlich
 auf 2 GiB, nutzt persistente Positionsdaten und verlangt Forward-Acknowledgements.
 Das ist ein Auslegungsbudget, keine gemessene Garantie: unkomprimierten Spitzendurchsatz
@@ -171,8 +171,9 @@ wiederholt aus. Die native API auf `cp-1` und OpenSearch über den Worker-SSH-Tu
 waren erreichbar; OpenSearch meldete green. Die Quell-IP-Liste des Cross-Cluster-
 LoadBalancers erlaubt die Cluster-1-Nodes, nicht den lokalen Arbeitsplatz.
 
-Der Benutzer bietet eine Erweiterung auf vier vCPU und 6 GB RAM je Control-Plane-Node
-an. Umstellung einzeln, beginnend mit `cp-2`, danach jeweils Ready/etcd/API prüfen.
+Alle drei Control-Plane-Nodes wurden durch den Benutzer einzeln auf vier vCPU und
+6 GB RAM erweitert. Danach wurden jeweils Ready-Status, Zeitabgleich und alle drei
+etcd-Endpunkte erfolgreich geprüft.
 Das ist eine Verbesserung gegenüber dem Istzustand; der tatsächliche Ressourcenbedarf
 muss anschließend beobachtet werden. Die [RKE2-Anforderungen](https://docs.rke2.io/install/requirements)
 nennen mindestens zwei CPUs/4 GB und empfehlen vier CPUs/8 GB. Collector-Requests
@@ -208,3 +209,22 @@ Hypervisor-/RTC-Ebene untersuchen.
 
 Quellen: [RKE2-Zertifikatsverwaltung](https://docs.rke2.io/security/certificates),
 [Chrony waitsync](https://chrony-project.org/doc/4.6.1/chronyc.html).
+
+
+Auf `rke2-cluster2-wk-1` wurde derselbe Zeitabgleich unter
+`/etc/systemd/system/rke2-agent.service.d/10-afi-wait-for-time.conf` installiert.
+Seine einzelne vCPU war während des Alt-Pufferabbaus vollständig ausgelastet; die
+Erweiterung auf vier vCPU bei unveränderten 12 GB RAM ist vom Benutzer zugesagt.
+Der Neustart erfolgt erst nach bestätigter Longhorn-Persistenz des zentralen Collectors.
+
+### Wiederherstellung eines alten Output-Puffers
+
+Auf Cluster 2 lagen zusätzlich 716 alte Chunk-Dateien (rund 11 MiB) mit dem früheren
+Output-Namen `opensearch` auf `emptyDir`. Der aktive Output `opensearch-root` meldete
+bereits eine leere Queue, erfasste diese Dateien aber nicht. Deshalb wird vor einem
+Pod-Ersatz neben den aktiven Metriken immer das gesamte Pufferverzeichnis geprüft.
+Für den Drain wurde der ursprüngliche Flow-/Output-Name vorübergehend wiederhergestellt,
+begrenzt auf den leeren Namespace `afi-legacy-buffer-recovery-no-input`. Dadurch lädt
+Fluentd die passenden alten Dateien, ohne neue Anwendungs-Namespaces in diesen Flow
+aufzunehmen. Nach dem Drain werden diese temporären Ressourcen entfernt.
+Siehe [Fluentd File Buffer und Pfadzuordnung](https://docs.fluentd.org/buffer/file).

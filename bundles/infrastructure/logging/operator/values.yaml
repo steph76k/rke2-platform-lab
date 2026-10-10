@@ -11,7 +11,7 @@ fluentbit:
       cpu: 200m
       memory: 256Mi
   bufferStorageVolume:
-    hostPath: &id001
+    hostPath:
       path: /var/lib/rancher/afi-logging/buffers
       type: DirectoryOrCreate
   bufferStorage:
@@ -42,7 +42,38 @@ logging:
   enabled: false
   fluentbitDisabled: false
   loggingRef: ''
-disablePvc: true
+disablePvc: false
+fluentd:
+  bufferStorageVolume:
+    pvc:
+      source:
+        claimName: afi-fluentd-buffer
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: longhorn-platform
+        resources:
+          requests:
+            storage: 20Gi
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 2Gi
+      cpu: 500m
+  metrics:
+    port: 24231
+    prometheusAnnotations: true
+    serviceMonitor: false
+    prometheusRules: false
+loggingOverlay:
+  spec:
+    fluentd:
+      bufferVolumeMetrics:
+        port: 9100
+        prometheusAnnotations: true
 fluentbitAgentOverlay:
   spec:
     positiondb:
@@ -66,12 +97,3 @@ fluentbitAgentOverlay:
       Keep_Log: 'On'
       K8S-Logging.Parser: 'Off'
       K8S-Logging.Exclude: 'Off'
-    bufferStorage:
-      storage.path: /buffers
-      storage.sync: full
-      storage.checksum: 'on'
-      storage.max_chunks_up: 32
-      storage.backlog.mem_limit: 32M
-      storage.metrics: 'on'
-    bufferStorageVolume:
-      hostPath: *id001
