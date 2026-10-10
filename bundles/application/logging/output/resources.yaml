@@ -54,6 +54,9 @@ spec:
     logstash_format: true
     logstash_prefix: kubernetes-rke2-cluster1
     buffer:
+      flush_mode: interval
+      flush_interval: 10s
+      flush_thread_count: 2
       timekey: 1m
       timekey_wait: 30s
       timekey_use_utc: true
