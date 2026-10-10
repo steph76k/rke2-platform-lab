@@ -37,7 +37,7 @@ with tempfile.TemporaryDirectory(prefix='afi-oidc-') as tmp:
  r=h.put(CONFIG['harbor']+'/api/v2.0/configurations',json=harbor,timeout=30);r.raise_for_status()
  r=h.get(CONFIG['harbor']+'/api/v2.0/users/current',timeout=30);r.raise_for_status();assert r.json()['username']=='admin';print('Harbor OIDC configured; local admin still authenticated')
  r=osapi.get(CONFIG['opensearch_tunnel']+'/_plugins/_security/api/securityconfig',timeout=30);r.raise_for_status();security=r.json()['config'];backup('before-opensearch-oidc.json',security);before_basic=copy.deepcopy(security['dynamic']['authc'])
- security['dynamic']['authc']['afi_openid_auth_domain']={'http_enabled':True,'transport_enabled':False,'order':1,'http_authenticator':{'type':'openid','challenge':False,'config':{'subject_key':'preferred_username','roles_key':'groups','openid_connect_url':CONFIG['keycloak']+'/realms/'+CONFIG['realm']+'/.well-known/openid-configuration','required_audience':'afi-opensearch','required_issuer':CONFIG['keycloak']+'/realms/'+CONFIG['realm']}},'authentication_backend':{'type':'noop'}}
+ security['dynamic']['authc']['afi_openid_auth_domain']={'http_enabled':True,'transport_enabled':False,'order':-1,'http_authenticator':{'type':'openid','challenge':False,'config':{'subject_key':'preferred_username','roles_key':'groups','openid_connect_url':CONFIG['keycloak']+'/realms/'+CONFIG['realm']+'/.well-known/openid-configuration','required_audience':'afi-opensearch','required_issuer':CONFIG['keycloak']+'/realms/'+CONFIG['realm']}},'authentication_backend':{'type':'noop'}}
  apply_security_config(security,cert)
  r=osapi.get(CONFIG['opensearch_tunnel']+'/_plugins/_security/api/securityconfig',timeout=30);r.raise_for_status()
  for name,value in before_basic.items():

@@ -1,0 +1,263 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logging-monitoring
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: afi-logging-prometheus
+  namespace: logging-monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: afi-logging-monitor
+  namespace: cattle-logging-system
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: afi-logging-monitor
+  namespace: cattle-logging-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: afi-logging-monitor
+subjects:
+- kind: ServiceAccount
+  name: afi-logging-prometheus
+  namespace: logging-monitoring
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: afi-logging-prometheus
+  namespace: logging-monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+      external_labels:
+        cluster: rke2-cluster2
+    rule_files:
+    - /etc/prometheus/rules.yaml
+    scrape_configs:
+    - job_name: prometheus
+      static_configs:
+      - targets:
+        - 127.0.0.1:9090
+    - job_name: logging-fluentd
+      metrics_path: /metrics
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - cattle-logging-system
+      relabel_configs:
+      - source_labels:
+        - __meta_kubernetes_pod_name
+        regex: rancher-logging-root-fluentd-[0-9]+
+        action: keep
+      - source_labels:
+        - __meta_kubernetes_pod_container_port_number
+        regex: '24231'
+        action: keep
+      - source_labels:
+        - __meta_kubernetes_pod_name
+        target_label: pod
+      - source_labels:
+        - __meta_kubernetes_pod_node_name
+        target_label: node
+    - job_name: logging-fluentbit
+      metrics_path: /api/v1/metrics/prometheus
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - cattle-logging-system
+      relabel_configs:
+      - source_labels:
+        - __meta_kubernetes_pod_name
+        regex: rancher-logging-root-fluentbit-.+
+        action: keep
+      - source_labels:
+        - __meta_kubernetes_pod_container_port_number
+        regex: '2020'
+        action: keep
+      - source_labels:
+        - __meta_kubernetes_pod_name
+        target_label: pod
+      - source_labels:
+        - __meta_kubernetes_pod_node_name
+        target_label: node
+    - job_name: logging-buffer-volume
+      metrics_path: /metrics
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - cattle-logging-system
+      relabel_configs:
+      - source_labels:
+        - __meta_kubernetes_pod_name
+        regex: rancher-logging-root-fluentd-[0-9]+
+        action: keep
+      - source_labels:
+        - __meta_kubernetes_pod_container_port_number
+        regex: '9100'
+        action: keep
+      - source_labels:
+        - __meta_kubernetes_pod_name
+        target_label: pod
+      - source_labels:
+        - __meta_kubernetes_pod_node_name
+        target_label: node
+  rules.yaml: |
+    groups:
+    - name: afi-logging-durability
+      rules:
+      - alert: AFILoggingExportRetry
+        expr: fluentd_output_status_retry_count > 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: Logging export retries are active
+          description: The persistent buffer is retrying delivery; check OpenSearch connectivity
+            and free buffer capacity.
+      - alert: AFILoggingBufferHigh
+        expr: fluentd_output_status_buffer_total_bytes / 4294967296 > 0.75
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: A logging output has used more than 75% of its 4 GiB buffer
+      - alert: AFILoggingBufferCritical
+        expr: fluentd_output_status_buffer_total_bytes / 4294967296 > 0.9
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: A logging output has used more than 90% of its buffer; input backpressure
+            is imminent
+      - alert: AFILoggingExportErrors
+        expr: increase(fluentd_output_status_num_errors[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Fluentd output errors are increasing
+      - alert: AFILoggingRecordsDropped
+        expr: increase(fluentbit_output_dropped_records_total[5m]) > 0
+        labels:
+          severity: critical
+        annotations:
+          summary: Fluent Bit has discarded records; investigate queue capacity and retries
+      - alert: AFILoggingCollectorUnavailable
+        expr: up{job=~"logging-fluentd|logging-fluentbit"} == 0
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: A logging collector metrics endpoint is unreachable
+      - alert: AFILoggingBufferFilesystemHigh
+        expr: (node_filesystem_size_bytes{mountpoint="/buffers"} - node_filesystem_avail_bytes{mountpoint="/buffers"})
+          / node_filesystem_size_bytes{mountpoint="/buffers"} > 0.8
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Persistent logging volume is more than 80% full
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: afi-logging-prometheus
+  namespace: logging-monitoring
+spec:
+  selector:
+    app.kubernetes.io/name: afi-logging-prometheus
+  ports:
+  - name: http
+    port: 9090
+    targetPort: 9090
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: afi-logging-prometheus
+  namespace: logging-monitoring
+spec:
+  replicas: 1
+  serviceName: afi-logging-prometheus
+  selector:
+    matchLabels: &id001
+      app.kubernetes.io/name: afi-logging-prometheus
+  template:
+    metadata:
+      labels: *id001
+    spec:
+      serviceAccountName: afi-logging-prometheus
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+      containers:
+      - name: prometheus
+        image: docker.io/rancher/prom-prometheus:v3.5.0
+        args:
+        - --config.file=/etc/prometheus/prometheus.yml
+        - --storage.tsdb.path=/prometheus
+        - --storage.tsdb.retention.time=14d
+        - --storage.tsdb.retention.size=1500MB
+        ports:
+        - name: http
+          containerPort: 9090
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: 9090
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: config
+          mountPath: /etc/prometheus
+          readOnly: true
+        - name: data
+          mountPath: /prometheus
+      volumes:
+      - name: config
+        configMap:
+          name: afi-logging-prometheus
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      storageClassName: longhorn-platform
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi

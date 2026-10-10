@@ -1,0 +1,11 @@
+name: lab-infra-logging-monitoring
+defaultNamespace: logging-monitoring
+helm:
+  releaseName: lab-infra-logging-monitoring
+  disablePreProcess: true
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
