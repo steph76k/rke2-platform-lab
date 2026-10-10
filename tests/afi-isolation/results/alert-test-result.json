@@ -1,4 +1,5 @@
 {
   "ruleSyntaxValid": true,
-  "sevenAlertsFiringAndHealthyCasesPassed": true
+  "sevenAlertsFiringAndHealthyCasesPassed": true,
+  "historicalRetryCounterDoesNotAlert": true
 }

@@ -4,11 +4,12 @@ Stand 10.10.2026: Cluster 1 verwendet die neuen Mandantenrouten, persistente Nod
 und den 20-GiB-Fluentd-PVC. Live-Routing mit gefälschten Labels/JSON-Feldern sowie
 OIDC-Zugriff auf eigene/fremde Pod-Logs: PASS für A und B. Beim echten Fluentd-Pod-Ersatz
 blieben PVC und Queue erhalten; anschließend wurden 50/50 Marker ohne Duplikate zugestellt.
-Cluster 2 ist noch nicht
-vollständig umgestellt: alte zentrale Queue auf `emptyDir` bleibt bis zum bestätigten
-Drain bestehen; Beide Node-Collector-DaemonSets verwenden bereits persistente Host-Pfade. Die Freigabe nach §8.7
-liegt vor. Fortschritt und Einschränkungen sind kein vollständiger Abnahmenachweis
-für Cluster 2.
+Cluster 2 verwendet jetzt ebenfalls einen 20-GiB-Longhorn-Puffer und persistente
+Node-Queues. Vor dem Pod-Ersatz wurden 0 Daten-Chunks und 0 Byte Restdaten bestätigt;
+eine leere Backup-Datei enthielt keine Nutzdaten. Der neue Collector ist mit drei
+bereiten Containern und zwei gesunden Longhorn-Replikaten geprüft. Der gesonderte
+50-Record-Neustarttest für Cluster 2 und die Worker-Erweiterung stehen noch aus.
+Die Freigabe nach §8.7 liegt vor.
 
 Der Logging-Operator erzeugt den Claim
 `rancher-logging-root-afi-fluentd-buffer-rancher-logging-root-fluentd-0` aus seiner
@@ -16,7 +17,7 @@ PVC-Vorlage. `source.claimName` ist dabei ein Namensbestandteil und keine Refere
 einen vorab angelegten Claim. Die ungenutzten Vorbereitungs-PVCs waren nie gemountet
 (Longhorn: detached, 0 Byte); ihre Fleet-Bundles wurden entfernt. Cluster 1 nutzt
 explizit StorageClass `longhorn` mit drei Replikaten, Cluster 2 ist mit
-`longhorn-platform` und zwei Replikaten vorbereitet. Der aktive PVC bleibt beim
+`longhorn-platform` und zwei Replikaten aktiv. Der aktive PVC bleibt beim
 Pod-Ersatz erhalten und gehört dem Operator.
 
 ## Vertrauensgrenze
@@ -228,3 +229,11 @@ begrenzt auf den leeren Namespace `afi-legacy-buffer-recovery-no-input`. Dadurch
 Fluentd die passenden alten Dateien, ohne neue Anwendungs-Namespaces in diesen Flow
 aufzunehmen. Nach dem Drain werden diese temporären Ressourcen entfernt.
 Siehe [Fluentd File Buffer und Pfadzuordnung](https://docs.fluentd.org/buffer/file).
+
+### Retry-Metrik
+
+Fluentd 1.18.0 liefert `retry_count` als kumulativen Fehlerzähler
+(`output.rb`: `@num_errors_metrics.get`). Ein konstanter Wert größer null bedeutet
+daher keinen laufenden Retry. Der Alarm prüft einen Anstieg über fünf Minuten zusammen
+mit einem nicht leeren Puffer. Ein zusätzlicher promtool-Fall stellt sicher, dass ein
+alter Fehlerzähler bei gesundem laufendem Betrieb keinen Dauerfehler auslöst.

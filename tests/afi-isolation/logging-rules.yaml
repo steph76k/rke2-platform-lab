@@ -2,7 +2,7 @@ groups:
 - name: afi-logging-durability
   rules:
   - alert: AFILoggingExportRetry
-    expr: fluentd_output_status_retry_count > 0
+    expr: increase(fluentd_output_status_retry_count[5m]) > 0 and fluentd_output_status_buffer_total_bytes > 0
     for: 2m
     labels:
       severity: warning
