@@ -1,5 +1,7 @@
 core:
   replicas: 2
+  podAnnotations:
+    platform.berger.ph/token-key-format: pkcs1
   existingSecret: platform-harbor-core
   existingXsrfSecret: platform-harbor-core
   existingXsrfSecretKey: CSRF_KEY

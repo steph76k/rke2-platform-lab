@@ -27,9 +27,9 @@ PATHS = ["harbor/credentials", "harbor/token-tls", "harbor/ingress-tls",
          "opensearch/admin-tls", "opensearch/logging", "pki/lab-ca", "bootstrap/smoke"]
 
 
-def pem_key(key):
+def pem_key(key, pkcs1=False):
     return key.private_bytes(serialization.Encoding.PEM,
-                             serialization.PrivateFormat.PKCS8,
+                             serialization.PrivateFormat.TraditionalOpenSSL if pkcs1 else serialization.PrivateFormat.PKCS8,
                              serialization.NoEncryption()).decode()
 
 
@@ -55,8 +55,8 @@ def certificate(cn, ca_key=None, ca_cert=None, dns=(), is_ca=False):
     return key, cert.sign(ca_key or key, hashes.SHA256())
 
 
-def bundle(key, cert, ca):
-    return {"tls.key": pem_key(key), "tls.crt": cert.public_bytes(serialization.Encoding.PEM).decode(),
+def bundle(key, cert, ca, pkcs1=False):
+    return {"tls.key": pem_key(key, pkcs1=pkcs1), "tls.crt": cert.public_bytes(serialization.Encoding.PEM).decode(),
             "ca.crt": ca.public_bytes(serialization.Encoding.PEM).decode()}
 
 
@@ -107,7 +107,8 @@ def main():
             "csrf-key": fixed(32), "jobservice-secret": fixed(16), "registry-http-secret": fixed(32),
             "registry-password": registry,
             "registry-htpasswd": "harbor_registry_user:" + bcrypt.hashpw(registry.encode(), bcrypt.gensalt()).decode()},
-        "harbor/token-tls": bundle(token_key, token_cert, ca),
+        # Harbor's token signer requires an RSA PRIVATE KEY (PKCS#1) PEM block.
+        "harbor/token-tls": bundle(token_key, token_cert, ca, pkcs1=True),
         "harbor/ingress-tls": bundle(harbor_key, harbor_cert, ca),
         "postgresql/harbor": {"username": "harbor-ha", "password": password()},
         "redis/credentials": {"password": password()},

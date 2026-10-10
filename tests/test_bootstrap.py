@@ -62,9 +62,11 @@ class BootstrapTests(unittest.TestCase):
         creds = stored['platform/harbor/credentials']
         self.assertEqual(len(creds['secret-key']), 16)
         self.assertEqual(len(creds['csrf-key']), 32)
+        self.assertTrue(stored['platform/harbor/token-tls']['tls.key'].startswith('-----BEGIN RSA PRIVATE KEY-----'))
+        self.assertTrue(stored['platform/opensearch/tls']['tls.key'].startswith('-----BEGIN PRIVATE KEY-----'))
         self.assertTrue(bcrypt.checkpw(creds['registry-password'].encode(), creds['registry-htpasswd'].split(':', 1)[1].encode()))
         users = yaml.safe_load(stored['platform/opensearch/security']['internal_users.yml'])
-        for user, path in [('admin', 'platform/opensearch/admin'), ('kibanaserver', 'platform/opensearch/dashboards')]:
+        for user, path in [('admin', 'platform/opensearch/admin'), ('kibanaserver', 'platform/opensearch/dashboards'), ('platform-logging', 'platform/opensearch/logging')]:
             self.assertTrue(bcrypt.checkpw(stored[path]['password'].encode(), users[user]['hash'].encode()))
             self.assertNotIn(stored[path]['password'], output.getvalue())
         node = x509.load_pem_x509_certificate(stored['platform/opensearch/tls']['tls.crt'].encode())
