@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: afi-fluentd-trusted-inputs
+  namespace: cattle-logging-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: fluentd
+      app.kubernetes.io/instance: rancher-logging-root
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: fluentbit
+    - podSelector:
+        matchLabels:
+          name: rancher-logging-rke2-journald-aggregator
+    ports:
+    - protocol: TCP
+      port: 24240
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: cattle-monitoring-system
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: logging-monitoring
+    ports:
+    - protocol: TCP
+      port: 24231
+    - protocol: TCP
+      port: 9100

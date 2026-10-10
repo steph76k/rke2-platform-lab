@@ -1,0 +1,9 @@
+{
+  "sampleSeconds": 830,
+  "primaryStoreDeltaBytes": 4602364,
+  "observedPrimaryBytesPerSecond": 5543,
+  "primary180DaysGiB": 80.3,
+  "withOpenSearchReplicaGiB": 160.6,
+  "withLonghornTwoReplicasGiB": 321.2,
+  "measurementLimitation": "Short sample of compressed primary store growth; not uncompressed Fluentd buffer throughput or a peak-load guarantee."
+}

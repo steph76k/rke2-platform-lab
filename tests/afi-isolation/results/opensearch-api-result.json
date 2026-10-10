@@ -1,0 +1,42 @@
+{
+  "tests": {
+    "a-dev": {
+      "own": 200,
+      "foreign": 403,
+      "combined": 403,
+      "wildcard": 403,
+      "legacy": 403,
+      "mixedMsearchForeign": 403,
+      "foreignDirectDocument": 403,
+      "readOnlyWriteDenied": 403
+    },
+    "b-dev": {
+      "own": 200,
+      "foreign": 403,
+      "combined": 403,
+      "wildcard": 403,
+      "legacy": 403,
+      "mixedMsearchForeign": 403,
+      "foreignDirectDocument": 403,
+      "readOnlyWriteDenied": 403
+    },
+    "a-admin": {
+      "own": 200,
+      "foreign": 403,
+      "combined": 403,
+      "wildcard": 403,
+      "legacy": 403,
+      "mixedMsearchForeign": 403,
+      "foreignDirectDocument": 403,
+      "readOnlyWriteDenied": 403
+    },
+    "rke2-cluster1-ingest": {
+      "readDenied": 403
+    },
+    "rke2-cluster2-ingest": {
+      "readDenied": 403
+    }
+  },
+  "syntheticIndicesOnly": true,
+  "ownProbeIndicesRemoved": true
+}

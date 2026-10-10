@@ -1,0 +1,116 @@
+rule_files:
+- logging-rules.yaml
+evaluation_interval: 1m
+tests:
+- name: outage and full buffers
+  interval: 1m
+  input_series:
+  - series: fluentd_output_status_retry_count
+    values: 1+0x20
+  - series: fluentd_output_status_buffer_total_bytes
+    values: 4000000000+0x20
+  - series: fluentd_output_status_num_errors
+    values: 0+1x20
+  - series: fluentbit_output_dropped_records_total
+    values: 0+1x20
+  - series: up{job="logging-fluentd"}
+    values: 0+0x20
+  - series: node_filesystem_size_bytes{mountpoint="/buffers"}
+    values: 100+0x20
+  - series: node_filesystem_avail_bytes{mountpoint="/buffers"}
+    values: 10+0x20
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: AFILoggingExportRetry
+    exp_alerts:
+    - exp_labels:
+        severity: warning
+      exp_annotations:
+        summary: Logging export retries are active
+        description: The persistent buffer is retrying delivery; check OpenSearch
+          connectivity and free buffer capacity.
+  - eval_time: 10m
+    alertname: AFILoggingBufferHigh
+    exp_alerts:
+    - exp_labels:
+        severity: warning
+      exp_annotations:
+        summary: A logging output has used more than 75% of its 4 GiB buffer
+  - eval_time: 10m
+    alertname: AFILoggingBufferCritical
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+      exp_annotations:
+        summary: A logging output has used more than 90% of its buffer; input backpressure
+          is imminent
+  - eval_time: 10m
+    alertname: AFILoggingExportErrors
+    exp_alerts:
+    - exp_labels:
+        severity: warning
+      exp_annotations:
+        summary: Fluentd output errors are increasing
+  - eval_time: 10m
+    alertname: AFILoggingRecordsDropped
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+      exp_annotations:
+        summary: Fluent Bit has discarded records; investigate queue capacity and
+          retries
+  - eval_time: 10m
+    alertname: AFILoggingCollectorUnavailable
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        job: logging-fluentd
+      exp_annotations:
+        summary: A logging collector metrics endpoint is unreachable
+  - eval_time: 10m
+    alertname: AFILoggingBufferFilesystemHigh
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        mountpoint: /buffers
+      exp_annotations:
+        summary: Persistent logging volume is more than 80% full
+- name: healthy pipeline
+  interval: 1m
+  input_series:
+  - series: fluentd_output_status_retry_count
+    values: 0+0x20
+  - series: fluentd_output_status_buffer_total_bytes
+    values: 0+0x20
+  - series: fluentd_output_status_num_errors
+    values: 0+0x20
+  - series: fluentbit_output_dropped_records_total
+    values: 0+0x20
+  - series: up{job="logging-fluentd"}
+    values: 1+0x20
+  - series: node_filesystem_size_bytes{mountpoint="/buffers"}
+    values: 100+0x20
+  - series: node_filesystem_avail_bytes{mountpoint="/buffers"}
+    values: 90+0x20
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: AFILoggingExportRetry
+    exp_alerts: []
+  - eval_time: 10m
+    alertname: AFILoggingBufferHigh
+    exp_alerts: []
+  - eval_time: 10m
+    alertname: AFILoggingBufferCritical
+    exp_alerts: []
+  - eval_time: 10m
+    alertname: AFILoggingExportErrors
+    exp_alerts: []
+  - eval_time: 10m
+    alertname: AFILoggingRecordsDropped
+    exp_alerts: []
+  - eval_time: 10m
+    alertname: AFILoggingCollectorUnavailable
+    exp_alerts: []
+  - eval_time: 10m
+    alertname: AFILoggingBufferFilesystemHigh
+    exp_alerts: []

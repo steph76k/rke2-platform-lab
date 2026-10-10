@@ -1,0 +1,55 @@
+groups:
+- name: afi-logging-durability
+  rules:
+  - alert: AFILoggingExportRetry
+    expr: fluentd_output_status_retry_count > 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: Logging export retries are active
+      description: The persistent buffer is retrying delivery; check OpenSearch connectivity
+        and free buffer capacity.
+  - alert: AFILoggingBufferHigh
+    expr: fluentd_output_status_buffer_total_bytes / 4294967296 > 0.75
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: A logging output has used more than 75% of its 4 GiB buffer
+  - alert: AFILoggingBufferCritical
+    expr: fluentd_output_status_buffer_total_bytes / 4294967296 > 0.9
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: A logging output has used more than 90% of its buffer; input backpressure
+        is imminent
+  - alert: AFILoggingExportErrors
+    expr: increase(fluentd_output_status_num_errors[5m]) > 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: Fluentd output errors are increasing
+  - alert: AFILoggingRecordsDropped
+    expr: increase(fluentbit_output_dropped_records_total[5m]) > 0
+    labels:
+      severity: critical
+    annotations:
+      summary: Fluent Bit has discarded records; investigate queue capacity and retries
+  - alert: AFILoggingCollectorUnavailable
+    expr: up{job=~"logging-fluentd|logging-fluentbit"} == 0
+    for: 3m
+    labels:
+      severity: critical
+    annotations:
+      summary: A logging collector metrics endpoint is unreachable
+  - alert: AFILoggingBufferFilesystemHigh
+    expr: (node_filesystem_size_bytes{mountpoint="/buffers"} - node_filesystem_avail_bytes{mountpoint="/buffers"})
+      / node_filesystem_size_bytes{mountpoint="/buffers"} > 0.8
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: Persistent logging volume is more than 80% full

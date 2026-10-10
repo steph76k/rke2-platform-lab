@@ -1,0 +1,26 @@
+{
+  "a-dev": {
+    "realBrowserOIDCLogin": true,
+    "discoverOwnLogAndTimeChart": true,
+    "dashboardsSearch": {
+      "own": 200,
+      "foreign": 403
+    },
+    "ownSavedObjectRead": 200,
+    "savedObjectWriteDenied": 403,
+    "foreignSavedObjectsNoData": 500,
+    "foreignTenantSelectionStatus": 200
+  },
+  "b-dev": {
+    "realBrowserOIDCLogin": true,
+    "discoverOwnLogAndTimeChart": true,
+    "dashboardsSearch": {
+      "own": 200,
+      "foreign": 403
+    },
+    "ownSavedObjectRead": 200,
+    "savedObjectWriteDenied": 403,
+    "foreignSavedObjectsNoData": 500,
+    "foreignTenantSelectionStatus": 200
+  }
+}

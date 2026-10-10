@@ -34,7 +34,7 @@ class BootstrapTests(unittest.TestCase):
             self.assertEqual(run.call_count, 1)
             self.assertEqual(run.call_args.args[0][2:4], ['metadata', 'get'])
 
-    def test_generated_values_satisfy_every_external_secret(self):
+    def test_generated_values_satisfy_bootstrap_owned_external_secrets(self):
         stored = {}
 
         def fake_run(argv, **kwargs):
@@ -58,6 +58,10 @@ class BootstrapTests(unittest.TestCase):
                     continue
                 for item in obj['spec']['data']:
                     remote = item['remoteRef']
+                    # These additive paths are owned by the separate AFI OIDC /
+                    # logging and bootstrap-minio.py bootstraps, not the destructive fresh-lab bootstrap.
+                    if remote['key'].startswith(('platform/afi-logging/', 'platform/oidc/', 'platform/minio/')):
+                        continue
                     self.assertIn(remote['property'], stored[remote['key']])
         creds = stored['platform/harbor/credentials']
         self.assertEqual(len(creds['secret-key']), 16)

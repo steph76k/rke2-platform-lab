@@ -1,0 +1,8 @@
+{
+  "recordsSent": 50,
+  "bufferObservedBeforeRestart": true,
+  "bufferBytesAfterPodReplacement": 11400,
+  "samePVC": true,
+  "deliveredAfterRecovery": 50,
+  "duplicates": 0
+}

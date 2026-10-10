@@ -1,0 +1,11 @@
+{
+  "terraformVersion": "1.14.7",
+  "terraformFormatCheck": true,
+  "terraformValidate": true,
+  "tenantAPlanExitCode": 0,
+  "tenantBPlanExitCode": 0,
+  "helmRenderBothCollectors": true,
+  "serverDryRunBothCollectorsAndRoutes": true,
+  "bootstrapUnitTestsPassed": 3,
+  "knownCredentialScanPassed": true
+}

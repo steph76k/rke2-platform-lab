@@ -10,14 +10,21 @@ if not a.apply:
  print('Would create/reconcile dedicated afi-harbor and afi-opensearch clients; configure Harbor OIDC and add OpenSearch OIDC. Use --apply after reviewing config/afi-isolation/identity.json.');raise SystemExit()
 os.umask(0o077);kc=keycloak();base=CONFIG['keycloak']+'/admin/realms/'+CONFIG['realm'];clients={}
 for name,settings in CONFIG['clients'].items():
+ desired={'clientId':name,'name':name,'description':'Managed by rke2-platform-lab AFI bootstrap','enabled':True,'protocol':'openid-connect','publicClient':False,'standardFlowEnabled':True,'directAccessGrantsEnabled':False,'serviceAccountsEnabled':False,'redirectUris':[settings['callback']],'webOrigins':[settings['origin']],'defaultClientScopes':['profile','email','roles'], 'protocolMappers':[
+   {'name':'AFI groups','protocol':'openid-connect','protocolMapper':'oidc-group-membership-mapper','config':{'claim.name':'groups','full.path':'false','id.token.claim':'true','access.token.claim':'true','userinfo.token.claim':'true'}},
+   {'name':'AFI audience','protocol':'openid-connect','protocolMapper':'oidc-audience-mapper','config':{'included.client.audience':name,'id.token.claim':'true','access.token.claim':'true'}}]}
  r=kc.get(base+'/clients',params={'clientId':name},timeout=30);r.raise_for_status();found=r.json()
  if found:
   assert len(found)==1 and found[0].get('description')=='Managed by rke2-platform-lab AFI bootstrap','Refuse to adopt unrelated client'
   client=found[0]
+  def normalized(value):
+   if isinstance(value,list):return [normalized(x) for x in value]
+   if isinstance(value,dict):return {k:normalized(v) for k,v in value.items() if k!='id'}
+   return value
+  if any(normalized(client.get(k))!=normalized(v) for k,v in desired.items()):
+   r=kc.put(base+'/clients/'+client['id'],json={**client,**desired},timeout=30);r.raise_for_status()
  else:
-  client={'clientId':name,'name':name,'description':'Managed by rke2-platform-lab AFI bootstrap','enabled':True,'protocol':'openid-connect','publicClient':False,'standardFlowEnabled':True,'directAccessGrantsEnabled':False,'serviceAccountsEnabled':False,'redirectUris':[settings['callback']],'webOrigins':[settings['origin']],'defaultClientScopes':['profile','email','roles'], 'protocolMappers':[
-   {'name':'AFI groups','protocol':'openid-connect','protocolMapper':'oidc-group-membership-mapper','config':{'claim.name':'groups','full.path':'false','id.token.claim':'true','access.token.claim':'true','userinfo.token.claim':'true'}},
-   {'name':'AFI audience','protocol':'openid-connect','protocolMapper':'oidc-audience-mapper','config':{'included.client.audience':name,'id.token.claim':'true','access.token.claim':'true'}}]}
+  client=desired.copy()
   r=kc.post(base+'/clients',json=client,timeout=30);r.raise_for_status();client['id']=r.headers['Location'].rsplit('/',1)[1]
  r=kc.get(base+'/clients/'+client['id']+'/client-secret',timeout=30);r.raise_for_status();secret=r.json()['value']
  try:saved=kv('oidc/'+name)

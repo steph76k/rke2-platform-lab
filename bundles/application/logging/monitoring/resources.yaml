@@ -100,3 +100,24 @@ spec:
     relabelings:
     - targetLabel: job
       replacement: logging-fluentbit
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: afi-logging-buffer-volume
+  namespace: cattle-logging-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fluentd
+      app.kubernetes.io/instance: rancher-logging-root
+  namespaceSelector:
+    matchNames:
+    - cattle-logging-system
+  podMetricsEndpoints:
+  - portNumber: 9100
+    path: /metrics
+    interval: 15s
+    relabelings:
+    - targetLabel: job
+      replacement: logging-buffer-volume

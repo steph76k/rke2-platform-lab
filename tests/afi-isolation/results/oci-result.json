@@ -1,0 +1,13 @@
+{
+  "a-dev": {
+    "ociLogin": true,
+    "ownPush": true,
+    "ownPull": true,
+    "foreignPullDenied": true
+  },
+  "b-dev": {
+    "ociLogin": true,
+    "ownPush": true,
+    "ownPull": true
+  }
+}

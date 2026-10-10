@@ -1,0 +1,29 @@
+{
+  "a-dev": {
+    "realBrowserOIDCLogin": true,
+    "ownProject": 200,
+    "foreignProject": 403,
+    "systemAdmin": false,
+    "ownProjectAdminWrite": 403,
+    "foreignProjectAdminWrite": 403,
+    "cliSecretGeneratedForOwnTemporaryUser": true
+  },
+  "b-dev": {
+    "realBrowserOIDCLogin": true,
+    "ownProject": 200,
+    "foreignProject": 403,
+    "systemAdmin": false,
+    "ownProjectAdminWrite": 403,
+    "foreignProjectAdminWrite": 403,
+    "cliSecretGeneratedForOwnTemporaryUser": true
+  },
+  "a-admin": {
+    "realBrowserOIDCLogin": true,
+    "ownProject": 200,
+    "foreignProject": 403,
+    "systemAdmin": false,
+    "ownProjectAdminWrite": 200,
+    "foreignProjectAdminWrite": 403,
+    "cliSecretGeneratedForOwnTemporaryUser": true
+  }
+}

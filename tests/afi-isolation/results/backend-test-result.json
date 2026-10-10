@@ -1,0 +1,11 @@
+{
+  "migrationResourcesUnchanged": true,
+  "versioning": "Enabled",
+  "otherTenantDenied": 403,
+  "encryptionKeyRequired": 400,
+  "concurrentTerraformApplyBlocked": true,
+  "firstTerraformApplySucceeded": true,
+  "versionRecoveryTerraformReadSucceeded": true,
+  "separateEncryptedBackupVerified": true,
+  "ownValidationObjectsRemoved": true
+}

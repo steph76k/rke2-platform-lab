@@ -71,9 +71,14 @@ fluentbitAgentOverlay:
       DB.locking: true
       Read_From_Head: true
       Mem_Buf_Limit: 32M
-      Rotate_Wait: 30
-      Skip_Long_Lines: true
+      Rotate_Wait: '30'
+      Skip_Long_Lines: 'On'
     forwardOptions:
       Require_ack_response: true
       Retry_Limit: 'False'
       storage.total_limit_size: 2G
+    filterKubernetes:
+      Merge_Log: 'Off'
+      Keep_Log: 'On'
+      K8S-Logging.Parser: 'Off'
+      K8S-Logging.Exclude: 'Off'

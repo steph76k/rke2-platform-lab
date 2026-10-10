@@ -1,16 +1,21 @@
 # RKE2 Platform Lab – Fleet
 
-Die Infrastrukturplattform auf `rke2-cluster2` wird über Rancher Fleet aus
-`steph76k/rke2-platform-lab`, Branch `main`, verwaltet. Der vollständige Lab-Neuaufbau
-mit frischen Daten wurde am 10.10.2026 ausdrücklich freigegeben und umgesetzt.
+Rancher Fleet verwaltet die Plattformkomponenten auf `rke2-cluster1` und
+`rke2-cluster2` aus `steph76k/rke2-platform-lab`, Branch `main`. Der aktuelle Stand
+umfasst 32 aktive Bundles für Plattformdienste, Secret-Zustellung, Logging und Monitoring.
+OpenBao bleibt auf K3s; Mandanten und Berechtigungen verwaltet das separate
+Terraform-Repository `rke2-tenants-lab`.
 
-18 Infrastruktur-Bundles stellen ESO, CNPG/PostgreSQL, Redis Operator mit
-Replication/Sentinel, Harbor, OpenSearch, Dashboards, die Plattform-StorageClass
-und OpenBao-Secret-Synchronisierung bereit. Sie zielen ausschließlich auf
-`environment=lab, role=infrastructure`. Die beiden zuvor aktiven Bundles bleiben
-bestehen; Cluster 1 wurde nicht umgebaut. OpenBao bleibt auf K3s.
+Die AFI-Erweiterung richtet OIDC und getrennte Zugriffe für Mandant A/B ein. Die
+Umstellung der bestehenden Logging-Collector auf persistente Puffer und neue
+Mandantenrouten liegt unter `config/afi-isolation/rollout/` zur Freigabe bereit.
+Historische Migrationsberichte dokumentieren den zuvor freigegebenen Lab-Neuaufbau.
 
 ## Dokumentation
+
+- [AFI-Mandantentrennung: Umsetzung und Testnachweis](docs/afi-isolation-validation.md)
+- [AFI-Konzept und Zuständigkeiten](docs/afi-isolation-design.md)
+- [Vorbereitete Logging-Umstellung und Kapazität](docs/afi-logging-rollout.md)
 
 - [Aktuelle Plattformvalidierung](docs/platform-validation.md)
 - [Logging-Abnahme und vorbereiteter Cluster-1-Rollout](docs/logging-validation.md)
@@ -28,12 +33,12 @@ bestehen; Cluster 1 wurde nicht umgebaut. OpenBao bleibt auf K3s.
 
 ## Betrieb
 
-Harbor: `https://harbor-ha.berger.ph`. Dashboards: `http://opensearch.berger.ph`.
+Harbor: `https://harbor-ha.berger.ph`. Dashboards: `https://opensearch.berger.ph`.
 Zugangsdaten liegen ausschließlich in OpenBao; die genauen Pfade stehen im
 [Ausführungsbericht](docs/migration-execution.md#zugang-und-wiederaufbau).
-Harbor-Clients benötigen Vertrauen in die neue Lab-CA. Dashboards behält vorerst
-seinen bisherigen HTTP-Ingress; der Login wurde über einen geschützten lokalen
-Kubernetes-Tunnel getestet.
+Harbor-Clients und Browser benötigen Vertrauen in die Lab-CA. Dashboards verwendet
+HTTPS und OIDC im Realm `berger`; der echte Browser- und API-Zugriff wurde mit getrennten
+Testmandanten geprüft. Der aktuelle AFI-Bericht ergänzt die historischen Migrationsberichte.
 
 `fleet/gitrepo.yaml` enthält die explizit aktivierten Bundle-Pfade. Die Datei wird
 nicht selbst von Fleet ausgerollt: Eine Änderung daran benötigt nach Git-Push ein

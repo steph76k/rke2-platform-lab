@@ -1,0 +1,7 @@
+{
+  "harborTestRepositoriesRemoved": 2,
+  "harborTestUsersRemoved": 3,
+  "keycloakTestUsersRemoved": 3,
+  "syntheticIndicesRemoved": 3,
+  "isolatedCollectorAndNamespaceDeletionRequested": true
+}
