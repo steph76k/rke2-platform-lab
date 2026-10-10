@@ -9,3 +9,7 @@ kibana_server:
   reserved: true
   users:
   - kibanaserver
+platform_logging:
+  reserved: false
+  users:
+  - platform-logging

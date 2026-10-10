@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PATHS = ["harbor/credentials", "harbor/token-tls", "harbor/ingress-tls",
          "postgresql/harbor", "redis/credentials", "opensearch/admin",
          "opensearch/dashboards", "opensearch/security", "opensearch/tls",
-         "opensearch/admin-tls", "pki/lab-ca", "bootstrap/smoke"]
+         "opensearch/admin-tls", "opensearch/logging", "pki/lab-ca", "bootstrap/smoke"]
 
 
 def pem_key(key):
@@ -84,6 +84,7 @@ def main():
     password = lambda: secrets.token_urlsafe(32)
     fixed = lambda size: ''.join(secrets.choice('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') for _ in range(size))
     admin, dashboards, registry = password(), password(), password()
+    logging_password = password()
     ca_key, ca = certificate("rke2-platform-lab-ca", is_ca=True)
     node_key, node = certificate("opensearch-nodes", ca_key, ca,
         dns=["opensearch-cluster-master", "opensearch-cluster-master.opensearch",
@@ -97,7 +98,9 @@ def main():
              "admin": {"hash": bcrypt.hashpw(admin.encode(), bcrypt.gensalt()).decode(),
                        "reserved": True, "backend_roles": ["admin"]},
              "kibanaserver": {"hash": bcrypt.hashpw(dashboards.encode(), bcrypt.gensalt()).decode(),
-                              "reserved": True}}
+                              "reserved": True},
+             "platform-logging": {"hash": bcrypt.hashpw(logging_password.encode(), bcrypt.gensalt()).decode(),
+                                  "reserved": False}}
     security['internal_users.yml'] = yaml.safe_dump(users, sort_keys=False)
     data = {
         "harbor/credentials": {"admin-password": password(), "secret-key": fixed(16), "core-secret": fixed(16),
@@ -113,6 +116,8 @@ def main():
         "opensearch/security": security,
         "opensearch/tls": bundle(node_key, node, ca),
         "opensearch/admin-tls": bundle(os_admin_key, os_admin, ca),
+        "opensearch/logging": {"username": "platform-logging", "password": logging_password,
+                               "ca.crt": ca.public_bytes(serialization.Encoding.PEM).decode()},
         "pki/lab-ca": {"ca.key": pem_key(ca_key), "ca.crt": ca.public_bytes(serialization.Encoding.PEM).decode()},
         "bootstrap/smoke": {"probe": "rke2-cluster2-bootstrap-ok"},
     }

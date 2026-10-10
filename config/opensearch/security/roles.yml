@@ -460,3 +460,14 @@ forecast_full_access:
     - indices:data/read/search
     - indices:data/write*
     - indices_monitor
+platform_logging:
+  reserved: false
+  cluster_permissions:
+  - cluster_monitor
+  - cluster_composite_ops
+  index_permissions:
+  - index_patterns:
+    - kubernetes-*
+    allowed_actions:
+    - crud
+    - create_index

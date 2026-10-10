@@ -1,0 +1,15 @@
+{
+  "bound_service_account_names": [
+    "openbao-logging"
+  ],
+  "bound_service_account_namespaces": [
+    "external-secrets"
+  ],
+  "audience": "https://kubernetes.default.svc.cluster.local",
+  "token_policies": [
+    "eso-logging"
+  ],
+  "token_ttl": 900,
+  "token_max_ttl": 3600,
+  "token_no_default_policy": false
+}
