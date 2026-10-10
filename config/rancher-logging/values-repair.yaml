@@ -1,0 +1,4 @@
+# Overlay for the existing Rancher Helm release; use --reuse-values.
+# Keep the root logging pipeline on its existing empty loggingRef.
+logging:
+  loggingRef: rancher-logging

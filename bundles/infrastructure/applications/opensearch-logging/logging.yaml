@@ -27,6 +27,7 @@ spec:
       timekey: 1m
       timekey_wait: 30s
       timekey_use_utc: true
+  loggingRef: rancher-logging
 ---
 apiVersion: logging.banzaicloud.io/v1beta1
 kind: ClusterFlow
@@ -40,3 +41,47 @@ spec:
       de_dot_separator: _
   globalOutputRefs:
   - opensearch
+  loggingRef: rancher-logging
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: ClusterOutput
+metadata:
+  name: opensearch-root
+  namespace: cattle-logging-system
+spec:
+  opensearch:
+    host: opensearch-cluster-master.opensearch.svc.cluster.local
+    port: 9200
+    scheme: https
+    ssl_verify: true
+    log_os_400_reason: true
+    ca_file:
+      mountFrom:
+        secretKeyRef:
+          name: platform-opensearch-logging
+          key: ca.crt
+    user: platform-logging
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: platform-opensearch-logging
+          key: password
+    logstash_format: true
+    logstash_prefix: kubernetes
+    buffer:
+      timekey: 1m
+      timekey_wait: 30s
+      timekey_use_utc: true
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: ClusterFlow
+metadata:
+  name: all-logs-to-opensearch-root
+  namespace: cattle-logging-system
+spec:
+  filters:
+  - dedot:
+      de_dot_nested: true
+      de_dot_separator: _
+  globalOutputRefs:
+  - opensearch-root
