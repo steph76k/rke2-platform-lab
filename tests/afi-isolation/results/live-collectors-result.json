@@ -1,0 +1,65 @@
+{
+  "checkedAtUTC": "2026-10-10T22:17:11Z",
+  "clusters": {
+    "cluster1": {
+      "collectorReady": true,
+      "bufferClaim": "rancher-logging-root-afi-fluentd-buffer-rancher-logging-root-fluentd-0",
+      "bufferSize": "20Gi",
+      "storageClass": "longhorn",
+      "healthyLonghornReplicas": 3,
+      "daemonsets": {
+        "rancher-logging-rke2-journald-aggregator": {
+          "ready": 5,
+          "persistentHostPaths": [
+            "/var/lib/rancher/afi-logging/journald"
+          ]
+        },
+        "rancher-logging-root-fluentbit": {
+          "ready": 5,
+          "persistentHostPaths": [
+            "/var/lib/rancher/afi-logging/positions",
+            "/var/lib/rancher/afi-logging/buffers"
+          ]
+        }
+      },
+      "onlyExpectedFlows": [
+        "afi-mandant-a",
+        "afi-mandant-b",
+        "afi-platform"
+      ],
+      "temporaryPauseRemoved": true,
+      "recreateFlagDisabled": true
+    },
+    "cluster2": {
+      "collectorReady": true,
+      "bufferClaim": "rancher-logging-root-afi-fluentd-buffer-rancher-logging-root-fluentd-0",
+      "bufferSize": "20Gi",
+      "storageClass": "longhorn-platform",
+      "healthyLonghornReplicas": 2,
+      "daemonsets": {
+        "rancher-logging-rke2-journald-aggregator": {
+          "ready": 5,
+          "persistentHostPaths": [
+            "/var/lib/rancher/afi-logging/journald"
+          ]
+        },
+        "rancher-logging-root-fluentbit": {
+          "ready": 5,
+          "persistentHostPaths": [
+            "/var/lib/rancher/afi-logging/positions",
+            "/var/lib/rancher/afi-logging/buffers"
+          ]
+        }
+      },
+      "onlyExpectedFlows": [
+        "afi-platform"
+      ],
+      "temporaryPauseRemoved": true,
+      "recreateFlagDisabled": true
+    }
+  },
+  "fleet": {
+    "commit": "9f6070a3b6f1068fba55166fd6af1679d58a5f61",
+    "readyBundles": 34
+  }
+}

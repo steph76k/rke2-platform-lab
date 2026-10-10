@@ -2,6 +2,36 @@
   "cluster2": {
     "targets": [
       {
+        "job": "logging-buffer-volume",
+        "health": "up",
+        "error": ""
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up",
+        "error": ""
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up",
+        "error": ""
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up",
+        "error": ""
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up",
+        "error": ""
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up",
+        "error": ""
+      },
+      {
         "job": "logging-fluentbit",
         "health": "up",
         "error": ""
@@ -73,6 +103,36 @@
   "cluster1": {
     "targets": [
       {
+        "job": "logging-buffer-volume",
+        "health": "up",
+        "error": ""
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up",
+        "error": ""
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up",
+        "error": ""
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up",
+        "error": ""
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up",
+        "error": ""
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up",
+        "error": ""
+      },
+      {
         "job": "logging-fluentbit",
         "health": "up",
         "error": ""
@@ -107,7 +167,7 @@
       {
         "name": "AFILoggingExportRetry",
         "health": "ok",
-        "state": "firing"
+        "state": "inactive"
       },
       {
         "name": "AFILoggingBufferHigh",

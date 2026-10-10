@@ -104,11 +104,10 @@ verursachen. `Read_From_Head` kann beim ersten Umstieg vorhandene Dateien erneut
 
 ## Monitoring
 
-Cluster 1 hat zwölf aktive Targets: zehn Fluent-Bit-Collector (Container/Journald),
-einen Fluentd und einen Volume-Metrics-Sidecar. Cluster 2 erreicht die vollständige
-Abdeckung erst nach Abschluss des Node- und Zentral-Collector-Rollouts. Sieben Regeln decken Retry,
+Beide Cluster haben je zwölf aktive Targets: zehn Fluent-Bit-Collector
+(Container/Journald), einen Fluentd und einen Volume-Metrics-Sidecar. Sieben Regeln decken Retry,
 75/90-Prozent-Füllstand, Exportfehler, verworfene Records, Nichterreichbarkeit und
-PVC-Füllstand ab. Der PVC-Füllstand wird auf Cluster 1 bereits vom Metrics-Sidecar erfasst.
+PVC-Füllstand ab. Der PVC-Füllstand wird auf beiden Clustern vom Metrics-Sidecar erfasst.
 `tests/afi-isolation/logging-alerts.test.yaml` prüft alle Regeln mit positiven und
 negativen Zeitreihen. Die kopierte Rules-Datei muss mit den aktiven Regeln übereinstimmen.
 Cluster 1 verwendet Rancher Monitoring; Cluster 2 hat einen eigenen Prometheus mit

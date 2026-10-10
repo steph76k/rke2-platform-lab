@@ -7,9 +7,9 @@ OpenBao bleibt auf K3s; Mandanten und Berechtigungen verwaltet das separate
 Terraform-Repository `rke2-tenants-lab`.
 
 Die AFI-Erweiterung richtet OIDC und getrennte Zugriffe für Mandant A/B ein. Die
-freigegebene Logging-Umstellung ist auf Cluster 1 aktiv; die realen Mandantenrouten
-und OIDC-Zugriffe wurden geprüft. Cluster 2 befindet sich wegen Speicherdruck auf
-den Control-Plane-Nodes noch im gestuften Rollout.
+freigegebene Logging-Umstellung ist auf beiden Clustern aktiv. Die realen Mandantenrouten
+und OIDC-Zugriffe wurden auf Cluster 1 geprüft. Auf Cluster 2 läuft die abschließende
+Abnahme nach PVC-Umstellung und Node-Erweiterung.
 Historische Migrationsberichte dokumentieren den zuvor freigegebenen Lab-Neuaufbau.
 
 ## Dokumentation

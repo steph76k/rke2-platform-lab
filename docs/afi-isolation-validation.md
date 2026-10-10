@@ -6,9 +6,10 @@ Harbor-OIDC, OpenSearch-OIDC/Indexrechte, Mandanten A/B, Remote-State und Loggin
 Monitoring sind aktiv. Die Terraform-Pläne zeigten bei der Abnahme keine Änderungen.
 Der anschließend freigegebene Live-Rollout ist auf Cluster 1 aktiv: persistente
 Collector-Puffer und echte Namespace-Routen wurden installiert; Routing/OIDC für
-A/B sind erfolgreich geprüft. Cluster 2 hat noch die alte zentrale Queue und wartet
-auf Ressourcenstabilisierung sowie vollständigen Drain. Die gesamte Plattform ist
-wegen dieser verbleibenden Cluster-2-Arbeiten noch nicht abschließend abgenommen.
+A/B sind erfolgreich geprüft. Cluster 2 verwendet nach vollständigem Alt-Puffer-Drain
+ebenfalls persistente Collector-Queues. Seine Control Plane ist erweitert und gesund;
+die abschließende Prüfung nach Worker-Erweiterung und der reale Collector-Neustarttest
+stehen noch aus.
 Details: [Logging-Rollout](afi-logging-rollout.md).
 
 ## Umgesetzte Konfiguration
@@ -34,8 +35,8 @@ Details: [Logging-Rollout](afi-logging-rollout.md).
 - Terraform: A übernommen, B zusätzlich erstellt, Gruppen/Rancher/Namespaces/Harbor/
   OpenBao/ESO/OpenSearch deklarativ verwaltet. Separate verschlüsselte und versionierte
   MinIO-States, eigene Backend-Zugänge, natives S3-Locking, geprüfte SOPS-Sicherungen.
-- Prometheus: zwölf erreichbare Targets auf Cluster 1 einschließlich Journald und
-  PVC-Metrics; sieben gesunde Alertregeln. Cluster 2 ist noch nicht vollständig ausgerollt.
+- Prometheus: je zwölf erreichbare Targets auf beiden Clustern einschließlich Journald
+  und PVC-Metrics; je sieben gesunde Alarmregeln, ohne aktive Alarme beim geprüften Stand.
 
 ## Funktionale Nachweise
 
@@ -76,8 +77,8 @@ nicht verwendet werden; dessen Systemkonfiguration wurde nicht verändert.
 | Recovery einer älteren S3-Version | Terraform kann State lesen | Separater Recovery-Key, `state list` zeigt Testressource | PASS |
 | SOPS-Backup A/B und Backend-Schlüssel | Entschlüsselung identisch | Im Speicher verifiziert, keine Klartextausgabe | PASS |
 | Terraform A/B | Kein Drift | `plan -detailed-exitcode`: jeweils 0 | PASS |
-| Monitoring | Targets/Regeln aktiv | Je sechs Targets Up, sieben Regeln gesund | PASS |
-| Alertlogik | Ausfall löst aus, Normalfall nicht | promtool: alle sieben Regeln mit positiven/negativen Reihen erfolgreich | PASS |
+| Monitoring | Targets/Regeln aktiv | Je zwölf Targets Up, sieben Regeln gesund | PASS |
+| Alertlogik | Ausfall löst aus, Normalfall nicht | promtool: alle sieben Regeln mit positiven/negativen Reihen und historischem Retry-Zähler erfolgreich | PASS |
 | Reale Namespace-Routen und gefälschte Metadaten | Richtiger Tenant, keine Umgehung | A/B: eigene reale Pod-Logs 200, fremde 403; Forward blockiert; Label-/JSON-Manipulation unwirksam | PASS Cluster 1 |
 | Persistenz des realen Cluster-1-Collectors | Neustartfest | Echter Pod ersetzt, gleicher PVC, Queue erhalten, 50/50 Marker, 0 Duplikate | PASS Cluster 1; Cluster 2 offen |
 
