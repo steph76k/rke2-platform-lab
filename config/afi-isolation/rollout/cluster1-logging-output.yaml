@@ -1,0 +1,231 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: opensearch-cluster-master
+  namespace: cattle-logging-system
+spec:
+  ports:
+  - name: https
+    port: 9200
+    targetPort: 9200
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: opensearch-cluster2
+  namespace: cattle-logging-system
+  labels:
+    kubernetes.io/service-name: opensearch-cluster-master
+    endpointslice.kubernetes.io/managed-by: fleet
+addressType: IPv4
+ports:
+- name: https
+  protocol: TCP
+  port: 9200
+endpoints:
+- addresses:
+  - 192.168.1.196
+  conditions:
+    ready: true
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: ClusterOutput
+metadata:
+  name: afi-mandant-a
+  namespace: cattle-logging-system
+spec:
+  opensearch:
+    host: opensearch-cluster-master
+    port: 9200
+    scheme: https
+    ssl_verify: true
+    log_os_400_reason: true
+    ca_file:
+      mountFrom:
+        secretKeyRef:
+          name: afi-opensearch-ingest
+          key: ca.crt
+    user: afi-ingest-rke2-cluster1
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: afi-opensearch-ingest
+          key: password
+    logstash_format: true
+    logstash_prefix: logs-rke2-cluster1-mandant-a
+    buffer:
+      type: file
+      timekey: 1m
+      timekey_wait: 10s
+      timekey_use_utc: true
+      flush_mode: interval
+      flush_interval: 10s
+      flush_thread_count: 2
+      chunk_limit_size: 8m
+      total_limit_size: 4g
+      queued_chunks_limit_size: 8192
+      retry_forever: true
+      retry_max_interval: 30s
+      overflow_action: block
+      flush_at_shutdown: false
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: ClusterFlow
+metadata:
+  name: afi-mandant-a
+  namespace: cattle-logging-system
+spec:
+  match:
+  - select:
+      namespaces:
+      - mandant-a-dev
+      - mandant-a-test
+      - mandant-a-prod
+  filters:
+  - dedot:
+      de_dot_nested: true
+      de_dot_separator: _
+  - record_modifier:
+      records:
+      - cluster_name: rke2-cluster1
+        cluster_role: applications
+        tenant_id: mandant-a
+        environment: lab
+  globalOutputRefs:
+  - afi-mandant-a
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: ClusterOutput
+metadata:
+  name: afi-mandant-b
+  namespace: cattle-logging-system
+spec:
+  opensearch:
+    host: opensearch-cluster-master
+    port: 9200
+    scheme: https
+    ssl_verify: true
+    log_os_400_reason: true
+    ca_file:
+      mountFrom:
+        secretKeyRef:
+          name: afi-opensearch-ingest
+          key: ca.crt
+    user: afi-ingest-rke2-cluster1
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: afi-opensearch-ingest
+          key: password
+    logstash_format: true
+    logstash_prefix: logs-rke2-cluster1-mandant-b
+    buffer:
+      type: file
+      timekey: 1m
+      timekey_wait: 10s
+      timekey_use_utc: true
+      flush_mode: interval
+      flush_interval: 10s
+      flush_thread_count: 2
+      chunk_limit_size: 8m
+      total_limit_size: 4g
+      queued_chunks_limit_size: 8192
+      retry_forever: true
+      retry_max_interval: 30s
+      overflow_action: block
+      flush_at_shutdown: false
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: ClusterFlow
+metadata:
+  name: afi-mandant-b
+  namespace: cattle-logging-system
+spec:
+  match:
+  - select:
+      namespaces:
+      - mandant-b-dev
+      - mandant-b-test
+      - mandant-b-prod
+  filters:
+  - dedot:
+      de_dot_nested: true
+      de_dot_separator: _
+  - record_modifier:
+      records:
+      - cluster_name: rke2-cluster1
+        cluster_role: applications
+        tenant_id: mandant-b
+        environment: lab
+  globalOutputRefs:
+  - afi-mandant-b
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: ClusterOutput
+metadata:
+  name: afi-platform
+  namespace: cattle-logging-system
+spec:
+  opensearch:
+    host: opensearch-cluster-master
+    port: 9200
+    scheme: https
+    ssl_verify: true
+    log_os_400_reason: true
+    ca_file:
+      mountFrom:
+        secretKeyRef:
+          name: afi-opensearch-ingest
+          key: ca.crt
+    user: afi-ingest-rke2-cluster1
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: afi-opensearch-ingest
+          key: password
+    logstash_format: true
+    logstash_prefix: logs-rke2-cluster1-platform
+    buffer:
+      type: file
+      timekey: 1m
+      timekey_wait: 10s
+      timekey_use_utc: true
+      flush_mode: interval
+      flush_interval: 10s
+      flush_thread_count: 2
+      chunk_limit_size: 8m
+      total_limit_size: 4g
+      queued_chunks_limit_size: 8192
+      retry_forever: true
+      retry_max_interval: 30s
+      overflow_action: block
+      flush_at_shutdown: false
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: ClusterFlow
+metadata:
+  name: afi-platform
+  namespace: cattle-logging-system
+spec:
+  match:
+  - exclude:
+      namespaces:
+      - mandant-a-dev
+      - mandant-a-test
+      - mandant-a-prod
+      - mandant-b-dev
+      - mandant-b-test
+      - mandant-b-prod
+  - select: {}
+  filters:
+  - dedot:
+      de_dot_nested: true
+      de_dot_separator: _
+  - record_modifier:
+      records:
+      - cluster_name: rke2-cluster1
+        cluster_role: applications
+        tenant_id: platform
+        environment: lab
+  globalOutputRefs:
+  - afi-platform

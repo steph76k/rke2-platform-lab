@@ -35,6 +35,8 @@ spec:
   - bundles/infrastructure/secrets/platform/minio
   - bundles/infrastructure/bootstrap/harbor-trust
   - bundles/infrastructure/applications/minio
+  - bundles/application/logging/afi-secrets
+  - bundles/infrastructure/secrets/platform/afi-logging
   targets:
   - name: lab-infrastructure
     clusterSelector:

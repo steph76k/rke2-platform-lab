@@ -8,6 +8,7 @@ helm:
   valuesFiles:
   - values.yaml
   timeoutSeconds: 900
+  disablePreProcess: true
 overrideTargets:
 - name: lab-infrastructure
   clusterSelector:
@@ -17,3 +18,4 @@ overrideTargets:
 dependsOn:
 - name: lab-infra-opensearch
 - name: lab-infra-opensearch-secrets
+- name: lab-infra-afi-logging-secrets

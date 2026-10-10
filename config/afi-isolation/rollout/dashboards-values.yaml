@@ -1,0 +1,107 @@
+config:
+  opensearch_dashboards.yml: 'server.host: 0.0.0.0
+
+    opensearch.hosts:
+
+    - https://opensearch-cluster-master:9200
+
+    opensearch.ssl.verificationMode: full
+
+    opensearch.requestHeadersWhitelist:
+
+    - authorization
+
+    - securitytenant
+
+    opensearch_security.multitenancy.enabled: true
+
+    opensearch_security.multitenancy.tenants.preferred:
+
+    - Private
+
+    - Global
+
+    opensearch_security.readonly_mode.roles:
+
+    - kibana_read_only
+
+    opensearch_security.cookie.secure: true
+
+    data_source.enabled: false
+
+    workspace.enabled: false
+
+    explore.enabled: false
+
+    opensearch.ssl.certificateAuthorities:
+
+    - /usr/share/opensearch-dashboards/config/opensearch-ca/ca.crt
+
+    opensearch_security.auth.multiple_auth_enabled: true
+
+    opensearch_security.auth.type: ["basicauth", "openid"]
+
+    opensearch_security.openid.connect_url: "https://idp.berger.ph/realms/berger/.well-known/openid-configuration"
+
+    opensearch_security.openid.client_id: "afi-opensearch"
+
+    opensearch_security.openid.client_secret: "${AFI_OIDC_CLIENT_SECRET}"
+
+    opensearch_security.openid.scope: "openid profile email"
+
+    opensearch_security.openid.base_redirect_url: "https://opensearch.berger.ph"
+
+    '
+ingress:
+  enabled: true
+  hosts:
+  - host: opensearch.berger.ph
+    paths:
+    - backend:
+        serviceName: ''
+        servicePort: ''
+      path: /
+  ingressClassName: cilium
+  tls:
+  - secretName: afi-opensearch-dashboards-tls
+    hosts:
+    - opensearch.berger.ph
+  annotations:
+    ingress.cilium.io/force-https: enabled
+opensearchHosts: https://opensearch-cluster-master:9200
+replicaCount: 2
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 512Mi
+service:
+  port: 5601
+  type: ClusterIP
+extraEnvs:
+- name: OPENSEARCH_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: platform-opensearch-dashboards
+      key: username
+- name: OPENSEARCH_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: platform-opensearch-dashboards
+      key: password
+- name: AFI_OIDC_CLIENT_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: afi-opensearch-oidc
+      key: client_secret
+secretMounts:
+- name: opensearch-ca
+  secretName: platform-opensearch-ca
+  path: /usr/share/opensearch-dashboards/config/opensearch-ca
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1

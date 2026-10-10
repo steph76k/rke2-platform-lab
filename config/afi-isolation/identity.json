@@ -1,0 +1,13 @@
+{
+  "keycloak": "https://idp.berger.ph",
+  "realm": "berger",
+  "harbor": "https://harbor-ha.berger.ph",
+  "dashboards": "https://opensearch.berger.ph",
+  "opensearch_tunnel": "https://127.0.0.1:19200",
+  "opensearch_tls_host": "opensearch-cluster-master.opensearch.svc.cluster.local",
+  "clients": {
+    "afi-harbor": {"callback": "https://harbor-ha.berger.ph/c/oidc/callback", "origin": "https://harbor-ha.berger.ph"},
+    "afi-opensearch": {"callback": "https://opensearch.berger.ph/auth/openid/login", "origin": "https://opensearch.berger.ph"}
+  },
+  "retention_days": 180
+}

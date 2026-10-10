@@ -1,0 +1,79 @@
+logging:
+  enabled: false
+additionalLoggingSources:
+  rke2:
+    enabled: true
+disablePvc: false
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+fluentbit:
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  bufferStorageVolume:
+    hostPath:
+      path: /var/lib/rancher/afi-logging/buffers
+      type: DirectoryOrCreate
+  bufferStorage:
+    storage.path: /buffers
+    storage.sync: full
+    storage.checksum: 'on'
+    storage.max_chunks_up: 32
+    storage.backlog.mem_limit: 32M
+    storage.metrics: 'on'
+  metrics:
+    port: 2020
+    path: /api/v1/metrics/prometheus
+    prometheusAnnotations: true
+    serviceMonitor: false
+    prometheusRules: false
+fluentd:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 1Gi
+  bufferStorageVolume:
+    pvc:
+      source:
+        claimName: afi-fluentd-buffer
+  replicas: 1
+  metrics:
+    port: 24231
+    prometheusAnnotations: true
+    serviceMonitor: false
+    prometheusRules: false
+loggingOverlay:
+  spec:
+    fluentd:
+      bufferVolumeMetrics:
+        port: 9100
+        prometheusAnnotations: true
+fluentbitAgentOverlay:
+  spec:
+    positiondb:
+      hostPath:
+        path: /var/lib/rancher/afi-logging/positions
+        type: DirectoryOrCreate
+    inputTail:
+      storage.type: filesystem
+      DB_Sync: Full
+      DB.journal_mode: WAL
+      DB.locking: true
+      Read_From_Head: true
+      Mem_Buf_Limit: 32M
+      Rotate_Wait: 30
+      Skip_Long_Lines: true
+    forwardOptions:
+      Require_ack_response: true
+      Retry_Limit: 'False'
+      storage.total_limit_size: 2G

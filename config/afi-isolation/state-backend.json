@@ -1,0 +1,9 @@
+{
+  "endpoint": "https://192.168.1.197:9000",
+  "region": "us-east-1",
+  "bucket": "afi-terraform-state",
+  "environment": "lab",
+  "credentials_path": "secret/platform/terraform-state",
+  "minio_root_path": "secret/platform/minio/credentials",
+  "ca_path": "secret/platform/pki/lab-ca"
+}
