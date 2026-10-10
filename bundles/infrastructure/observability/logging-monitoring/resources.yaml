@@ -89,7 +89,7 @@ data:
       relabel_configs:
       - source_labels:
         - __meta_kubernetes_pod_name
-        regex: rancher-logging-root-fluentbit-.+
+        regex: rancher-logging-(root-fluentbit|rke2-journald-aggregator)-.+
         action: keep
       - source_labels:
         - __meta_kubernetes_pod_container_port_number

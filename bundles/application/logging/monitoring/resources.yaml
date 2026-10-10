@@ -121,3 +121,23 @@ spec:
     relabelings:
     - targetLabel: job
       replacement: logging-buffer-volume
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: afi-logging-journald
+  namespace: cattle-logging-system
+spec:
+  selector:
+    matchLabels:
+      name: rancher-logging-rke2-journald-aggregator
+  namespaceSelector:
+    matchNames:
+    - cattle-logging-system
+  podMetricsEndpoints:
+  - port: metrics
+    path: /api/v1/metrics/prometheus
+    interval: 15s
+    relabelings:
+    - targetLabel: job
+      replacement: logging-fluentbit
