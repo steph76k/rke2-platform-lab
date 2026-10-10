@@ -17,6 +17,12 @@ spec:
   - bundles/infrastructure/secrets/platform/redis
   - bundles/infrastructure/secrets/platform/opensearch
   - bundles/infrastructure/secrets/platform/logging
+  - bundles/infrastructure/operators/cnpg
+  - bundles/infrastructure/operators/redis-operator
+  - bundles/infrastructure/data-services/storage-class
+  - bundles/infrastructure/data-services/harbor-postgres
+  - bundles/infrastructure/data-services/redis-replication
+  - bundles/infrastructure/data-services/harbor-storage
   targets:
   - name: lab-infrastructure
     clusterSelector:
