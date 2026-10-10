@@ -9,6 +9,7 @@ spec:
     port: 9200
     scheme: https
     ssl_verify: true
+    log_os_400_reason: true
     ca_file:
       mountFrom:
         secretKeyRef:
