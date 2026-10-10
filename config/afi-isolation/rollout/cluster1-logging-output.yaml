@@ -43,6 +43,7 @@ spec:
     verify_os_version_at_startup: false
     default_opensearch_version: 3
     request_timeout: 30s
+    bulk_message_request_threshold: '2097152'
     reload_connections: false
     reload_on_failure: false
     reconnect_on_error: true
@@ -115,6 +116,7 @@ spec:
     verify_os_version_at_startup: false
     default_opensearch_version: 3
     request_timeout: 30s
+    bulk_message_request_threshold: '2097152'
     reload_connections: false
     reload_on_failure: false
     reconnect_on_error: true
@@ -187,6 +189,7 @@ spec:
     verify_os_version_at_startup: false
     default_opensearch_version: 3
     request_timeout: 30s
+    bulk_message_request_threshold: '2097152'
     reload_connections: false
     reload_on_failure: false
     reconnect_on_error: true
