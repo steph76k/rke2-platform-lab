@@ -30,6 +30,8 @@ spec:
   - bundles/infrastructure/applications/opensearch-ingest
   - bundles/application/logging/crds
   - bundles/application/logging/secrets
+  - bundles/application/logging/operator
+  - bundles/application/logging/output
   targets:
   - name: lab-infrastructure
     clusterSelector:
