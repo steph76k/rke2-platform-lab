@@ -50,7 +50,6 @@ fluentbitAgentOverlay:
         type: DirectoryOrCreate
     inputTail:
       storage.type: filesystem
-      DB_Sync: Full
       DB.journal_mode: WAL
       DB.locking: true
       Read_From_Head: true
