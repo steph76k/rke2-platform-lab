@@ -1,17 +1,22 @@
-# Apply on the Rancher/Fleet management cluster, not on the downstream cluster.
-# Replace YOUR_GITHUB_ACCOUNT and the cluster selector with your actual Fleet labels.
 apiVersion: fleet.cattle.io/v1alpha1
 kind: GitRepo
 metadata:
-  name: rke2-platform-poc
+  name: rke2-platform
   namespace: fleet-default
 spec:
   repo: https://github.com/steph76k/rke2-platform-lab.git
   branch: main
   paths:
     - bundles/00-bootstrap-test
+    - bundles/application/operators/external-secrets
   targets:
-    - name: rke2-cluster2
+    - name: lab-infrastructure
       clusterSelector:
         matchLabels:
-          platform-role: infrastructure-poc
+          environment: lab
+          role: infrastructure
+    - name: lab-applications
+      clusterSelector:
+        matchLabels:
+          environment: lab
+          role: applications

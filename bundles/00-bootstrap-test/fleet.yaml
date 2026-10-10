@@ -1,1 +1,7 @@
 defaultNamespace: fleet-poc
+overrideTargets:
+  - name: lab-infrastructure
+    clusterSelector:
+      matchLabels:
+        environment: lab
+        role: infrastructure

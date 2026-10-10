@@ -1,0 +1,15 @@
+defaultNamespace: external-secrets
+helm:
+  releaseName: external-secrets
+  repo: https://charts.external-secrets.io
+  chart: external-secrets
+  version: 2.11.0
+  takeOwnership: true
+  valuesFiles:
+    - values.yaml
+overrideTargets:
+  - name: lab-applications
+    clusterSelector:
+      matchLabels:
+        environment: lab
+        role: applications

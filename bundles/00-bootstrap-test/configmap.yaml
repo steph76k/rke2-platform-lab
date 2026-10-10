@@ -1,13 +1,7 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: fleet-poc
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: fleet-smoke-test
+  name: fleet-poc
   namespace: fleet-poc
 data:
-  purpose: "Validate Rancher Fleet GitOps reconciliation"
-  managed-by: "fleet"
+  status: connected

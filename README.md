@@ -1,23 +1,23 @@
-# rke2-platform
+# RKE2 Platform Lab – Fleet
 
-Homelab proof of concept for Rancher Fleet with reusable RKE2 platform components.
+GitHub repository: `steph76k/rke2-platform-lab` (main).
 
-## Safe first deployment
+## Layout
+- `bundles/00-bootstrap-test`: isolated infrastructure test on rke2-cluster2
+- `bundles/infrastructure`: platform operators, stateful services and applications (staged only)
+- `bundles/application/operators/external-secrets`: ESO v2.11.0 targeting rke2-cluster1
+- `fleet/gitrepo.yaml`: Fleet GitRepo with two role-specific cluster selectors
 
-1. Create GitHub repo `rke2-platform` and push this repository's files.
-2. On the **Rancher/Fleet management cluster**, inspect Fleet clusters: `kubectl -n fleet-default get clusters.fleet.cattle.io --show-labels`.
-3. Add label `platform-role=infrastructure-poc` **only** to the Fleet Cluster resource representing `rke2-cluster2` (use Rancher UI or kubectl on management cluster).
-4. Replace `YOUR_GITHUB_ACCOUNT` in `fleet/gitrepo.yaml`.
-5. Apply `fleet/gitrepo.yaml` to the management cluster: `kubectl apply -f fleet/gitrepo.yaml`.
-6. Check Fleet GitRepo and bundles on the management cluster: `kubectl -n fleet-default get gitrepos.fleet.cattle.io,bundles.fleet.cattle.io`.
-7. On downstream `rke2-cluster2`, check: `kubectl -n fleet-poc get configmap fleet-smoke-test -o yaml`.
+## Before enabling ESO
+ESO already runs on cluster1 as an existing manual Helm release. Confirm its release chart, values, resources and release ownership first. Fleet adoption may require additional migration steps; do not uninstall ESO or delete CRDs. The test package proposes `helm.takeOwnership: true`, not an assured zero-downtime takeover.
 
-For private GitHub repos configure Fleet `clientSecretName` with read-only repository credentials in `fleet-default` before applying. Do not commit secrets, private age keys, or unencrypted Terraform state.
+Confirm the GitRepo resource still has the correct name/namespace and review target changes before running:
 
-## Planned bundles
+```bash
+kubectl --context rancher apply -f fleet/gitrepo.yaml
+kubectl --context rancher -n fleet-default get gitrepos,bundles
+kubectl --context rke2-cluster1 -n external-secrets get deploy
+kubectl --context rke2-cluster2 -n fleet-poc get configmap
+```
 
-Future independent bundles: CNPG operator, Redis operator, CNPG Harbor database, Redis replication, Harbor, OpenBao, OpenSearch, External Secrets Operator.
-
-## Warning on existing deployments
-
-Existing Helm releases are not owned by Fleet. Do not add their paths to the Fleet GitRepo until a controlled takeover/migration plan is prepared, including data and secret backups.
+The GitRepo paths are deliberately explicit. Adding the whole bundles directory would activate currently staged components.
