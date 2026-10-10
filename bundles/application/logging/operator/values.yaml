@@ -14,10 +14,27 @@ fluentbit:
   resources:
     requests:
       cpu: 25m
-      memory: 50M
+      memory: 64Mi
     limits:
-      cpu: 200m
-      memory: 100M
+      cpu: 500m
+      memory: 256Mi
+  bufferStorageVolume:
+    hostPath:
+      path: /var/lib/rancher/afi-logging/buffers
+      type: DirectoryOrCreate
+  bufferStorage:
+    storage.path: /buffers
+    storage.sync: full
+    storage.checksum: 'on'
+    storage.max_chunks_up: 32
+    storage.backlog.mem_limit: 32M
+    storage.metrics: 'on'
+  metrics:
+    port: 2020
+    path: /api/v1/metrics/prometheus
+    prometheusAnnotations: true
+    serviceMonitor: false
+    prometheusRules: false
 fluentd:
   resources:
     requests:
@@ -25,3 +42,27 @@ fluentd:
       memory: 256Mi
     limits:
       memory: 768Mi
+fluentbitAgentOverlay:
+  spec:
+    positiondb:
+      hostPath:
+        path: /var/lib/rancher/afi-logging/positions
+        type: DirectoryOrCreate
+    inputTail:
+      storage.type: filesystem
+      DB_Sync: Full
+      DB.journal_mode: WAL
+      DB.locking: true
+      Read_From_Head: true
+      Mem_Buf_Limit: 32M
+      Rotate_Wait: '30'
+      Skip_Long_Lines: 'On'
+    forwardOptions:
+      Require_ack_response: true
+      Retry_Limit: 'False'
+      storage.total_limit_size: 2G
+    filterKubernetes:
+      Merge_Log: 'Off'
+      Keep_Log: 'On'
+      K8S-Logging.Parser: 'Off'
+      K8S-Logging.Exclude: 'Off'
