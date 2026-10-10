@@ -1,3 +1,4 @@
+name: lab-app-external-secrets
 defaultNamespace: external-secrets
 helm:
   releaseName: external-secrets

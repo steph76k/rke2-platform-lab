@@ -1,3 +1,4 @@
+name: lab-bootstrap-test
 defaultNamespace: fleet-poc
 overrideTargets:
   - name: lab-infrastructure
