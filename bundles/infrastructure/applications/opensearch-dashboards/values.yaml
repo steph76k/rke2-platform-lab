@@ -13,8 +13,6 @@ config:
     - Global
     opensearch_security.readonly_mode.roles:
     - kibana_read_only
-    - mandant-a-logs-read
-    - mandant-b-logs-read
     opensearch_security.cookie.secure: true
     data_source.enabled: false
     workspace.enabled: false
