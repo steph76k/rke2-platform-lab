@@ -34,5 +34,9 @@ metadata:
   name: all-logs-to-opensearch
   namespace: cattle-logging-system
 spec:
+  filters:
+  - dedot:
+      de_dot_nested: true
+      de_dot_separator: _
   globalOutputRefs:
   - opensearch
