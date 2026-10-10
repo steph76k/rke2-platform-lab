@@ -12,6 +12,11 @@ bestehen; Cluster 1 wurde nicht umgebaut. OpenBao bleibt auf K3s.
 
 ## Dokumentation
 
+- [Aktuelle Plattformvalidierung](docs/platform-validation.md)
+- [Logging-Abnahme und vorbereiteter Cluster-1-Rollout](docs/logging-validation.md)
+- [Rancher-Keycloak-Bestand und Integrationsplan](docs/keycloak-rancher-integration.md)
+- [Probleme, Freigaben und nächste Schritte](docs/open-items.md)
+
 - [Ausführung, Funktionstests und Einschränkungen](docs/migration-execution.md)
 - [Ausgangsinventar vor der Migration](docs/inventory.md)
 - [Architektur und Zuständigkeiten](docs/architecture.md)

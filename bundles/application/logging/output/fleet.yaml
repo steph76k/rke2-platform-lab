@@ -1,0 +1,13 @@
+name: lab-app-logging-output
+defaultNamespace: cattle-logging-system
+helm:
+  releaseName: lab-app-logging-output
+overrideTargets:
+- name: lab-applications
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: applications
+dependsOn:
+- name: lab-app-logging-operator
+- name: lab-app-logging-secrets

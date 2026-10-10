@@ -1,0 +1,1333 @@
+{
+  "date": "2026-10-10",
+  "inventoryTimestamp": "2026-10-10T16:56:43.185609+00:00",
+  "gitRevisionBefore": "38fda7680dfdb3310e40aac9886c6aeeb5aba811",
+  "fleetBundles": [
+    {
+      "namespace": "fleet-default",
+      "name": "fleet-agent-c-44q9v",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "fleet-agent-rke2-cluster1",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-app-external-secrets",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-bootstrap-test",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-cnpg",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-external-secrets",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-harbor",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-harbor-postgres",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-harbor-secrets",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-harbor-storage",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-logging-secrets",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-opensearch",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-opensearch-dashboards",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-opensearch-logging",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-opensearch-secrets",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-postgresql-secrets",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-redis-operator",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-redis-replication",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-redis-secrets",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-secret-smoke-test",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-secret-stores",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-default",
+      "name": "lab-infra-storage-class",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    },
+    {
+      "namespace": "fleet-local",
+      "name": "fleet-agent-local",
+      "summary": {
+        "desiredReady": 1,
+        "ready": 1
+      }
+    }
+  ],
+  "fleetDeployments": [
+    {
+      "name": "fleet-agent-c-44q9v",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-bootstrap-test",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-cnpg",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-external-secrets",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-harbor",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-harbor-postgres",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-harbor-secrets",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-harbor-storage",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-logging-secrets",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-opensearch",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-opensearch-dashboards",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-opensearch-logging",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-opensearch-secrets",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-postgresql-secrets",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-redis-operator",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-redis-replication",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-redis-secrets",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-secret-smoke-test",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-secret-stores",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "lab-infra-storage-class",
+      "namespace": "cluster-fleet-default-c-44q9v-a779df149bba",
+      "ready": true
+    },
+    {
+      "name": "fleet-agent-rke2-cluster1",
+      "namespace": "cluster-fleet-default-rke2-cluster1-3be31f11de00",
+      "ready": true
+    },
+    {
+      "name": "lab-app-external-secrets",
+      "namespace": "cluster-fleet-default-rke2-cluster1-3be31f11de00",
+      "ready": true
+    },
+    {
+      "name": "fleet-agent-local",
+      "namespace": "cluster-fleet-local-local-1a3d67d0a899",
+      "ready": true
+    }
+  ],
+  "infrastructureHelm": [
+    {
+      "namespace": "cattle-fleet-system",
+      "name": "fleet-agent-c-44q9v",
+      "revision": 2,
+      "status": "deployed",
+      "chart": "fleet-agent-c-44q9v",
+      "chartVersion": "v0.0.0+s-ded5b584168fdd0cc63da8a2d55e30313ffbfe97a7581fcadd58cc5e8f795"
+    },
+    {
+      "namespace": "cattle-logging-system",
+      "name": "lab-infra-logging-secrets",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "lab-infra-logging-secrets",
+      "chartVersion": "v0.0.0+git-328eed2c7929"
+    },
+    {
+      "namespace": "cattle-logging-system",
+      "name": "lab-infra-opensearch-logging",
+      "revision": 30,
+      "status": "deployed",
+      "chart": "lab-infra-opensearch-logging",
+      "chartVersion": "v0.0.0+git-2245eaf33327"
+    },
+    {
+      "namespace": "cattle-logging-system",
+      "name": "rancher-logging-crd",
+      "revision": 2,
+      "status": "deployed",
+      "chart": "rancher-logging-crd",
+      "chartVersion": "109.0.1+up4.10.0-rancher.24"
+    },
+    {
+      "namespace": "cattle-logging-system",
+      "name": "rancher-logging",
+      "revision": 5,
+      "status": "deployed",
+      "chart": "rancher-logging",
+      "chartVersion": "109.0.1+up4.10.0-rancher.24"
+    },
+    {
+      "namespace": "cattle-neuvector-system",
+      "name": "neuvector-crd",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "neuvector-crd",
+      "chartVersion": "109.0.6+up2.11.2"
+    },
+    {
+      "namespace": "cattle-neuvector-system",
+      "name": "neuvector-monitor",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "neuvector-monitor",
+      "chartVersion": "109.0.6+up2.11.2"
+    },
+    {
+      "namespace": "cattle-neuvector-system",
+      "name": "neuvector",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "neuvector",
+      "chartVersion": "109.0.6+up2.11.2"
+    },
+    {
+      "namespace": "cattle-system",
+      "name": "rancher-webhook",
+      "revision": 3,
+      "status": "deployed",
+      "chart": "rancher-webhook",
+      "chartVersion": "109.0.3+up0.10.7"
+    },
+    {
+      "namespace": "cattle-system",
+      "name": "system-upgrade-controller",
+      "revision": 2,
+      "status": "deployed",
+      "chart": "system-upgrade-controller",
+      "chartVersion": "109.0.2"
+    },
+    {
+      "namespace": "cert-manager",
+      "name": "jetstack",
+      "revision": 8,
+      "status": "deployed",
+      "chart": "cert-manager",
+      "chartVersion": "v1.16.2"
+    },
+    {
+      "namespace": "cnpg-system",
+      "name": "cnpg",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "cloudnative-pg",
+      "chartVersion": "0.29.1"
+    },
+    {
+      "namespace": "external-secrets",
+      "name": "external-secrets",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "external-secrets",
+      "chartVersion": "2.11.0"
+    },
+    {
+      "namespace": "external-secrets",
+      "name": "lab-infra-secret-smoke-test",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "lab-infra-secret-smoke-test",
+      "chartVersion": "v0.0.0+git-a1aa9d8e3d8e"
+    },
+    {
+      "namespace": "external-secrets",
+      "name": "lab-infra-secret-stores",
+      "revision": 2,
+      "status": "deployed",
+      "chart": "lab-infra-secret-stores",
+      "chartVersion": "v0.0.0+git-03099f370b83"
+    },
+    {
+      "namespace": "fleet-poc",
+      "name": "lab-bootstrap-test",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "lab-bootstrap-test",
+      "chartVersion": "v0.0.0+git-78d14a3403b9"
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "harbor",
+      "revision": 2,
+      "status": "deployed",
+      "chart": "harbor",
+      "chartVersion": "1.19.2"
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "lab-infra-harbor-postgres",
+      "revision": 3,
+      "status": "deployed",
+      "chart": "lab-infra-harbor-postgres",
+      "chartVersion": "v0.0.0+git-4eaa43843089"
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "lab-infra-harbor-secrets",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "lab-infra-harbor-secrets",
+      "chartVersion": "v0.0.0+git-a1aa9d8e3d8e"
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "lab-infra-harbor-storage",
+      "revision": 2,
+      "status": "deployed",
+      "chart": "lab-infra-harbor-storage",
+      "chartVersion": "v0.0.0+git-2896b1c23cb0"
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "lab-infra-postgresql-secrets",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "lab-infra-postgresql-secrets",
+      "chartVersion": "v0.0.0+git-a1aa9d8e3d8e"
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "lab-infra-redis-secrets",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "lab-infra-redis-secrets",
+      "chartVersion": "v0.0.0+git-a1aa9d8e3d8e"
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "redis-operator",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "redis-operator",
+      "chartVersion": "0.27.0"
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "redis-replication",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "redis-replication",
+      "chartVersion": "0.17.1"
+    },
+    {
+      "namespace": "kube-system",
+      "name": "lab-infra-storage-class",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "lab-infra-storage-class",
+      "chartVersion": "v0.0.0+git-328eed2c7929"
+    },
+    {
+      "namespace": "kube-system",
+      "name": "rke2-cilium",
+      "revision": 12,
+      "status": "deployed",
+      "chart": "rke2-cilium",
+      "chartVersion": "1.19.601"
+    },
+    {
+      "namespace": "kube-system",
+      "name": "rke2-coredns",
+      "revision": 4,
+      "status": "deployed",
+      "chart": "rke2-coredns",
+      "chartVersion": "1.46.201"
+    },
+    {
+      "namespace": "kube-system",
+      "name": "rke2-metrics-server",
+      "revision": 4,
+      "status": "deployed",
+      "chart": "rke2-metrics-server",
+      "chartVersion": "3.13.105"
+    },
+    {
+      "namespace": "kube-system",
+      "name": "rke2-runtimeclasses",
+      "revision": 4,
+      "status": "deployed",
+      "chart": "rke2-runtimeclasses",
+      "chartVersion": "0.1.000"
+    },
+    {
+      "namespace": "kube-system",
+      "name": "rke2-snapshot-controller-crd",
+      "revision": 4,
+      "status": "deployed",
+      "chart": "rke2-snapshot-controller-crd",
+      "chartVersion": "4.2.008"
+    },
+    {
+      "namespace": "kube-system",
+      "name": "rke2-snapshot-controller",
+      "revision": 4,
+      "status": "deployed",
+      "chart": "rke2-snapshot-controller",
+      "chartVersion": "4.2.008"
+    },
+    {
+      "namespace": "longhorn-system",
+      "name": "longhorn-crd",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "longhorn-crd",
+      "chartVersion": "109.4.0+up1.12.1"
+    },
+    {
+      "namespace": "longhorn-system",
+      "name": "longhorn",
+      "revision": 1,
+      "status": "failed",
+      "chart": "longhorn",
+      "chartVersion": "109.4.0+up1.12.1"
+    },
+    {
+      "namespace": "opensearch",
+      "name": "lab-infra-opensearch-secrets",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "lab-infra-opensearch-secrets",
+      "chartVersion": "v0.0.0+git-a1aa9d8e3d8e"
+    },
+    {
+      "namespace": "opensearch",
+      "name": "opensearch-dashboards",
+      "revision": 1,
+      "status": "deployed",
+      "chart": "opensearch-dashboards",
+      "chartVersion": "3.9.0"
+    },
+    {
+      "namespace": "opensearch",
+      "name": "opensearch",
+      "revision": 4,
+      "status": "deployed",
+      "chart": "opensearch",
+      "chartVersion": "3.9.0"
+    }
+  ],
+  "storage": [
+    {
+      "namespace": "harbor-ha",
+      "name": "data-harbor-trivy-0",
+      "phase": "Bound",
+      "volume": "pvc-971906ec-a20c-4493-8dfc-9fc303ec28b4",
+      "robustness": "healthy",
+      "replicas": 2
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "harbor-ha-db-1",
+      "phase": "Bound",
+      "volume": "pvc-997021cb-0eb0-4739-bdad-e0c0b0082d19",
+      "robustness": "healthy",
+      "replicas": 2
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "harbor-ha-db-2",
+      "phase": "Bound",
+      "volume": "pvc-f9cd41bb-8b6b-4870-add5-19489c05f1b6",
+      "robustness": "healthy",
+      "replicas": 2
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "harbor-ha-db-3",
+      "phase": "Bound",
+      "volume": "pvc-3db4cd35-0baf-4996-924c-fdbb68196bfa",
+      "robustness": "healthy",
+      "replicas": 2
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "harbor-registry",
+      "phase": "Bound",
+      "volume": "pvc-46fc6172-7976-4739-8fad-247691fe2c90",
+      "robustness": "healthy",
+      "replicas": 2
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "redis-replication-redis-replication-0",
+      "phase": "Bound",
+      "volume": "pvc-7a900f65-ece9-4213-97b6-f50822c09961",
+      "robustness": "healthy",
+      "replicas": 2
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "redis-replication-redis-replication-1",
+      "phase": "Bound",
+      "volume": "pvc-18c33d84-bae7-4327-a13d-cf7155ac6db4",
+      "robustness": "healthy",
+      "replicas": 2
+    },
+    {
+      "namespace": "harbor-ha",
+      "name": "redis-replication-redis-replication-2",
+      "phase": "Bound",
+      "volume": "pvc-41179b25-5ec1-4d4c-8ab1-f1109a8c0ff8",
+      "robustness": "healthy",
+      "replicas": 2
+    },
+    {
+      "namespace": "opensearch",
+      "name": "opensearch-cluster-master-opensearch-cluster-master-0",
+      "phase": "Bound",
+      "volume": "pvc-e94dd3f7-cb5c-49d9-90dd-76e5580d52d0",
+      "robustness": "healthy",
+      "replicas": 2
+    },
+    {
+      "namespace": "opensearch",
+      "name": "opensearch-cluster-master-opensearch-cluster-master-1",
+      "phase": "Bound",
+      "volume": "pvc-8aecd738-3628-4018-bb05-7e4bcc83998a",
+      "robustness": "healthy",
+      "replicas": 2
+    },
+    {
+      "namespace": "opensearch",
+      "name": "opensearch-cluster-master-opensearch-cluster-master-2",
+      "phase": "Bound",
+      "volume": "pvc-7c59ccef-d57f-4580-9033-4f7c25d5926f",
+      "robustness": "healthy",
+      "replicas": 2
+    }
+  ],
+  "logging": {
+    "probe": "codex-log-20261010165949",
+    "documents": [
+      {
+        "index": "kubernetes-2026.10.10",
+        "source": {
+          "time": "2026-10-10T18:59:55.678914173+02:00",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-log-20261010165949-wk1 sequence=1",
+          "kubernetes": {
+            "pod_name": "codex-log-20261010165949-wk1",
+            "namespace_name": "default",
+            "pod_id": "36d16ea5-2af5-4bd9-9a48-da84206695ce",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-log-20261010165949"
+            },
+            "host": "rke2-cluster2-wk-1.berger.ph",
+            "container_name": "probe",
+            "docker_id": "733f014bb1c891ebbd173ad0de7eda64f3349f368fbd4978fea9e5c5f6f59825",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-xmzdw",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "@timestamp": "2026-10-10T16:59:55.678914173+00:00"
+        }
+      },
+      {
+        "index": "kubernetes-2026.10.10",
+        "source": {
+          "time": "2026-10-10T18:59:55.679308315+02:00",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-log-20261010165949-wk1 sequence=2",
+          "kubernetes": {
+            "pod_name": "codex-log-20261010165949-wk1",
+            "namespace_name": "default",
+            "pod_id": "36d16ea5-2af5-4bd9-9a48-da84206695ce",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-log-20261010165949"
+            },
+            "host": "rke2-cluster2-wk-1.berger.ph",
+            "container_name": "probe",
+            "docker_id": "733f014bb1c891ebbd173ad0de7eda64f3349f368fbd4978fea9e5c5f6f59825",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-xmzdw",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "@timestamp": "2026-10-10T16:59:55.679308315+00:00"
+        }
+      },
+      {
+        "index": "kubernetes-2026.10.10",
+        "source": {
+          "time": "2026-10-10T18:59:55.679384416+02:00",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-log-20261010165949-wk1 sequence=3",
+          "kubernetes": {
+            "pod_name": "codex-log-20261010165949-wk1",
+            "namespace_name": "default",
+            "pod_id": "36d16ea5-2af5-4bd9-9a48-da84206695ce",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-log-20261010165949"
+            },
+            "host": "rke2-cluster2-wk-1.berger.ph",
+            "container_name": "probe",
+            "docker_id": "733f014bb1c891ebbd173ad0de7eda64f3349f368fbd4978fea9e5c5f6f59825",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-xmzdw",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "@timestamp": "2026-10-10T16:59:55.679384416+00:00"
+        }
+      },
+      {
+        "index": "kubernetes-2026.10.10",
+        "source": {
+          "time": "2026-10-10T18:59:56.521898496+02:00",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-log-20261010165949-wk2 sequence=1",
+          "kubernetes": {
+            "pod_name": "codex-log-20261010165949-wk2",
+            "namespace_name": "default",
+            "pod_id": "e7dd34c7-f309-4e54-9e4b-89108e65fc4a",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-log-20261010165949"
+            },
+            "host": "rke2-cluster2-wk-2.berger.ph",
+            "container_name": "probe",
+            "docker_id": "4a1ccf7f787bbf5953f5e2a0308b58d76d76877e214116a4068f6ad2d6b056f9",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-xmzdw",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "@timestamp": "2026-10-10T16:59:56.521898496+00:00"
+        }
+      },
+      {
+        "index": "kubernetes-2026.10.10",
+        "source": {
+          "time": "2026-10-10T18:59:56.522165705+02:00",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-log-20261010165949-wk2 sequence=2",
+          "kubernetes": {
+            "pod_name": "codex-log-20261010165949-wk2",
+            "namespace_name": "default",
+            "pod_id": "e7dd34c7-f309-4e54-9e4b-89108e65fc4a",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-log-20261010165949"
+            },
+            "host": "rke2-cluster2-wk-2.berger.ph",
+            "container_name": "probe",
+            "docker_id": "4a1ccf7f787bbf5953f5e2a0308b58d76d76877e214116a4068f6ad2d6b056f9",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-xmzdw",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "@timestamp": "2026-10-10T16:59:56.522165705+00:00"
+        }
+      },
+      {
+        "index": "kubernetes-2026.10.10",
+        "source": {
+          "time": "2026-10-10T18:59:56.522169775+02:00",
+          "stream": "stdout",
+          "logtag": "F",
+          "message": "codex-log-20261010165949-wk2 sequence=3",
+          "kubernetes": {
+            "pod_name": "codex-log-20261010165949-wk2",
+            "namespace_name": "default",
+            "pod_id": "e7dd34c7-f309-4e54-9e4b-89108e65fc4a",
+            "labels": {
+              "app": "logging-validation",
+              "app_kubernetes_io/name": "logging-validation",
+              "validation-id": "codex-log-20261010165949"
+            },
+            "host": "rke2-cluster2-wk-2.berger.ph",
+            "container_name": "probe",
+            "docker_id": "4a1ccf7f787bbf5953f5e2a0308b58d76d76877e214116a4068f6ad2d6b056f9",
+            "container_hash": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+            "container_image": "docker.io/library/busybox:1.36"
+          },
+          "kubernetes_namespace": {
+            "name": "default",
+            "labels": {
+              "field_cattle_io/projectId": "p-xmzdw",
+              "kubernetes_io/metadata_name": "default"
+            }
+          },
+          "@timestamp": "2026-10-10T16:59:56.522169774+00:00"
+        }
+      }
+    ],
+    "duplicateCheck": "six distinct messages, six documents; confirmed again after pod cleanup"
+  },
+  "dashboards": {
+    "login": 200,
+    "search": 200,
+    "probe": "codex-log-20261010165949",
+    "total": 6,
+    "indexPatterns": []
+  },
+  "secretScan": {
+    "files": 114,
+    "historyBlobs": 140,
+    "liveSecretMatches": 0,
+    "privateKeyBlocks": 0,
+    "secretManifestPayloads": 0,
+    "scope": "Known current platform credentials plus structural scan, not proof against all unknown historical credentials"
+  },
+  "rancherAuth": {
+    "rancherOIDC": {
+      "enabled": true,
+      "accessMode": "unrestricted",
+      "clientId": "rancher",
+      "issuer": "https://idp.berger.ph/realms/myrealm",
+      "authEndpoint": "https://idp.berger.ph/realms/myrealm/protocol/openid-connect/auth",
+      "userInfoEndpoint": "https://idp.berger.ph/realms/myrealm/protocol/openid-connect/userinfo",
+      "rancherUrl": "https://rancher.berger.ph/verify-auth",
+      "scope": "openid profile email",
+      "groupSearchEnabled": true,
+      "allowedPrincipalIds": [
+        "keycloakoidc_user://8e8b393b-93cd-405f-a031-d51f2897b82a",
+        "keycloakoidc_group://G_Admin",
+        "keycloakoidc_user://825b5c03-972c-45bc-9ad7-40dd3e8581b5"
+      ],
+      "type": "keyCloakOIDCConfig"
+    },
+    "localAuth": true,
+    "globalrolebindings": [
+      {
+        "groupPrincipalName": null,
+        "userPrincipalName": "local://user-bcld2",
+        "userName": "user-bcld2",
+        "globalRoleName": "admin",
+        "roleTemplateName": null,
+        "projectName": null
+      },
+      {
+        "groupPrincipalName": "keycloakoidc_group://G_Admin",
+        "userPrincipalName": null,
+        "userName": null,
+        "globalRoleName": "admin",
+        "roleTemplateName": null,
+        "projectName": null
+      },
+      {
+        "groupPrincipalName": "keycloakoidc_group://G_Developer",
+        "userPrincipalName": null,
+        "userName": null,
+        "globalRoleName": "user-base",
+        "roleTemplateName": null,
+        "projectName": null
+      },
+      {
+        "groupPrincipalName": "keycloakoidc_group://G_Viewer",
+        "userPrincipalName": null,
+        "userName": null,
+        "globalRoleName": "user-base",
+        "roleTemplateName": null,
+        "projectName": null
+      }
+    ],
+    "projectroletemplatebindings": [
+      {
+        "groupPrincipalName": "keycloakoidc_group://G_Developer",
+        "userPrincipalName": null,
+        "userName": null,
+        "globalRoleName": null,
+        "roleTemplateName": "project-owner",
+        "projectName": "c-m-prkskj2p:p-9gcht"
+      }
+    ]
+  },
+  "keycloak": {
+    "discoveryHttp": 200,
+    "discovery": {
+      "issuer": "https://idp.berger.ph/realms/berger",
+      "authorization_endpoint": "https://idp.berger.ph/realms/berger/protocol/openid-connect/auth",
+      "token_endpoint": "https://idp.berger.ph/realms/berger/protocol/openid-connect/token",
+      "userinfo_endpoint": "https://idp.berger.ph/realms/berger/protocol/openid-connect/userinfo",
+      "jwks_uri": "https://idp.berger.ph/realms/berger/protocol/openid-connect/certs",
+      "scopes_supported": [
+        "openid",
+        "offline_access",
+        "profile",
+        "acr",
+        "web-origins",
+        "phone",
+        "basic",
+        "address",
+        "microprofile-jwt",
+        "organization",
+        "email",
+        "service_account",
+        "roles"
+      ]
+    },
+    "realms": [
+      {
+        "realm": "master",
+        "enabled": true
+      },
+      {
+        "realm": "berger",
+        "enabled": true
+      }
+    ],
+    "realm": {
+      "realm": "berger",
+      "enabled": true,
+      "sslRequired": "external",
+      "registrationAllowed": false,
+      "loginWithEmailAllowed": true,
+      "bruteForceProtected": false
+    },
+    "clients": [],
+    "groups": [
+      {
+        "id": "709d7143-bdd2-4264-b6f5-bcc926e80be3",
+        "name": "mandant-a",
+        "description": "",
+        "path": "/mandant-a",
+        "subGroupCount": 0,
+        "subGroups": [],
+        "attributes": {},
+        "realmRoles": [],
+        "clientRoles": {},
+        "access": {
+          "view": true,
+          "viewMembers": true,
+          "manageMembers": true,
+          "manage": true,
+          "manageMembership": true
+        },
+        "roleMappings": {}
+      },
+      {
+        "id": "98dcb195-cdba-413f-aaec-9ebe63e7b331",
+        "name": "openbao-platform-admins",
+        "description": "",
+        "path": "/openbao-platform-admins",
+        "subGroupCount": 0,
+        "subGroups": [],
+        "attributes": {},
+        "realmRoles": [],
+        "clientRoles": {},
+        "access": {
+          "view": true,
+          "viewMembers": true,
+          "manageMembers": true,
+          "manage": true,
+          "manageMembership": true
+        },
+        "roleMappings": {}
+      }
+    ]
+  },
+  "dataServices": {
+    "cnpg": {
+      "phase": "Cluster in healthy state",
+      "instances": 3,
+      "readyInstances": 3,
+      "currentPrimary": "harbor-ha-db-2",
+      "targetPrimary": "harbor-ha-db-2",
+      "conditions": [
+        {
+          "lastTransitionTime": "2026-10-10T11:17:33Z",
+          "message": "Cluster has been bootstrapped",
+          "reason": "BootstrapCompleted",
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastTransitionTime": "2026-10-10T11:18:05Z",
+          "message": "A single, unique system ID was found across reporting instances.",
+          "reason": "Unique",
+          "status": "True",
+          "type": "ConsistentSystemID"
+        },
+        {
+          "lastTransitionTime": "2026-10-10T11:44:08Z",
+          "message": "Cluster is Ready",
+          "reason": "ClusterIsReady",
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastTransitionTime": "2026-10-10T11:35:20Z",
+          "message": "Continuous archiving is working",
+          "reason": "ContinuousArchivingSuccess",
+          "status": "True",
+          "type": "ContinuousArchiving"
+        }
+      ]
+    },
+    "harbor-ha-db-1": "t\nstreaming",
+    "harbor-ha-db-2": "f\nharbor-ha-db-3|streaming|async|||\nharbor-ha-db-1|streaming|async|||",
+    "harbor-ha-db-3": "t\nstreaming",
+    "postgresLogin": "harbor-ha|f\nt|TLSv1.3",
+    "redis-replication-0": "PONG\n# Replication\nrole:slave\nmaster_host:10.42.5.183\nmaster_port:6379\nmaster_link_status:up\nmaster_last_io_seconds_ago:1\nmaster_sync_in_progress:0\nslave_read_repl_offset:12170742\nslave_repl_offset:12170742\nslave_priority:100\nslave_read_only:1\nreplica_announced:1\nconnected_slaves:0\nmaster_failover_state:no-failover\nmaster_replid:884eaa8e9c61ed06bd4e8b3b904f19949bdcc5d0\nmaster_replid2:0000000000000000000000000000000000000000\nmaster_repl_offset:12170742\nsecond_repl_offset:-1\nrepl_backlog_active:1\nrepl_backlog_size:1048576\nrepl_backlog_first_byte_offset:11117716\nrepl_backlog_histlen:1053027",
+    "redis-replication-1": "PONG\n# Replication\nrole:slave\nmaster_host:10.42.5.183\nmaster_port:6379\nmaster_link_status:up\nmaster_last_io_seconds_ago:2\nmaster_sync_in_progress:0\nslave_read_repl_offset:12170742\nslave_repl_offset:12170742\nslave_priority:100\nslave_read_only:1\nreplica_announced:1\nconnected_slaves:0\nmaster_failover_state:no-failover\nmaster_replid:884eaa8e9c61ed06bd4e8b3b904f19949bdcc5d0\nmaster_replid2:0000000000000000000000000000000000000000\nmaster_repl_offset:12170742\nsecond_repl_offset:-1\nrepl_backlog_active:1\nrepl_backlog_size:1048576\nrepl_backlog_first_byte_offset:11108118\nrepl_backlog_histlen:1062625",
+    "redis-replication-2": "PONG\n# Replication\nrole:master\nconnected_slaves:2\nslave0:ip=10.42.4.119,port=6379,state=online,offset=12170742,lag=1\nslave1:ip=10.42.5.75,port=6379,state=online,offset=12170742,lag=0\nmaster_failover_state:no-failover\nmaster_replid:884eaa8e9c61ed06bd4e8b3b904f19949bdcc5d0\nmaster_replid2:48027d140694659effe08cb3367d0a501e5b1db5\nmaster_repl_offset:12170794\nsecond_repl_offset:559829\nrepl_backlog_active:1\nrepl_backlog_size:1048576\nrepl_backlog_first_byte_offset:11119790\nrepl_backlog_histlen:1051005",
+    "/_cluster/health": {
+      "cluster_name": "opensearch-cluster",
+      "status": "green",
+      "timed_out": false,
+      "number_of_nodes": 3,
+      "number_of_data_nodes": 3,
+      "discovered_master": true,
+      "discovered_cluster_manager": true,
+      "active_primary_shards": 6,
+      "active_shards": 16,
+      "relocating_shards": 0,
+      "initializing_shards": 0,
+      "unassigned_shards": 0,
+      "delayed_unassigned_shards": 0,
+      "number_of_pending_tasks": 0,
+      "number_of_in_flight_fetch": 0,
+      "task_max_waiting_in_queue_millis": 0,
+      "active_shards_percent_as_number": 100.0
+    },
+    "/_cat/nodes?format=json&h=name,ip,node.role,master": [
+      {
+        "name": "opensearch-cluster-master-0",
+        "ip": "10.42.5.111",
+        "node.role": "dimr",
+        "master": "*"
+      },
+      {
+        "name": "opensearch-cluster-master-2",
+        "ip": "10.42.5.248",
+        "node.role": "dimr",
+        "master": "-"
+      },
+      {
+        "name": "opensearch-cluster-master-1",
+        "ip": "10.42.5.229",
+        "node.role": "dimr",
+        "master": "-"
+      }
+    ],
+    "/_cat/indices?format=json&h=health,status,index,pri,rep,docs.count": [
+      {
+        "health": "green",
+        "status": "open",
+        "index": ".plugins-ml-config",
+        "pri": "1",
+        "rep": "2",
+        "docs.count": "1"
+      },
+      {
+        "health": "green",
+        "status": "open",
+        "index": "top_queries-2026.10.10-59490",
+        "pri": "1",
+        "rep": "2",
+        "docs.count": "35"
+      },
+      {
+        "health": "green",
+        "status": "open",
+        "index": "kubernetes-2026.10.10",
+        "pri": "1",
+        "rep": "1",
+        "docs.count": "84597"
+      },
+      {
+        "health": "green",
+        "status": "open",
+        "index": ".kibana_1",
+        "pri": "1",
+        "rep": "1",
+        "docs.count": "0"
+      },
+      {
+        "health": "green",
+        "status": "open",
+        "index": ".opendistro_security",
+        "pri": "1",
+        "rep": "2",
+        "docs.count": "8"
+      }
+    ],
+    "/_cat/shards?format=json&h=index,shard,prirep,state,node": [
+      {
+        "index": "top_queries-2026.10.10-59490",
+        "shard": "0",
+        "prirep": "p",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-0"
+      },
+      {
+        "index": "top_queries-2026.10.10-59490",
+        "shard": "0",
+        "prirep": "r",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-2"
+      },
+      {
+        "index": "top_queries-2026.10.10-59490",
+        "shard": "0",
+        "prirep": "r",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-1"
+      },
+      {
+        "index": ".plugins-ml-config",
+        "shard": "0",
+        "prirep": "p",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-0"
+      },
+      {
+        "index": ".plugins-ml-config",
+        "shard": "0",
+        "prirep": "r",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-2"
+      },
+      {
+        "index": ".plugins-ml-config",
+        "shard": "0",
+        "prirep": "r",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-1"
+      },
+      {
+        "index": "kubernetes-2026.10.10",
+        "shard": "0",
+        "prirep": "r",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-0"
+      },
+      {
+        "index": "kubernetes-2026.10.10",
+        "shard": "0",
+        "prirep": "p",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-2"
+      },
+      {
+        "index": ".opensearch-sap-log-types-config",
+        "shard": "0",
+        "prirep": "p",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-0"
+      },
+      {
+        "index": ".opensearch-sap-log-types-config",
+        "shard": "0",
+        "prirep": "r",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-2"
+      },
+      {
+        "index": ".opensearch-sap-log-types-config",
+        "shard": "0",
+        "prirep": "r",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-1"
+      },
+      {
+        "index": ".kibana_1",
+        "shard": "0",
+        "prirep": "p",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-0"
+      },
+      {
+        "index": ".kibana_1",
+        "shard": "0",
+        "prirep": "r",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-1"
+      },
+      {
+        "index": ".opendistro_security",
+        "shard": "0",
+        "prirep": "p",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-0"
+      },
+      {
+        "index": ".opendistro_security",
+        "shard": "0",
+        "prirep": "r",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-2"
+      },
+      {
+        "index": ".opendistro_security",
+        "shard": "0",
+        "prirep": "r",
+        "state": "STARTED",
+        "node": "opensearch-cluster-master-1"
+      }
+    ],
+    "opensearch/tls": {
+      "expires": "2027-10-10 11:06:27",
+      "sans": "<SubjectAlternativeName(<GeneralNames([<DNSName(value='opensearch-cluster-master')>, <DNSName(value='opensearch-cluster-master.opensearch')>, <DNSName(value='opensearch-cluster-master.opensearch.svc')>, <DNSName(value='opensearch-cluster-master.opensearch.svc.cluster.local')>, <DNSName(value='*.opensearch-cluster-master-headless.opensearch.svc.cluster.local')>])>)>"
+    },
+    "harbor/ingress-tls": {
+      "expires": "2027-10-10 11:06:29",
+      "sans": "<SubjectAlternativeName(<GeneralNames([<DNSName(value='harbor-ha.berger.ph')>])>)>"
+    }
+  },
+  "sentinel": {
+    "redis-replication-s-0": "name\nmymaster\nip\n10.42.5.183\nport\n6379\nrunid\n5b454adb11553f6f7dc4793965d9e82bf9f65cef\nflags\nmaster\nlink-pending-commands\n0\nlink-refcount\n1\nlast-ping-sent\n0\nlast-ok-ping-reply\n481\nlast-ping-reply\n481\ndown-after-milliseconds\n5000\ninfo-refresh\n914\nrole-reported\nmaster\nrole-reported-time\n19292174\nconfig-epoch\n1\nnum-slaves\n2\nnum-other-sentinels\n2\nquorum\n2\nfailover-timeout\n10000\nparallel-syncs\n1\nOK 3 usable Sentinels. Quorum and failover authorization can be reached\n",
+    "redis-replication-s-1": "name\nmymaster\nip\n10.42.5.183\nport\n6379\nrunid\n5b454adb11553f6f7dc4793965d9e82bf9f65cef\nflags\nmaster\nlink-pending-commands\n0\nlink-refcount\n1\nlast-ping-sent\n0\nlast-ok-ping-reply\n780\nlast-ping-reply\n780\ndown-after-milliseconds\n5000\ninfo-refresh\n4915\nrole-reported\nmaster\nrole-reported-time\n19292327\nconfig-epoch\n1\nnum-slaves\n2\nnum-other-sentinels\n2\nquorum\n2\nfailover-timeout\n10000\nparallel-syncs\n1\nOK 3 usable Sentinels. Quorum and failover authorization can be reached\n",
+    "redis-replication-s-2": "name\nmymaster\nip\n10.42.5.183\nport\n6379\nrunid\n5b454adb11553f6f7dc4793965d9e82bf9f65cef\nflags\nmaster\nlink-pending-commands\n0\nlink-refcount\n1\nlast-ping-sent\n0\nlast-ok-ping-reply\n499\nlast-ping-reply\n499\ndown-after-milliseconds\n5000\ninfo-refresh\n4959\nrole-reported\nmaster\nrole-reported-time\n19292752\nconfig-epoch\n1\nnum-slaves\n2\nnum-other-sentinels\n2\nquorum\n2\nfailover-timeout\n10000\nparallel-syncs\n1\nOK 3 usable Sentinels. Quorum and failover authorization can be reached\n"
+  },
+  "harborTest": {
+    "project": "codex-validation-20261010-1705",
+    "manifestDigest": "sha256:c64c687cbea9300178b30c95835354e34c4e4febc4badfe27102879de0483b5e",
+    "pushPull": "passed with blob and manifest verification",
+    "scan": "Success",
+    "cleanup": "artifact, own empty repository and own project removed",
+    "healthComponents": [
+      "core",
+      "database",
+      "jobservice",
+      "portal",
+      "redis",
+      "registry",
+      "registryctl",
+      "trivy"
+    ]
+  },
+  "openbaoAuthTests": {
+    "cluster1MandantA": {
+      "login": 200,
+      "ownKVRead": 200,
+      "revokeOwnToken": 204
+    },
+    "cluster2Logging": {
+      "login": 200,
+      "ownKVRead": 200,
+      "harborKVReadDenied": 403,
+      "revokeOwnToken": 204
+    }
+  }
+}

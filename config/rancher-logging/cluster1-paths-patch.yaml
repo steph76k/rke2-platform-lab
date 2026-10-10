@@ -1,0 +1,17 @@
+# STAGED ONLY: update canonical fleet/gitrepo.yaml in reviewed bootstrap phases.
+# Do not apply before the OpenBao role approval and readiness gates in docs/logging-validation.md.
+- op: add
+  path: /spec/paths/-
+  value: bundles/infrastructure/applications/opensearch-ingest
+- op: add
+  path: /spec/paths/-
+  value: bundles/application/logging/crds
+- op: add
+  path: /spec/paths/-
+  value: bundles/application/logging/secrets
+- op: add
+  path: /spec/paths/-
+  value: bundles/application/logging/operator
+- op: add
+  path: /spec/paths/-
+  value: bundles/application/logging/output
