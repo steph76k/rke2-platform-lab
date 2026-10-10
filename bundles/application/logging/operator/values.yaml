@@ -18,11 +18,11 @@ fluentbit:
     limits:
       cpu: 500m
       memory: 256Mi
-  bufferStorageVolume:
+  bufferStorageVolume: &id002
     hostPath:
       path: /var/lib/rancher/afi-logging/buffers
       type: DirectoryOrCreate
-  bufferStorage:
+  bufferStorage: &id001
     storage.path: /buffers
     storage.sync: full
     storage.checksum: 'on'
@@ -65,3 +65,5 @@ fluentbitAgentOverlay:
       Keep_Log: 'On'
       K8S-Logging.Parser: 'Off'
       K8S-Logging.Exclude: 'Off'
+    bufferStorage: *id001
+    bufferStorageVolume: *id002
