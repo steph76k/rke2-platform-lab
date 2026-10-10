@@ -11,3 +11,4 @@ overrideTargets:
 dependsOn:
 - name: lab-infra-cnpg
 - name: lab-infra-postgresql-secrets
+- name: lab-infra-storage-class

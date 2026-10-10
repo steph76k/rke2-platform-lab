@@ -11,6 +11,11 @@ spec:
   - bundles/application/operators/external-secrets
   - bundles/infrastructure/operators/external-secrets
   - bundles/infrastructure/secrets/stores
+  - bundles/infrastructure/secrets/smoke-test
+  - bundles/infrastructure/secrets/platform/harbor
+  - bundles/infrastructure/secrets/platform/postgresql
+  - bundles/infrastructure/secrets/platform/redis
+  - bundles/infrastructure/secrets/platform/opensearch
   targets:
   - name: lab-infrastructure
     clusterSelector:

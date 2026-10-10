@@ -1,0 +1,10 @@
+name: lab-infra-storage-class
+defaultNamespace: kube-system
+helm:
+  releaseName: lab-infra-storage-class
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure

@@ -10,3 +10,4 @@ overrideTargets:
       role: infrastructure
 dependsOn:
 - name: lab-infra-secret-stores
+- name: lab-infra-storage-class

@@ -116,7 +116,7 @@ def main():
             docs = [o for file in sorted(p.parent.glob('*.yaml')) if file.name != 'fleet.yaml' for o in yaml.safe_load_all(file.read_text()) if o]
         for o in docs:
             o.setdefault('metadata', {})
-            if o['kind'] not in ('CustomResourceDefinition', 'ClusterRole', 'ClusterRoleBinding', 'ClusterSecretStore', 'Namespace', 'ValidatingWebhookConfiguration', 'MutatingWebhookConfiguration'):
+            if o['kind'] not in ('CustomResourceDefinition', 'ClusterRole', 'ClusterRoleBinding', 'ClusterSecretStore', 'Namespace', 'StorageClass', 'ValidatingWebhookConfiguration', 'MutatingWebhookConfiguration'):
                 o['metadata'].setdefault('namespace', f['defaultNamespace'])
             objects.append((name, o))
             if o['kind'] == 'Secret':

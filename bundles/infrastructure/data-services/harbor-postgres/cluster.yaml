@@ -19,7 +19,7 @@ spec:
       memory: 256Mi
   storage:
     size: 1Gi
-    storageClass: longhorn
+    storageClass: longhorn-platform
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: restart
   bootstrap:

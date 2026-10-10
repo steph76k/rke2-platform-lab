@@ -46,7 +46,7 @@ persistence:
     registry:
       existingClaim: harbor-registry
     trivy:
-      storageClass: longhorn
+      storageClass: longhorn-platform
       accessMode: ReadWriteOnce
       size: 5Gi
   resourcePolicy: keep

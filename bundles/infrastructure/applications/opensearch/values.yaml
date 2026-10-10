@@ -30,7 +30,7 @@ persistence:
   - ReadWriteOnce
   enabled: true
   size: 10Gi
-  storageClass: longhorn
+  storageClass: longhorn-platform
 replicas: 3
 resources:
   limits:

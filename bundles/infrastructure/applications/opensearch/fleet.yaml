@@ -16,3 +16,4 @@ overrideTargets:
       role: infrastructure
 dependsOn:
 - name: lab-infra-opensearch-secrets
+- name: lab-infra-storage-class

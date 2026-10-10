@@ -17,3 +17,4 @@ overrideTargets:
 dependsOn:
 - name: lab-infra-redis-operator
 - name: lab-infra-redis-secrets
+- name: lab-infra-storage-class

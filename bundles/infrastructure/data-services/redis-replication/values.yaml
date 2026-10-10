@@ -44,4 +44,4 @@ storageSpec:
       resources:
         requests:
           storage: 2Gi
-      storageClassName: longhorn
+      storageClassName: longhorn-platform
