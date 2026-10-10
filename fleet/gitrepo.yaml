@@ -27,6 +27,9 @@ spec:
   - bundles/infrastructure/applications/harbor
   - bundles/infrastructure/applications/opensearch-dashboards
   - bundles/infrastructure/applications/opensearch-logging
+  - bundles/infrastructure/applications/opensearch-ingest
+  - bundles/application/logging/crds
+  - bundles/application/logging/secrets
   targets:
   - name: lab-infrastructure
     clusterSelector:
