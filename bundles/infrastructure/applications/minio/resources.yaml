@@ -60,7 +60,7 @@ spec:
       - name: minio-registry
       containers:
       - name: minio
-        image: harbor-ha.berger.ph/platform-builds/minio@sha256:bad99ef826a89d42b68fb872986a78b86ec1a42bf9f8d411c7d4aa19a0bcbe95
+        image: harbor-ha.berger.ph/platform-builds/minio@sha256:12758d79d4af633bc59d031956601baa2dcf6888737f80707170303987afdff9
         args:
         - server
         - /data
