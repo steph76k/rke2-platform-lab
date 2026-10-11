@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Render reviewed cluster/namespace catalog to STAGED Fleet routing, never deploy.
+"""Render Cluster 1 catalog to STAGED Fleet routing, never deploy.
+Cluster 2 project-label routes are exclusively owned by rke2-tenants-lab Terraform.
 After adding a tenant, review the catalog and generated diff before rollout.
 """
 from pathlib import Path
@@ -16,7 +17,7 @@ for tenant,data in cat.items():
   assert (data['cluster'],ns) not in seen, 'Duplicate namespace ownership'
   seen.add((data['cluster'],ns))
 def dump(name,docs): (stage/name).write_text(yaml.safe_dump_all(docs,sort_keys=False))
-for n in [1,2]:
+for n in [1]:
  # Explicit namespace matches; the fallback excludes all mapped namespaces.
  cluster='rke2-cluster'+str(n);namespaces=[ns for t in cat.values() if t['cluster']==cluster for ns in t['namespaces']];docs=[]
  if n==1:
@@ -29,4 +30,4 @@ for n in [1,2]:
   match=[{'select':{'namespaces':ns}}] if ns else ([{'exclude':{'namespaces':namespaces}},{'select':{}}] if namespaces else [{'select':{}}])
   docs.append({'apiVersion':'logging.banzaicloud.io/v1beta1','kind':'ClusterFlow','metadata':{'name':'afi-'+tenant,'namespace':'cattle-logging-system'},'spec':{'match':match,'filters':[{'dedot':{'de_dot_nested':True,'de_dot_separator':'_'}},{'record_modifier':{'records':[{'cluster_name':cluster,'cluster_role':'applications' if n==1 else 'infrastructure','tenant_id':tenant,'environment':'lab'}]}}],'globalOutputRefs':[output]}})
  dump(f'cluster{n}-logging-output.yaml',docs)
-print('Rendered staged logging routes; review before Fleet activation.')
+print('Rendered Cluster 1 staged routes. Cluster 2 routes belong to tenant Terraform.')

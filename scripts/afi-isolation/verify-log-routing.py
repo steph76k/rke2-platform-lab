@@ -20,9 +20,11 @@ p.add_argument('--cluster', choices=['1', '2'], default='1')
 p.add_argument('--kubeconfig', type=Path)
 p.add_argument('--output', type=Path, required=True)
 p.add_argument('--identities', type=Path, help='Protected JSON file containing temporary OIDC identities')
+p.add_argument('--namespace-map', type=Path, help='Optional JSON mapping tenant to an existing test namespace')
 a = p.parse_args()
 os.umask(0o077)
 cluster = 'rke2-cluster' + a.cluster
+namespace_map = json.loads(a.namespace_map.read_text()) if a.namespace_map else {}
 k = ['kubectl', '--request-timeout=30s']
 k += ['--kubeconfig=' + str(a.kubeconfig)] if a.kubeconfig else ['--context=' + cluster]
 
@@ -44,7 +46,7 @@ with tempfile.TemporaryDirectory(prefix='afi-routing-') as directory:
     base = CONFIG['opensearch_tunnel']
     try:
         for tenant in ['mandant-a', 'mandant-b']:
-            namespace = tenant + '-dev'
+            namespace = namespace_map.get(tenant, tenant + '-dev')
             other = 'mandant-b' if tenant == 'mandant-a' else 'mandant-a'
             original = json.loads(kubectl(['get', 'namespace', namespace, '-o', 'json']))
             labels[namespace] = {key: original['metadata'].get('labels', {}).get(key)

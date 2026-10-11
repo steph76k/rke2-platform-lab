@@ -8,8 +8,9 @@ Terraform-Repository `rke2-tenants-lab`.
 
 Die AFI-Erweiterung richtet OIDC und getrennte Zugriffe für Mandant A/B ein. Die
 freigegebene Logging-Umstellung ist auf beiden Clustern aktiv. Die realen Mandantenrouten
-und OIDC-Zugriffe wurden auf Cluster 1 geprüft. Auf Cluster 2 läuft die abschließende
-Abnahme nach PVC-Umstellung und Node-Erweiterung.
+und OIDC-Zugriffe wurden auf beiden Clustern geprüft. A/B liegen inzwischen auf Cluster 2;
+neue Namespaces erhalten über geschützte Projektlabels automatisch Logging-, Egress- und
+ESO-Zuordnung. Dessen Logging-Routen verwaltet Terraform im Tenant-Repository.
 Historische Migrationsberichte dokumentieren den zuvor freigegebenen Lab-Neuaufbau.
 
 ## Dokumentation

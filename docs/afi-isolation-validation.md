@@ -100,15 +100,16 @@ OpenSearch-Tunnel gemäß dem Mandanten-Repository öffnen. Konfigurationsdateie
 4. Den gemeinsamen Terraform-State initialisieren, Plan aller Mandanten prüfen und anwenden.
 5. `bootstrap-retention.py` und `bootstrap-saved-objects.py` gleichen die eigenen
    zentralen Policies/Templates und Index-Patterns ab.
-6. `render-logging.py` erzeugt vorbereitete Routen; Aktivierung und Rückfallweg stehen in
+6. `render-logging.py` erzeugt nur noch Cluster-1-Routen; Cluster 2 verwaltet Terraform.
+   Historische Collector-Aktivierung und Rückfallweg stehen in
    [afi-logging-rollout.md](afi-logging-rollout.md). Kein automatischer Collector-Rollout
    allein durch einen neuen Mandanteneintrag.
 7. Für die Rechteprüfung frische Benutzer ausschließlich den neuen Gruppen zuordnen,
    temporäre Marker/Images verwenden und nach dem Test diese Benutzer/Objekte entfernen.
    Keine Tokens oder Logdaten in Testprotokolle übernehmen.
 
-Fleet besitzt Plattforminstallationen, Logging-CRs und Monitoring. Terraform besitzt
-Mandanten und Rollen. Bootstrap-Skripte besitzen globale OIDC-/Ingest-/Retention-Objekte.
+Fleet besitzt Plattforminstallationen, Collector, Cluster-1-Logging-CRs und Monitoring.
+Terraform besitzt Mandanten, Rollen und alle AFI-Logging-Routen auf Cluster 2. Bootstrap-Skripte besitzen globale OIDC-/Ingest-/Retention-Objekte.
 Diese Grenzen vermeiden konkurrierende Controller. Bestehende produktive Benutzer
 wurden weder umgruppiert noch durch Testbenutzer ersetzt.
 
@@ -126,3 +127,18 @@ wurden weder umgruppiert noch durch Testbenutzer ersetzt.
   500 statt 403. Beides ist zu dokumentieren, kein Grund für breitere Indexrechte.
 - Bestehende Bootstrap-Administratorzugänge werden nur vom Lab-Operator verwendet.
   Für späteren Team-/CI-Betrieb eingeschränkte Verwaltungsidentitäten separat bereitstellen.
+
+## Dynamischer Namespace Self-Service am 11.10.2026
+
+Die Cluster-2-Routen wurden ohne Neuanlage ihrer sechs CRs aus Fleet in den gemeinsamen
+Terraform-State übernommen. Die UID-Prüfung bestätigte unveränderte Ressourcen; Namen,
+Indexpräfixe und Pufferpfade bleiben erhalten. Fleet verwaltet 34 aktive Bundles.
+Fluent Bit übermittelt Namespace-Labels mit 30 Sekunden Cache. Geschützte Projektlabels
+steuern Logging, Egress und ESO; frei gesetzte Tenant-Labels verleihen keine Rechte.
+
+Vier neue Namespaces unter A/B-Admins und Developers: 36 Admission-/ESO-Prüfungen,
+16 Netzwerkfälle, vier Egress-IP-Prüfungen, fünf echte Rancher-OIDC-Anmeldungen und
+A/B-Logrouting samt OpenSearch-OIDC-Gegenprobe erfolgreich. Alle Testressourcen bereinigt.
+Details und maschinenlesbare Nachweise im [Tenant-Repository](https://github.com/steph76k/rke2-tenants-lab/tree/main/tests/results/namespace-selfservice).
+Die dortige [Betriebsanleitung](https://github.com/steph76k/rke2-tenants-lab/blob/main/docs/namespace-self-service.md)
+beschreibt Erstellung, Grenzen und Rücknahme.

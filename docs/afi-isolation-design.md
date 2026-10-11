@@ -1,13 +1,16 @@
 # AFI-PoC: Mandantentrennung und Datenhaltbarkeit
 
-Stand: 10.10.2026. Umsetzung und Tests werden separat protokolliert; dieses Konzept
+Stand: 11.10.2026. Umsetzung und Tests werden separat protokolliert; dieses Konzept
 ist kein Erfolgsnachweis. Bestehende Rancher-OIDC-Konfiguration bleibt erhalten.
 
 ## Zuständigkeiten und Identitäten
 
-Fleet verwaltet Installationen, Secret-Zustellung, Logging-Konfiguration und Monitoring.
+Fleet verwaltet Installationen, Secret-Zustellung, Collector und Monitoring sowie
+die allgemeine Admission-Regel zum Schutz der Rancher-Projektlabels.
 Terraform verwaltet je Mandant Keycloak-Gruppen, Rancher-Projekt/Namespaces,
 Harbor-Projektmitgliedschaften, OpenBao und OpenSearch-Rollen, -Mappings und -Tenants.
+Zusätzlich besitzt Terraform die Cluster-2-Logging-Routen und mandantenspezifischen
+Admission-Regeln. Selbst erstellte zusätzliche Namespaces bleiben außerhalb des States.
 Plattformweite OIDC-Clients und Auth-Konfigurationen werden durch ein deklaratives,
 idempotentes Bootstrap-Skript mit bestehenden administrativen Zugängen abgeglichen.
 Secrets liegen in OpenBao; Git enthält nur Namen, Claims und Rollenbeschreibungen.
@@ -21,12 +24,17 @@ in neue Gruppen aufgenommen. Lokale Notfalladministratoren bleiben bestehen.
 
 ## Logging und OpenSearch
 
-Feste, administrativ gepflegte Cluster-/Namespace-Zuordnung statt Tenant-Labels.
+Auf Cluster 2 selektieren Terraform-verwaltete ClusterFlows das geschützte Label
+`field.cattle.io/projectId`. Rancher vergibt es anhand der autorisierten Projektannotation;
+Admission verhindert widersprüchliche oder entfernte Labels und Tenant-Projektwechsel.
+Admins und Developers können Namespaces mit dem Pflichtpräfix `<mandant>-` selbst anlegen.
+Logging, Cilium-Egress und ESO erfassen neue Namespaces automatisch, ohne Katalogpflege.
+
 Mandantenlogs gehen in `logs-<cluster>-<mandant>-YYYY.MM.DD`, Plattformlogs in eigene
-Indizes. Nicht zugeordnete Namespaces werden niemals einem Mandanten zugeschlagen.
-Ein Export der Terraform-Namespace-Liste dient als Eingabe für die Fleet-Konfiguration;
-Terraform besitzt keine Logging-CRs. Änderungen dieses Katalogs erfordern Review.
-Die Cluster-ID und Tenant-ID werden durch Collector-Konfiguration gesetzt.
+Indizes. Nicht zugeordnete Namespaces gelangen ausschließlich zur Plattform-Auffangroute.
+Die Cluster-ID und Tenant-ID werden durch Collector-Konfiguration gesetzt. Cluster 1
+enthält nach A/B-Migration nur Plattformrouten und bleibt Fleet-verwaltet.
+Betrieb, Tests und Rücknahme: [Namespace Self-Service](https://github.com/steph76k/rke2-tenants-lab/blob/main/docs/namespace-self-service.md).
 
 OpenSearch-Rollen erlauben `read` ausschließlich auf den eigenen exakten Indexpräfixen.
 Keine Rechte auf alte gemischte `kubernetes-*`-Indizes. Separate Dashboards-Tenants
