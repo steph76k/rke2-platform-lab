@@ -157,3 +157,25 @@ Nur selbst erzeugte Testidentitäten und Prüfressourcen entfernen.
 - [Argo CD Keycloak](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/keycloak/)
 - [Argo CD Projects](https://argo-cd.readthedocs.io/en/stable/user-guide/projects/)
 - [Argo CD RBAC](https://argo-cd.readthedocs.io/en/stable/operator-manual/rbac/)
+
+## Während der Erstinstallation bestätigte Korrekturen
+
+- Der Prometheus-Adapter überschritt beim Start sein ursprüngliches 256-MiB-Limit.
+  Fleet setzt jetzt 128 MiB Request, 768 MiB Limit und `GOMEMLIMIT=600MiB`.
+  Der neue Pod wurde Ready ohne Neustart. Einmalig wurden dieselben bereits
+  veröffentlichten Werte live gepatcht, um den wartenden ersten Helm-Installationslauf
+  freizugeben; anschließend übernahm Fleet wieder die Konfiguration.
+- Fleet 0.15.4 verwendet für neue Helm-Releases Server-Side Apply mit gemeinsamem
+  Feldmanager `fleetagent`, auch für das minimale Release-Namespace-Objekt. Das
+  entfernt im vorab durch das Secrets-Bundle erzeugten Namespace die von demselben
+  Manager gesetzte Projektannotation, während Ranchers Projektlabel erhalten bleibt.
+  Ein Server-Dry-Run reproduzierte die korrekte Ablehnung durch
+  `afi-project-label-integrity`. Die Admission bleibt unverändert aktiv.
+  Der dedizierte Argo-Chart nutzt `helm.takeOwnership=true`, wodurch diese Fleet-Version
+  auf den Dreiwege-Merge umschaltet. ESO-Secrets bleiben vom Chart ausgeschlossen.
+  Alle Argo-Bundles erhalten dieselben Namespace-Projekt- und Owner-Metadaten.
+  [Fleet-Implementierung](https://github.com/rancher/fleet/blob/v0.15.4/internal/helmdeployer/install.go).
+- Rancher Monitoring erreichte alle 12 Logging-Targets und wertete die sieben
+  AFI-Logging-Regeln erfolgreich aus; Grafana war über den authentifizierten Rancher-
+  Proxy gesund. Deshalb wird der alte `afi-logging-prometheus` auf null Replikate
+  gesetzt. StatefulSet und PVC bleiben für die Rückkehr auf eine Replik erhalten.

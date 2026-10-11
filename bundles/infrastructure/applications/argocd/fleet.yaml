@@ -9,6 +9,7 @@ helm:
   - values.yaml
   timeoutSeconds: 1200
   disablePreProcess: true
+  takeOwnership: true
 overrideTargets:
 - name: lab-infrastructure
   clusterSelector:

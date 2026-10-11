@@ -199,7 +199,10 @@ metadata:
   name: afi-logging-prometheus
   namespace: logging-monitoring
 spec:
-  replicas: 1
+  replicas: 0
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
   serviceName: afi-logging-prometheus
   selector:
     matchLabels: &id001
