@@ -2,8 +2,9 @@
 
 Rancher Fleet verwaltet die Plattformkomponenten auf `rke2-cluster1` und
 `rke2-cluster2` aus `steph76k/rke2-platform-lab`, Branch `main`. Der aktuelle Stand
-umfasst 40 Downstream-Bundles für Plattformdienste, Secret-Zustellung, Logging, Monitoring und Argo CD.
-Ein separates Management-Bundle verwaltet Ranchers [Navigationslinks](docs/rancher-navigation.md).
+umfasst 42 Downstream-BundleDeployments für Plattformdienste, Secret-Zustellung, Logging, Monitoring und Argo CD.
+Ein gemeinsames [Navigations-Bundle](docs/rancher-navigation.md) zeigt Plattformlinks auf beiden
+Downstream-Clustern und über ein separates Fleet-GitRepo auch auf Ranchers Management-Cluster.
 OpenBao bleibt auf K3s; Mandanten und Berechtigungen verwaltet das separate
 Terraform-Repository `rke2-tenants-lab`.
 

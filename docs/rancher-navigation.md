@@ -1,8 +1,9 @@
 # Plattformdienste in der Rancher-Navigation
 
 Rancher verwendet das clusterweite CRD `navlinks.ui.cattle.io`, API `ui.cattle.io/v1`.
-Vier `NavLink`-Objekte auf dem lokalen Rancher-Management-Cluster bilden die Gruppe
-**Plattformdienste** unter **local → Plattformdienste**. Die Einträge öffnen einen neuen Tab und zeigen die Original-Icons.
+Je vier `NavLink`-Objekte auf dem lokalen Rancher-Management-Cluster sowie beiden
+Downstream-Clustern bilden die Gruppe **Plattformdienste**. Sie erscheint unter
+**local**, **rke2-cluster1** und **rke2-cluster2** jeweils in der Cluster-Navigation. Die Einträge öffnen einen neuen Tab und zeigen die Original-Icons.
 
 | Anzeige | Ziel |
 | --- | --- |
@@ -22,12 +23,16 @@ bleiben beim jeweiligen Dienst; das Anzeigen eines Links vergibt keine Zugriffsr
 - `fleet/management-gitrepo.yaml`: separater GitRepo `rke2-platform-management` im Namespace
   `fleet-local`, ausschließlich für Cluster `name=local` und diesen einen Bundle-Pfad.
 
-Der bestehende `fleet-default/rke2-platform` mit seinen 40 Downstream-Bundles wird
-nicht erweitert. Das Management-Bundle soll keine Plattformdienste auf Rancher installieren.
+`fleet-default/rke2-platform` verwendet denselben Bundle-Pfad für beide bestehenden
+Downstream-Ziele. Dadurch entstehen zwei weitere BundleDeployments, insgesamt 42.
+Die identischen Ressourcen werden pro Cluster getrennt verwaltet; die Linkdefinitionen
+und eingebetteten Icons haben weiterhin nur eine Quelle im Repository.
+Das Navigations-Bundle installiert keine Plattformdienste auf den Zielclustern.
 Wie das bestehende GitRepo-Objekt wird auch dieses Bootstrap-Objekt einmal explizit angewendet:
 
 ```bash
 kubectl --context=rancher apply -f fleet/management-gitrepo.yaml
+kubectl --context=rancher apply -f fleet/gitrepo.yaml
 ```
 
 Danach übernimmt Fleet Änderungen an den NavLinks aus `main`. Keine parallele manuelle
@@ -47,7 +52,7 @@ Geprüft gegen das vorhandene CRD-Schema und Rancher Dashboard v2.14.3:
 - [Rancher: Anzeigename, Gruppe und Linkziel](https://github.com/rancher/dashboard/blob/v2.14.3/shell/models/ui.cattle.io.navlink.js)
 - [Rancher: Gruppenübersicht mit Icons](https://github.com/rancher/dashboard/blob/v2.14.3/shell/pages/c/_cluster/navlinks/_group.vue)
 
-## Live-Prüfung am 11.10.2026
+## Ursprüngliche Management-Prüfung am 11.10.2026
 
 Server-Dry-Run für alle vier Links und den Fleet-GitRepo erfolgreich. Management-Fleet
 1/1 und bisherige Downstream-Bundles 40/40 Ready. Die Gruppenübersicht wurde im echten
