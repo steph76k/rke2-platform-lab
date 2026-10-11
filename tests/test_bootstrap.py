@@ -59,8 +59,8 @@ class BootstrapTests(unittest.TestCase):
                 for item in obj['spec']['data']:
                     remote = item['remoteRef']
                     # These additive paths are owned by the separate AFI OIDC /
-                    # logging and bootstrap-minio.py bootstraps, not the destructive fresh-lab bootstrap.
-                    if remote['key'].startswith(('platform/afi-logging/', 'platform/oidc/', 'platform/minio/')):
+                    # logging, Argo CD and bootstrap-minio.py bootstraps, not the destructive fresh-lab bootstrap.
+                    if remote['key'].startswith(('platform/afi-logging/', 'platform/oidc/', 'platform/minio/', 'platform/argocd/')):
                         continue
                     self.assertIn(remote['property'], stored[remote['key']])
         creds = stored['platform/harbor/credentials']

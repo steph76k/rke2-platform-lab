@@ -3,3 +3,4 @@ PyYAML>=6
 cryptography>=3.4
 boto3>=1.35
 minio>=7.2
+bcrypt>=4

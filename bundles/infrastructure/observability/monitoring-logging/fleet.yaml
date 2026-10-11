@@ -1,0 +1,13 @@
+name: lab-infra-monitoring-logging
+defaultNamespace: cattle-logging-system
+helm:
+  releaseName: lab-infra-monitoring-logging
+  disablePreProcess: true
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
+dependsOn:
+- name: lab-infra-monitoring

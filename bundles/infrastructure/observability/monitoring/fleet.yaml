@@ -1,0 +1,19 @@
+name: lab-infra-monitoring
+defaultNamespace: cattle-monitoring-system
+helm:
+  releaseName: rancher-monitoring
+  repo: https://charts.rancher.io
+  chart: rancher-monitoring
+  version: 109.0.6+up80.9.1-rancher.22
+  timeoutSeconds: 1200
+  valuesFiles:
+  - values.yaml
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
+dependsOn:
+- name: lab-infra-monitoring-crds
+- name: lab-infra-storage-class

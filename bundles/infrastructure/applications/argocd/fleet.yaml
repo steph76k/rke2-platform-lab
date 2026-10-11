@@ -1,0 +1,20 @@
+name: lab-infra-argocd
+defaultNamespace: argocd
+helm:
+  releaseName: argocd
+  repo: https://argoproj.github.io/argo-helm
+  chart: argo-cd
+  version: 10.10.2
+  valuesFiles:
+  - values.yaml
+  timeoutSeconds: 1200
+  disablePreProcess: true
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
+dependsOn:
+- name: lab-infra-argocd-secrets
+- name: lab-infra-monitoring-crds

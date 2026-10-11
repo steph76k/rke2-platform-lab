@@ -1,0 +1,128 @@
+global:
+  domain: argocd.berger.ph
+  affinity:
+    nodeAffinity:
+      type: hard
+      matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
+  networkPolicy:
+    create: false
+configs:
+  cm:
+    url: https://argocd.berger.ph
+    admin.enabled: true
+    users.anonymous.enabled: false
+    exec.enabled: false
+    oidc.config: "name: Keycloak berger\nissuer: https://idp.berger.ph/realms/berger\n\
+      clientID: afi-argocd\nclientSecret: $oidc.keycloak.clientSecret\nrequestedScopes:\n\
+      - openid\n- profile\n- email\nrequestedIDTokenClaims:\n  groups:\n    essential:\
+      \ true\nenablePKCEAuthentication: true\n"
+  params:
+    server.insecure: true
+  rbac:
+    create: false
+  secret:
+    createSecret: false
+dex:
+  enabled: false
+controller:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 1Gi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+server:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: cilium
+    hostname: argocd.berger.ph
+    tls: true
+    annotations:
+      ingress.cilium.io/loadbalancer-mode: shared
+      ingress.cilium.io/force-https: enabled
+repoServer:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 1Gi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+redis:
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+applicationSet:
+  replicas: 0
+notifications:
+  enabled: false
+extraObjects:
+- apiVersion: argoproj.io/v1alpha1
+  kind: AppProject
+  metadata:
+    name: default
+    namespace: argocd
+  spec:
+    sourceRepos: []
+    sourceNamespaces: []
+    destinations: []
+    namespaceResourceBlacklist:
+    - group: '*'
+      kind: '*'
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: argocd-internal
+    namespace: argocd
+  spec:
+    podSelector: {}
+    policyTypes:
+    - Ingress
+    ingress:
+    - from:
+      - podSelector: {}
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: cattle-monitoring-system
+      ports:
+      - port: 8082
+      - port: 8083
+      - port: 8084
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: argocd-authenticated-api
+    namespace: argocd
+  spec:
+    podSelector:
+      matchLabels:
+        app.kubernetes.io/name: argocd-server
+    policyTypes:
+    - Ingress
+    ingress:
+    - ports:
+      - port: 8080
+        protocol: TCP

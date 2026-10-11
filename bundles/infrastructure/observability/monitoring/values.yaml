@@ -1,0 +1,147 @@
+global:
+  cattle:
+    clusterId: c-44q9v
+    clusterName: rke2-cluster2
+    systemProjectId: p-6qghv
+    url: https://rancher.berger.ph
+  rbac:
+    userRoles:
+      aggregateToDefaultRoles: false
+rke2ControllerManager:
+  enabled: true
+rke2Scheduler:
+  enabled: true
+rke2Etcd:
+  enabled: true
+rke2Proxy:
+  enabled: false
+rke2IngressNginx:
+  enabled: false
+kubeProxy:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeEtcd:
+  enabled: false
+prometheus:
+  prometheusSpec:
+    replicas: 1
+    retention: 7d
+    retentionSize: 8GB
+    resources:
+      requests:
+        cpu: 250m
+        memory: 768Mi
+      limits:
+        memory: 2Gi
+    affinity: &id002
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: DoesNotExist
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn-platform
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi
+    externalLabels:
+      cluster: rke2-cluster2
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    serviceMonitorNamespaceSelector: &id001
+      matchExpressions:
+      - key: kubernetes.io/metadata.name
+        operator: In
+        values:
+        - cattle-monitoring-system
+        - cattle-logging-system
+        - kube-system
+        - cattle-system
+        - longhorn-system
+        - harbor-ha
+        - opensearch
+        - minio
+        - argocd
+        - external-secrets
+        - cnpg-system
+    podMonitorNamespaceSelector: *id001
+    ruleNamespaceSelector: *id001
+    probeNamespaceSelector: *id001
+alertmanager:
+  alertmanagerSpec:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        memory: 256Mi
+    affinity: *id002
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn-platform
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+grafana:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+  affinity: *id002
+  persistence:
+    enabled: true
+    storageClassName: longhorn-platform
+    size: 1Gi
+  ingress:
+    enabled: false
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+kube-state-metrics:
+  resources:
+    requests:
+      cpu: 30m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+prometheus-node-exporter:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      memory: 128Mi
+prometheus-adapter:
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+defaultRules:
+  rules:
+    kubeProxy: false
+loggingMonitors:
+  fluentd:
+    enabled: true
+  fluentbit:
+    enabled: true
