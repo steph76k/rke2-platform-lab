@@ -2,15 +2,12 @@
 
 ## Stand und Abnahmegrenze
 
-Harbor-OIDC, OpenSearch-OIDC/Indexrechte, Mandanten A/B, Remote-State und Logging-
-Monitoring sind aktiv. Die Terraform-Pläne zeigten bei der Abnahme keine Änderungen.
-Der anschließend freigegebene Live-Rollout ist auf Cluster 1 aktiv: persistente
-Collector-Puffer und echte Namespace-Routen wurden installiert; Routing/OIDC für
-A/B sind erfolgreich geprüft. Cluster 2 verwendet nach vollständigem Alt-Puffer-Drain
-ebenfalls persistente Collector-Queues. Seine Control Plane ist erweitert und gesund;
-die abschließende Prüfung nach Worker-Erweiterung und der reale Collector-Neustarttest
-stehen noch aus.
-Details: [Logging-Rollout](afi-logging-rollout.md).
+Stand 11.10.2026: Harbor-OIDC, OpenSearch-OIDC/Indexrechte, Mandanten A/B, gemeinsamer
+Remote-State und Logging-Monitoring sind aktiv. A/B wurden vollständig nach Cluster 2
+übernommen; Rancher-Projekt-Isolation und vier Terraform-Egress-Adressen sind wirksam.
+Alle 16 Netzwerkfälle, Rancher-OIDC-Projekt-/Kubernetes-Rechte und vier LAN-Quell-IPs
+sind geprüft. Beide realen Collector-Neustarttests lieferten 50/50 Marker ohne Duplikate.
+Details: [Tenant-Umzug/Egress](egress-gateway-poc.md) und [Logging](afi-logging-rollout.md).
 
 ## Umgesetzte Konfiguration
 
@@ -22,7 +19,8 @@ Details: [Logging-Rollout](afi-logging-rollout.md).
   Projekterstellung nur durch Plattformadministratoren. Lokaler `admin` bleibt nutzbar.
 - OpenSearch 3.9.0: OIDC vor dem unveränderten Basic-Auth-Domain, Prüfung von Issuer und
   Audience. Die Leserolle umfasst `cluster_composite_ops_ro`, `cluster:monitor/main`,
-  `read` nur auf `logs-rke2-cluster1-<mandant>-*` und `kibana_all_read` nur im eigenen Tenant.
+  `read` nur auf die eigenen `logs-rke2-cluster1-<mandant>-*` und
+  `logs-rke2-cluster2-<mandant>-*` und `kibana_all_read` nur im eigenen Tenant.
   Keine Bulk-Schreibrechte, kein `all_access`, keine Rechte auf alte gemischte Indizes.
 - Dashboards: TLS, Basic/OIDC-Auswahl, getrennte Saved Objects, zentral bereitgestellte
   Index-Patterns. Zwei Replikate mit `maxUnavailable=0` für den Konfigurationsrollout.
@@ -81,8 +79,8 @@ nicht verwendet werden; dessen Systemkonfiguration wurde nicht verändert.
 | Terraform A/B | Kein Drift | `plan -detailed-exitcode`: jeweils 0 | PASS |
 | Monitoring | Targets/Regeln aktiv | Je zwölf Targets Up, sieben Regeln gesund | PASS |
 | Alertlogik | Ausfall löst aus, Normalfall nicht | promtool: alle sieben Regeln mit positiven/negativen Reihen und historischem Retry-Zähler erfolgreich | PASS |
-| Reale Namespace-Routen und gefälschte Metadaten | Richtiger Tenant, keine Umgehung | A/B: eigene reale Pod-Logs 200, fremde 403; Forward blockiert; Label-/JSON-Manipulation unwirksam | PASS Cluster 1 |
-| Persistenz des realen Cluster-1-Collectors | Neustartfest | Echter Pod ersetzt, gleicher PVC, Queue erhalten, 50/50 Marker, 0 Duplikate | PASS Cluster 1; Cluster 2 offen |
+| Reale Namespace-Routen und gefälschte Metadaten | Richtiger Tenant, keine Umgehung | A/B: eigene reale Pod-Logs 200, fremde 403; Forward blockiert; Label-/JSON-Manipulation unwirksam | PASS Cluster 1 und Cluster 2 |
+| Persistenz der realen Collector beider Cluster | Neustartfest | Echter Pod ersetzt, gleicher PVC, Queue erhalten, 50/50 Marker, 0 Duplikate | PASS Cluster 1 und Cluster 2 |
 
 Die 50-Record-Prüfung belegt die getestete Ausfall-/Neustartfolge und ist keine allgemeine
 Exactly-once- oder Kapazitätsgarantie. Ein vollständiger Cluster-Ausfall wurde nicht erzeugt.
@@ -95,11 +93,11 @@ Python-Abhängigkeiten: `scripts/afi-isolation/requirements.txt`; zusätzlich ku
 OpenBao CLI, SOPS und ein vorhandener administrativer Lab-Zugang. TLS-verifizierten
 OpenSearch-Tunnel gemäß dem Mandanten-Repository öffnen. Konfigurationsdateien prüfen:
 
-1. `bootstrap-state.py <mandant>` für getrennte Backend-Identitäten.
+1. `bootstrap-state.py tenants` für den gemeinsamen administrativen Backend-Zugang.
 2. `bootstrap-oidc.py` zeigt den Plan; `--apply` gleicht die eigenen OIDC-Clients und
    Auth-Konfigurationen ab. Verschlüsselte Vorher-Sicherung wird angelegt.
 3. `bootstrap-logging.py` legt eigene Ingest-/ESO-Identitäten an. Fleet stellt ihre Secrets zu.
-4. Terraform pro Mandant initialisieren, Plan prüfen und anwenden.
+4. Den gemeinsamen Terraform-State initialisieren, Plan aller Mandanten prüfen und anwenden.
 5. `bootstrap-retention.py` und `bootstrap-saved-objects.py` gleichen die eigenen
    zentralen Policies/Templates und Index-Patterns ab.
 6. `render-logging.py` erzeugt vorbereitete Routen; Aktivierung und Rückfallweg stehen in
@@ -116,9 +114,6 @@ wurden weder umgruppiert noch durch Testbenutzer ersetzt.
 
 ## Offene Betriebsaufgaben
 
-- Worker 1 auf Cluster 2 wie zugesagt auf vier vCPU erweitern; danach den noch ausstehenden
-  realen 50-Record-Collector-Neustarttest abschließen. Persistente Puffer, Namespace-Routing
-  und Forward-NetworkPolicy sind bereits auf beiden Clustern aktiv und geprüft.
 - Speicherausbau für 180 Tage: am 11.10.2026 vom Benutzer aus dem Auftrag genommen,
   kein offener Abnahmepunkt. Die bestehende ISM-Policy bleibt aktiv; eine garantierte
   180-Tage-Vorhaltung gehört nicht zum zugesagten Lab-Umfang.

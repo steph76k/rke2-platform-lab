@@ -1,0 +1,180 @@
+{
+  "cluster1": {
+    "targets": [
+      {
+        "job": "logging-buffer-volume",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentd",
+        "health": "up"
+      }
+    ],
+    "rules": [
+      {
+        "name": "AFILoggingExportRetry",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingBufferHigh",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingBufferCritical",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingExportErrors",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingRecordsDropped",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingCollectorUnavailable",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingBufferFilesystemHigh",
+        "health": "ok",
+        "state": "inactive"
+      }
+    ]
+  },
+  "cluster2": {
+    "targets": [
+      {
+        "job": "logging-buffer-volume",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentbit",
+        "health": "up"
+      },
+      {
+        "job": "logging-fluentd",
+        "health": "up"
+      }
+    ],
+    "rules": [
+      {
+        "name": "AFILoggingExportRetry",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingBufferHigh",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingBufferCritical",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingExportErrors",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingRecordsDropped",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingCollectorUnavailable",
+        "health": "ok",
+        "state": "inactive"
+      },
+      {
+        "name": "AFILoggingBufferFilesystemHigh",
+        "health": "ok",
+        "state": "inactive"
+      }
+    ]
+  }
+}

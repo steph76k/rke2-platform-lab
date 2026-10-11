@@ -1,15 +1,13 @@
 # Logging-Umstellung: freigegebener Rollout
 
-Stand 10.10.2026: Cluster 1 verwendet die neuen Mandantenrouten, persistente Node-Queues
-und den 20-GiB-Fluentd-PVC. Live-Routing mit gefälschten Labels/JSON-Feldern sowie
-OIDC-Zugriff auf eigene/fremde Pod-Logs: PASS für A und B. Beim echten Fluentd-Pod-Ersatz
-blieben PVC und Queue erhalten; anschließend wurden 50/50 Marker ohne Duplikate zugestellt.
-Cluster 2 verwendet jetzt ebenfalls einen 20-GiB-Longhorn-Puffer und persistente
-Node-Queues. Vor dem Pod-Ersatz wurden 0 Daten-Chunks und 0 Byte Restdaten bestätigt;
-eine leere Backup-Datei enthielt keine Nutzdaten. Der neue Collector ist mit drei
-bereiten Containern und zwei gesunden Longhorn-Replikaten geprüft. Der gesonderte
-50-Record-Neustarttest für Cluster 2 und die Worker-Erweiterung stehen noch aus.
-Die Freigabe nach §8.7 liegt vor.
+Stand 11.10.2026: Beide Cluster verwenden persistente Node-Queues und je einen
+20-GiB-Fluentd-PVC. A/B sind vollständig auf Cluster 2 umgezogen; dort laufen die
+Mandantenrouten plus Plattformroute. Cluster 1 behält nur die Plattformroute.
+Echte Pod-Logs einschließlich gefälschter Labels/JSON-Felder und OIDC-Zugriffe auf
+eigene/fremde Daten sind geprüft. Beide realen Collector-Neustarttests bestanden:
+gleicher PVC, Queue nach Neustart vorhanden, 50/50 eindeutige Marker, keine Duplikate.
+Worker 1 und alle Control Planes auf Cluster 2 besitzen jetzt vier vCPU.
+Die Freigabe nach §8.7 wurde erteilt und umgesetzt.
 
 Der Logging-Operator erzeugt den Claim
 `rancher-logging-root-afi-fluentd-buffer-rancher-logging-root-fluentd-0` aus seiner
@@ -77,7 +75,7 @@ bleiben für Mandanten unlesbar und werden nicht automatisch umgeschrieben oder 
 ## Pufferbudget und Verlustgrenzen
 
 Vorläufiges Ziel: vier Stunden Ausfall, mangels abweichender Angabe. Fluentd hat je
-Ausgang 4 GiB File-Buffer, insgesamt maximal 12 GiB auf Cluster 1 bzw. 4 GiB auf Cluster 2,
+Ausgang 4 GiB File-Buffer, nach dem Tenant-Umzug insgesamt maximal 4 GiB auf Cluster 1 bzw. 12 GiB auf Cluster 2,
 auf jeweils 20-GiB-PVC. Chunk 2 MiB, Flush alle 10 s, zwei Threads, unbegrenzte Retry-Dauer,
 maximal 30 s Retry-Intervall, Backpressure bei vollem Buffer. Versionsabfrage beim
 OpenSearch-Verbindungsaufbau ist deaktiviert, damit Collector-Neustart auch während
@@ -217,8 +215,9 @@ Quellen: [RKE2-Zertifikatsverwaltung](https://docs.rke2.io/security/certificates
 Auf `rke2-cluster2-wk-1` wurde derselbe Zeitabgleich unter
 `/etc/systemd/system/rke2-agent.service.d/10-afi-wait-for-time.conf` installiert.
 Seine einzelne vCPU war während des Alt-Pufferabbaus vollständig ausgelastet; die
-Erweiterung auf vier vCPU bei unveränderten 12 GB RAM ist vom Benutzer zugesagt.
-Der Neustart erfolgt erst nach bestätigter Longhorn-Persistenz des zentralen Collectors.
+Erweiterung auf vier vCPU bei unveränderten 12 GB RAM ist abgeschlossen.
+Nach dem Neustart wurden 14 aktive Longhorn-Volumes mit je zwei RW-Replikaten auf
+unterschiedlichen Workern bestätigt.
 
 ### Wiederherstellung eines alten Output-Puffers
 

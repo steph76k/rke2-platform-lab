@@ -1,0 +1,9 @@
+{
+  "cluster": "rke2-cluster2",
+  "realCollectorPodReplaced": true,
+  "samePersistentPVC": true,
+  "queuePresentAfterReplacement": true,
+  "uniqueRecordsDelivered": 50,
+  "duplicates": 0,
+  "onlySyntheticOutputUnavailable": true
+}

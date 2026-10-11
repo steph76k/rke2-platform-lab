@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-11T11:09:39.266564+00:00",
+  "node": "rke2-cluster2-wk-1.berger.ph",
+  "cpu": "4",
+  "memory": "11981464Ki",
+  "ready": true,
+  "schedulable": true,
+  "activeVolumesHealthy": 14,
+  "eachActiveVolumeHasTwoRWReplicasOnDistinctWorkers": true,
+  "rancherMoveStillInProgress": true,
+  "terraformApplyPushCiliumRolloutPaused": true,
+  "openbaoEndpointUnavailableDuringVMmove": true
+}
