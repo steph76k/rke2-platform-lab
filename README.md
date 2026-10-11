@@ -17,6 +17,7 @@ Historische Migrationsberichte dokumentieren den zuvor freigegebenen Lab-Neuaufb
 
 ## Dokumentation
 
+- [Plattform-Admin-Gruppen und Rancher Single Logout](docs/platform-access.md)
 - [Rancher-Navigation mit Plattform-Icons](docs/rancher-navigation.md)
 - [Worker-RAM, Rancher Monitoring und Argo CD: Abschluss und Prüfungen](docs/monitoring-argocd-rollout.md)
 

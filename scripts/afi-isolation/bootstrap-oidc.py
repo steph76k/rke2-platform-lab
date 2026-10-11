@@ -40,7 +40,9 @@ with tempfile.TemporaryDirectory(prefix='afi-oidc-') as tmp:
  assert before['auth_mode']['value'] in ['db_auth','oidc_auth']
  assert before['auth_mode']['editable'] or before['auth_mode']['value']=='oidc_auth','Existing local users block OIDC; do not remove them'
  # Empty global admin group prevents unintended OIDC system administrators.
- harbor={'auth_mode':'oidc_auth','oidc_name':'Keycloak berger','oidc_endpoint':CONFIG['keycloak']+'/realms/'+CONFIG['realm'],'oidc_client_id':'afi-harbor','oidc_client_secret':clients['afi-harbor']['client_secret'],'oidc_groups_claim':'groups','oidc_admin_group':'','oidc_scope':'openid,profile,email','oidc_verify_cert':True,'oidc_auto_onboard':True,'oidc_user_claim':'preferred_username','project_creation_restriction':'adminonly'}
+ # oidc_admin_group belongs to the shared tenant Terraform state; a bootstrap
+ # rerun must not clear the platform-admin mapping.
+ harbor={'auth_mode':'oidc_auth','oidc_name':'Keycloak berger','oidc_endpoint':CONFIG['keycloak']+'/realms/'+CONFIG['realm'],'oidc_client_id':'afi-harbor','oidc_client_secret':clients['afi-harbor']['client_secret'],'oidc_groups_claim':'groups','oidc_scope':'openid,profile,email','oidc_verify_cert':True,'oidc_auto_onboard':True,'oidc_user_claim':'preferred_username','project_creation_restriction':'adminonly'}
  r=h.put(CONFIG['harbor']+'/api/v2.0/configurations',json=harbor,timeout=30);r.raise_for_status()
  r=h.get(CONFIG['harbor']+'/api/v2.0/users/current',timeout=30);r.raise_for_status();assert r.json()['username']=='admin';print('Harbor OIDC configured; local admin still authenticated')
  r=osapi.get(CONFIG['opensearch_tunnel']+'/_plugins/_security/api/securityconfig',timeout=30);r.raise_for_status();security=r.json()['config'];backup('before-opensearch-oidc.json',security);before_basic=copy.deepcopy(security['dynamic']['authc'])
