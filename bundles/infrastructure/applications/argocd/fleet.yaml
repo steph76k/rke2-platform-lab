@@ -20,5 +20,7 @@ dependsOn:
 - name: lab-infra-monitoring-crds
 namespaceAnnotations:
   field.cattle.io/projectId: c-44q9v:p-6qghv
+  objectset.rio.cattle.io/id: default-lab-infra-argocd-secrets
 namespaceLabels:
   field.cattle.io/projectId: p-6qghv
+  objectset.rio.cattle.io/hash: 609ca5f9cad64260d0ba4c91e2449527fab7452a
