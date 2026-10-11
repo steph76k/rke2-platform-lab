@@ -8,7 +8,7 @@ Downstream-Clustern bilden die Gruppe **Plattformdienste**. Sie erscheint unter
 | Anzeige | Ziel |
 | --- | --- |
 | Harbor | https://harbor-ha.berger.ph |
-| OpenBao | https://openbao.berger.ph/ui/ |
+| OpenBao | https://openbao.berger.ph/ui/vault/auth?with=oidc |
 | OpenSearch | https://opensearch.berger.ph |
 | Argo CD | https://argocd.berger.ph |
 
