@@ -7,7 +7,6 @@ im Logging-Rollout nicht erneut vollständig geprüft.
 
 | Priorität | Thema | Status | Konkreter nächster Schritt |
 | --- | --- | --- | --- |
-| P1 | 180-Tage-Logkapazität | Offen | Retention-Policy ist aktiv, vorhandene 3 × 10 GiB reichen gemäß Messung nicht; Speicherbudget einschließlich OpenSearch-/Longhorn-Replikation und Reserve erweitern |
 | P2 | Direkte Cluster-2-Kubeconfig | Teilweise behoben | Nativer administrativer Zugang wurde über SSH geprüft und temporär genutzt; die bisherige lokale Datei separat erneuern. Keine Zugangsdaten in Git |
 | P2 | Dashboards Fremdtenant-Fehlerstatus | Offen | HTTPS, OIDC und eigene Index-Patterns funktionieren; erzwungener Fremdtenant-Zugriff liefert derzeit HTTP 500 ohne Daten statt eines klaren 403 |
 | P2 | NeuVector-Exporter | Fehlgeschlagen | Bestehenden wiederkehrenden BackOff außerhalb Plattform-Bundles separat diagnostizieren/reparieren |
@@ -23,6 +22,10 @@ im Logging-Rollout nicht erneut vollständig geprüft.
 | P2 | Keycloak-Altbindungen / Realm-Schutz | Freigabe erforderlich | Stale G_Admin/G_Developer/G_Viewer-Bindungen und unrestricted-Modus prüfen; keine automatische Neuanlage gleichnamiger Admin-Gruppe. Brute-force-Schutz derzeit aus |
 | P2 | Keycloak-Secret-Verwaltung | Freigabe erforderlich | Bootstrap-Admin-/DB-Zugangsdaten liegen als Literal-Env im bestehenden StatefulSet; später kontrolliert in Secret-Verwaltung überführen, ohne ungeprüfte Rotation |
 | P3 | Aktiver Redis-/PostgreSQL-Failover | Freigabe erforderlich | Kein Failover im aktuellen Lauf; Auswirkungen auf Harbor und Wartungsfenster zuerst genehmigen |
+
+Der Benutzer hat den Speicherausbau für 180 Tage am 11.10.2026 aus dem Auftrag
+genommen. Er ist kein offener Abnahmepunkt mehr. Die bestehende Retention-Policy
+bleibt konfiguriert; eine garantierte Vorhaltung von 180 Tagen wird nicht zugesagt.
 
 ## Aktuelle Ergänzungen
 

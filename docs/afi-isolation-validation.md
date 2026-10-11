@@ -114,11 +114,12 @@ wurden weder umgruppiert noch durch Testbenutzer ersetzt.
 
 ## Offene Betriebsaufgaben
 
-- Freigabe und anschließende Abnahme der bestehenden Collector-Umstellung einschließlich
-  vertrauenswürdigem Namespace-Routing und Forward-NetworkPolicy.
-- 180 Tage benötigen nach kurzer Messung ca. 160,6 GiB OpenSearch-Speicher einschließlich
-  Replik, ca. 321,2 GiB mit Longhorn-Kopien, plus Reserve. Vorhanden: 30 GiB. Der Messwert
-  ist keine Peak-Prognose; Speicherausbau und repräsentative Volumenmessung sind nötig.
+- Worker 1 auf Cluster 2 wie zugesagt auf vier vCPU erweitern; danach den noch ausstehenden
+  realen 50-Record-Collector-Neustarttest abschließen. Persistente Puffer, Namespace-Routing
+  und Forward-NetworkPolicy sind bereits auf beiden Clustern aktiv und geprüft.
+- Speicherausbau für 180 Tage: am 11.10.2026 vom Benutzer aus dem Auftrag genommen,
+  kein offener Abnahmepunkt. Die bestehende ISM-Policy bleibt aktiv; eine garantierte
+  180-Tage-Vorhaltung gehört nicht zum zugesagten Lab-Umfang.
 - Cluster-2-Prometheus hat noch keinen externen Alertmanager-Empfänger. Keine Ende-zu-Ende-
   Alarmzustellung behaupten, solange Ziel und Routing nicht eingerichtet sind.
 - SOPS-Sicherungen sind lokal außerhalb MinIO geprüft. Automatische Off-host-Sicherung
@@ -126,8 +127,5 @@ wurden weder umgruppiert noch durch Testbenutzer ersetzt.
 - Das Standard-Index-Pattern wird zentral gesetzt; weitere read-only UI-Änderungen können HTTP 403 anzeigen; Saved-Object-
   Schreibrechte bleiben absichtlich gesperrt. Fremdtenant-Objektzugriff liefert aktuell
   500 statt 403. Beides ist zu dokumentieren, kein Grund für breitere Indexrechte.
-- Bestehender Cluster-1-Collector meldet Export-Timeouts; neuer Retry-Alarm hat dies sichtbar
-  gemacht. HTTP-Verbindung zum Ziel sowie ein synthetischer 1-MB-Bulk-Request sind erfolgreich (200, 0,72 s). Zuletzt ca. 74,5 MiB Rückstand und Retry-Zähler 21; Rückstand vor Collector-Neustart prüfen
-  und leeren, siehe Rollout-Anleitung; keine Pufferdaten ungeprüft verwerfen.
 - Bestehende Bootstrap-Administratorzugänge werden nur vom Lab-Operator verwendet.
   Für späteren Team-/CI-Betrieb eingeschränkte Verwaltungsidentitäten separat bereitstellen.

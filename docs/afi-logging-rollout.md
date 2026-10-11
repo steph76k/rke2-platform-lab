@@ -95,6 +95,9 @@ Replik und rund 321,2 GiB physisch mit zwei Longhorn-Kopien, jeweils ohne Reserv
 Bestehende 3 x 10 GiB reichen dafür nicht. Freie Longhorn-Kapazität wurde zuletzt mit
 ca. 203 GB auf Cluster 1 und 217 GB auf Cluster 2 gemessen; das ersetzt kein verbindliches
 Speicherbudget. Zusätzlicher Speicher und Reserve sind vor einer 180-Tage-Zusage nötig.
+Am 11.10.2026 hat der Benutzer diesen Speicherausbau aus dem Auftrag genommen.
+Die Messung bleibt als Betriebsinformation erhalten; eine garantierte Vorhaltung von
+180 Tagen ist kein Abnahmeziel mehr. Die laufende ISM-Policy wurde dadurch nicht geändert.
 
 Node-lokale Fluent-Bit-Daten überleben keinen Node-Datenverlust. Longhorn-Puffer hängen
 von intakten Volumes/Replikaten ab. Volle Queues, Rotation bei Backpressure, ausgelassene
