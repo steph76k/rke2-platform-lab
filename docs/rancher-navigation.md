@@ -58,3 +58,12 @@ Server-Dry-Run für alle vier Links und den Fleet-GitRepo erfolgreich. Managemen
 1/1 und bisherige Downstream-Bundles 40/40 Ready. Die Gruppenübersicht wurde im echten
 Chromium-Browser geöffnet: alle vier Linkziele, `_blank` und vollständig geladene,
 eingebettete Icons bestätigt. [Sanitisiertes Browser-Ergebnis](validation/rancher-navigation-20261011.json).
+
+## Downstream-Erweiterung am 11.10.2026
+
+Auf beiden Downstream-Clustern war das NavLink-CRD bereits vorhanden; keine CRD-
+Installation oder Erweiterung von Benutzerrechten erforderlich. Je vier NavLinks wurden
+über dasselbe Bundle ausgerollt. Downstream-Fleet 42/42 Ready. Die Gruppenübersicht
+wurde mit administrativer Sitzung auf beiden Clustern im Chromium-Browser geprüft:
+alle vier Ziel-URLs, neue Tabs und vollständig geladene Original-Icons bestätigt.
+[Browser-Nachweis für beide Cluster](validation/rancher-navigation-downstream-20261011.json).
