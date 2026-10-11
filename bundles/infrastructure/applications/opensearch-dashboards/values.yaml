@@ -9,8 +9,8 @@ config:
     - securitytenant
     opensearch_security.multitenancy.enabled: true
     opensearch_security.multitenancy.tenants.preferred:
-    - Private
     - Global
+    - Private
     opensearch_security.readonly_mode.roles:
     - kibana_read_only
     opensearch_security.cookie.secure: true
