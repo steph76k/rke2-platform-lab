@@ -47,7 +47,7 @@ PostgreSQL-/Redis-Anwendungszugriffe erfolgreich und OpenSearch green.
 Die VM-Aufrüstung von Worker 2 steht zu diesem Zeitpunkt noch aus. Worker 2 bleibt
 cordoned. Nach Rückkehr: neue Boot-ID und 16 GB prüfen, uncordon, Longhorn-Replikate
 wiederherstellen und Datenbank-/Dienstreplikate kontrolliert auf beide Worker verteilen.
-Erst danach die fünf vorbereiteten Monitoring-/Argo-CD-Bundles aktivieren.
+Erst danach die vorbereiteten Monitoring-/Argo-CD-Bundles aktivieren.
 Die zentrale Installation und die Argo-Tenant-Abnahme sind noch nicht erfolgt.
 
 ## Reparierter Ausgangsbefund
@@ -107,6 +107,13 @@ lesen, anlegen, ändern und synchronisieren; Admins zusätzlich löschen. Kein E
 kein Manifest-Override, keine Project-Administration oder fremde Application-Rechte.
 Der Standardrolle werden keine Leserechte gegeben; das Default-Projekt ist gesperrt.
 ApplicationSet-Controller ist mit null Replikaten vorbereitet, nicht für Mandanten aktiviert.
+Das gesperrte `default`-AppProject liegt im nachgelagerten Fleet-Bundle
+`lab-infra-argocd-policy`: Der Argo-Chart installiert seine CRDs als Templates,
+daher kann das AppProject beim allerersten Helm-Lauf noch nicht mitgebaut werden.
+Das Policy-Bundle darf ausschließlich dieses von Argo gegebenenfalls automatisch
+erzeugte Standardprojekt übernehmen (`helm.takeOwnership=true`). Die Tenant-Abnahme
+erfolgt erst nach erfolgreicher Default-Projektsperre. Insgesamt sind sechs neue
+Bundles und damit 40 Plattform-BundleDeployments vorgesehen.
 
 Destination-Namespaces folgen `<mandant>-*`. Die vorhandene Namespace-Admission prüft
 Pflichtpräfix und autorisierte Projektzuordnung. Terraform verhindert überlappende

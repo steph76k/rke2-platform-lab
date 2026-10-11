@@ -46,6 +46,7 @@ spec:
   - bundles/infrastructure/observability/monitoring-logging
   - bundles/infrastructure/secrets/platform/argocd
   - bundles/infrastructure/applications/argocd
+  - bundles/infrastructure/applications/argocd-policy
   targets:
   - name: lab-infrastructure
     clusterSelector:

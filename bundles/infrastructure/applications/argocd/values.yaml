@@ -79,18 +79,6 @@ applicationSet:
 notifications:
   enabled: false
 extraObjects:
-- apiVersion: argoproj.io/v1alpha1
-  kind: AppProject
-  metadata:
-    name: default
-    namespace: argocd
-  spec:
-    sourceRepos: []
-    sourceNamespaces: []
-    destinations: []
-    namespaceResourceBlacklist:
-    - group: '*'
-      kind: '*'
 - apiVersion: networking.k8s.io/v1
   kind: NetworkPolicy
   metadata:

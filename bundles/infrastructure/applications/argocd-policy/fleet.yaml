@@ -1,0 +1,13 @@
+name: lab-infra-argocd-policy
+defaultNamespace: argocd
+helm:
+  releaseName: lab-infra-argocd-policy
+  takeOwnership: true
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
+dependsOn:
+- name: lab-infra-argocd
