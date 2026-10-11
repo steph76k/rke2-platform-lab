@@ -1,6 +1,6 @@
 {
   "mandant-a": {
-    "cluster": "rke2-cluster1",
+    "cluster": "rke2-cluster2",
     "namespaces": [
       "mandant-a-dev",
       "mandant-a-test",
@@ -8,7 +8,7 @@
     ]
   },
   "mandant-b": {
-    "cluster": "rke2-cluster1",
+    "cluster": "rke2-cluster2",
     "namespaces": [
       "mandant-b-dev",
       "mandant-b-test",

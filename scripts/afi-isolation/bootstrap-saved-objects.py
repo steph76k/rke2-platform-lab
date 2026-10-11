@@ -2,10 +2,13 @@
 """Publish administrator-managed log index patterns to isolated Dashboards tenants.
 Log-reader groups only read these objects. Does not replace user-created objects.
 """
-import json,os,tempfile
+import argparse,json,os,tempfile
 from pathlib import Path
 import requests
-from afi_platform import CONFIG,ROOT,kv
+from afi_platform import CONFIG,ROOT,kv,backup
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--allow-cluster-migration",action="store_true",help="Allow a managed pattern to move between the two known clusters for the same tenant")
+args=parser.parse_args()
 os.umask(0o077)
 with tempfile.TemporaryDirectory(prefix='afi-saved-objects-') as tmp:
  ca=Path(tmp)/'ca.crt';ca.write_text(kv('pki/lab-ca')['ca.crt']);s=requests.Session();s.verify=str(ca);s.headers['osd-xsrf']='afi-bootstrap';password=kv('opensearch/admin')['password']
@@ -23,7 +26,10 @@ with tempfile.TemporaryDirectory(prefix='afi-saved-objects-') as tmp:
   path=CONFIG['dashboards']+'/api/saved_objects/index-pattern/afi-logs-'+tenant
   r=s.get(path,timeout=30)
   if r.status_code==200:
-   assert r.json()['attributes']['title']==attrs['title'],'Refuse to overwrite an unexpected existing pattern'
+   previous=r.json()['attributes']['title']
+   if previous!=attrs['title']:
+    assert args.allow_cluster_migration and previous in ['logs-rke2-cluster1-'+tenant+'-*','logs-rke2-cluster2-'+tenant+'-*'],'Refuse to overwrite an unexpected existing pattern'
+    backup('saved-pattern-before-cluster-move-'+tenant,r.json())
    if any(r.json()['attributes'].get(k)!=v for k,v in attrs.items()):
     r=s.put(path,json={'attributes':attrs},timeout=30);r.raise_for_status()
   else:
