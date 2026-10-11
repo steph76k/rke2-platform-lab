@@ -41,6 +41,11 @@ spec:
   - bundles/infrastructure/logging/crds
   - bundles/infrastructure/logging/operator
   - bundles/infrastructure/security/project-labels
+  - bundles/infrastructure/observability/monitoring-crds
+  - bundles/infrastructure/observability/monitoring
+  - bundles/infrastructure/observability/monitoring-logging
+  - bundles/infrastructure/secrets/platform/argocd
+  - bundles/infrastructure/applications/argocd
   targets:
   - name: lab-infrastructure
     clusterSelector:
