@@ -26,7 +26,6 @@ spec:
   - bundles/infrastructure/applications/opensearch
   - bundles/infrastructure/applications/harbor
   - bundles/infrastructure/applications/opensearch-dashboards
-  - bundles/infrastructure/applications/opensearch-logging
   - bundles/infrastructure/applications/opensearch-ingest
   - bundles/application/logging/crds
   - bundles/application/logging/secrets
