@@ -74,6 +74,13 @@ loggingOverlay:
       bufferVolumeMetrics:
         port: 9100
         prometheusAnnotations: true
+      bufferVolumeResources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
 fluentbitAgentOverlay:
   spec:
     positiondb:
@@ -94,7 +101,7 @@ fluentbitAgentOverlay:
       storage.total_limit_size: 2G
     filterKubernetes:
       namespace_labels: 'On'
-      kube_meta_namespace_cache_ttl: '30s'
+      kube_meta_namespace_cache_ttl: 30s
       Merge_Log: 'Off'
       Keep_Log: 'On'
       K8S-Logging.Parser: 'Off'
