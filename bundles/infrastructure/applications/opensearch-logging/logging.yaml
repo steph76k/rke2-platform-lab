@@ -3,6 +3,8 @@ kind: ClusterOutput
 metadata:
   name: afi-mandant-a
   namespace: cattle-logging-system
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   opensearch:
     host: opensearch-cluster-master.opensearch.svc.cluster.local
@@ -51,6 +53,8 @@ kind: ClusterFlow
 metadata:
   name: afi-mandant-a
   namespace: cattle-logging-system
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   match:
   - select:
@@ -76,6 +80,8 @@ kind: ClusterOutput
 metadata:
   name: afi-mandant-b
   namespace: cattle-logging-system
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   opensearch:
     host: opensearch-cluster-master.opensearch.svc.cluster.local
@@ -124,6 +130,8 @@ kind: ClusterFlow
 metadata:
   name: afi-mandant-b
   namespace: cattle-logging-system
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   match:
   - select:
@@ -149,6 +157,8 @@ kind: ClusterOutput
 metadata:
   name: afi-platform
   namespace: cattle-logging-system
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   opensearch:
     host: opensearch-cluster-master.opensearch.svc.cluster.local
@@ -197,6 +207,8 @@ kind: ClusterFlow
 metadata:
   name: afi-platform
   namespace: cattle-logging-system
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   match:
   - exclude:

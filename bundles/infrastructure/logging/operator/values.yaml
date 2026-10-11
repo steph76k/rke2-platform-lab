@@ -93,6 +93,8 @@ fluentbitAgentOverlay:
       Retry_Limit: 'False'
       storage.total_limit_size: 2G
     filterKubernetes:
+      namespace_labels: 'On'
+      kube_meta_namespace_cache_ttl: '30s'
       Merge_Log: 'Off'
       Keep_Log: 'On'
       K8S-Logging.Parser: 'Off'

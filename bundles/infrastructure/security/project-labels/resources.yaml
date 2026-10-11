@@ -1,0 +1,32 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: afi-project-label-integrity
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+    - apiGroups: [""]
+      apiVersions: [v1]
+      operations: [CREATE, UPDATE]
+      resources: [namespaces]
+  variables:
+  - name: project
+    expression: "has(object.metadata.annotations) && 'field.cattle.io/projectId' in object.metadata.annotations ? object.metadata.annotations['field.cattle.io/projectId'] : ''"
+  - name: projectLabel
+    expression: "has(object.metadata.labels) && 'field.cattle.io/projectId' in object.metadata.labels ? object.metadata.labels['field.cattle.io/projectId'] : ''"
+  - name: previousLabel
+    expression: "oldObject != null && has(oldObject.metadata.labels) && 'field.cattle.io/projectId' in oldObject.metadata.labels ? oldObject.metadata.labels['field.cattle.io/projectId'] : ''"
+  validations:
+  - expression: "variables.projectLabel == '' || (variables.project != '' && variables.project.endsWith(':' + variables.projectLabel))"
+    message: "The Rancher project label must match the authorized project annotation."
+  - expression: "variables.previousLabel == '' || variables.projectLabel != ''"
+    message: "An established Rancher project label cannot be removed."
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: afi-project-label-integrity
+spec:
+  policyName: afi-project-label-integrity
+  validationActions: [Deny]

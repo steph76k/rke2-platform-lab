@@ -1,4 +1,5 @@
 name: lab-infra-opensearch-logging
+keepResources: true
 defaultNamespace: cattle-logging-system
 helm:
   releaseName: lab-infra-opensearch-logging

@@ -1,0 +1,8 @@
+name: lab-infra-project-labels
+defaultNamespace: cattle-system
+overrideTargets:
+- name: lab-infrastructure
+  clusterSelector:
+    matchLabels:
+      environment: lab
+      role: infrastructure
