@@ -1,0 +1,54 @@
+[
+  {
+    "text": "Harbor\nContainer-Registry und Helm-Artefakte",
+    "target": "_blank",
+    "href": "https://harbor-ha.berger.ph/",
+    "images": [
+      {
+        "complete": true,
+        "width": 64,
+        "height": 64,
+        "embedded": true
+      }
+    ]
+  },
+  {
+    "text": "OpenBao\nSecrets-Verwaltung",
+    "target": "_blank",
+    "href": "https://openbao.berger.ph/ui/",
+    "images": [
+      {
+        "complete": true,
+        "width": 2634,
+        "height": 1550,
+        "embedded": true
+      }
+    ]
+  },
+  {
+    "text": "OpenSearch\nDashboards und Mandanten-Logs",
+    "target": "_blank",
+    "href": "https://opensearch.berger.ph/",
+    "images": [
+      {
+        "complete": true,
+        "width": 180,
+        "height": 180,
+        "embedded": true
+      }
+    ]
+  },
+  {
+    "text": "Argo CD\nGitOps f\u00fcr Anwendungen",
+    "target": "_blank",
+    "href": "https://argocd.berger.ph/",
+    "images": [
+      {
+        "complete": true,
+        "width": 32,
+        "height": 32,
+        "embedded": true
+      }
+    ]
+  }
+]
