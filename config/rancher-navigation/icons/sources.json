@@ -1,0 +1,26 @@
+[
+  {
+    "name": "harbor",
+    "source": "https://harbor-ha.berger.ph/favicon.ico?v=2",
+    "file": "harbor.ico",
+    "sha256": "99fa5b8a1661384db313bca24ea2ea255a73f6a6517a8700c5f33e4bc4ce9aaa"
+  },
+  {
+    "name": "openbao",
+    "source": "https://openbao.berger.ph/ui/favicon.svg",
+    "file": "openbao.svg",
+    "sha256": "e6b7e8124dd40277a9357e5e8a7ee0e6b908979958fd235778daebdefad891d9"
+  },
+  {
+    "name": "opensearch",
+    "source": "https://opensearch.berger.ph/ui/favicons/apple-touch-icon.png",
+    "file": "opensearch.png",
+    "sha256": "2ba4aa9ed413b31ff40a688c28f32c9314eca3016962356084c1dc29dae3cd2f"
+  },
+  {
+    "name": "argocd",
+    "source": "https://argocd.berger.ph/assets/favicon/favicon-32x32.png",
+    "file": "argocd.png",
+    "sha256": "43a9c1f6c44054115c80555e62395ebbfcaafe08bbb5db2aa9c963f6a78cb947"
+  }
+]

@@ -1,0 +1,4 @@
+name: lab-management-navigation
+defaultNamespace: cattle-system
+helm:
+  releaseName: lab-management-navigation

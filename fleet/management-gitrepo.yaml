@@ -1,0 +1,15 @@
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: rke2-platform-management
+  namespace: fleet-local
+spec:
+  repo: https://github.com/steph76k/rke2-platform-lab.git
+  branch: main
+  paths:
+  - bundles/management/navigation
+  targets:
+  - name: rancher-local
+    clusterSelector:
+      matchLabels:
+        name: local
