@@ -6,6 +6,7 @@ ausdrücklich gewünschte Mitgliedschaft von `berger/admin`.
 
 - [Gruppen, Benutzer und Rechte](https://github.com/steph76k/rke2-tenants-lab/blob/main/docs/platform-admins.md)
 - [Rancher-/Keycloak-Logout und Rückfall](https://github.com/steph76k/rke2-tenants-lab/blob/main/docs/rancher-oidc-logout.md)
+- [OpenSearch: globale Indexansichten und Logout](https://github.com/steph76k/rke2-tenants-lab/blob/main/docs/opensearch-platform-ui.md)
 - [Prüfergebnisse vom 11.10.2026](https://github.com/steph76k/rke2-tenants-lab/tree/main/tests/results/platform-admins)
 
 Fleet installiert die Dienste; Terraform verwaltet diese Berechtigungen und
@@ -25,6 +26,9 @@ python3 scripts/afi-isolation/verify-platform-admins.py \
 # Zusätzlich: Playwright mit Chromium und dessen Systembibliotheken.
 python3 scripts/afi-isolation/verify-rancher-logout.py \
   --ca-file /path/to/lab-ca-bundle.crt --output /tmp/rancher-logout.json
+
+python3 scripts/afi-isolation/verify-opensearch-platform-ui.py \
+  --ca-file /path/to/lab-ca-bundle.crt --output /tmp/opensearch-ui.json
 ```
 
 Die Rechteprüfung enthält ein unverändertes Argo-AppProject-Update als
@@ -35,4 +39,8 @@ Die Inhalte der Berechtigungen werden dadurch nicht erweitert.
 Am 11.10.2026 erfolgreich geprüft: Plattformrechte in allen fünf Diensten,
 Ablehnung der Plattformfunktionen für reine Mandanten-Admins, Harbor-Zugang
 `berger-admin`, echter Rancher-UI-Logout mit beendeter Keycloak-Sitzung und
-erneuter Passwortabfrage. Der abschließende Terraform-Plan enthält keine Änderungen.
+erneuter Passwortabfrage. Auch OpenSearch wurde im Browser mit Plattform- und
+Mandantenkonten geprüft: globale Indexansichten und A/B-/Plattformlogs sind für
+Plattformadministratoren zugänglich, fremde Logs und globale Saved Objects für
+Mandanten gesperrt. Der OpenSearch-Logout beendet ebenfalls die Keycloak-Sitzung.
+Der abschließende Terraform-Plan enthält keine Änderungen.
