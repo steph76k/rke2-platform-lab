@@ -111,9 +111,11 @@ Beide Cluster haben je zwölf aktive Targets: zehn Fluent-Bit-Collector
 PVC-Füllstand ab. Der PVC-Füllstand wird auf beiden Clustern vom Metrics-Sidecar erfasst.
 `tests/afi-isolation/logging-alerts.test.yaml` prüft alle Regeln mit positiven und
 negativen Zeitreihen. Die kopierte Rules-Datei muss mit den aktiven Regeln übereinstimmen.
-Cluster 1 verwendet Rancher Monitoring; Cluster 2 hat einen eigenen Prometheus mit
-2-GiB-PVC und 14 Tagen Metrik-Retention. Auf Cluster 2 ist noch kein Alertmanager-
-Empfänger angebunden: Regel-Auswertung ist vorhanden, externe Zustellung noch offen.
+Beide Cluster verwenden inzwischen Rancher Monitoring. Cluster 2 nutzt 10 GiB PVC
+und 7 Tage / 8 GB Metrik-Retention. Nach positiver Target-/Regel-Abnahme wurde der alte
+Logging-Prometheus auf null Replikate skaliert; sein 2-GiB-PVC bleibt erhalten.
+[Installation und Prüfergebnisse](monitoring-argocd-rollout.md). Auf Cluster 2 ist noch kein
+externer Alertmanager-Empfänger angebunden: Regel-Auswertung ist vorhanden, externe Zustellung noch offen.
 
 ## Befunde während des freigegebenen Rollouts
 

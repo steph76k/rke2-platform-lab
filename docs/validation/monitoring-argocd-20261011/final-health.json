@@ -1,0 +1,104 @@
+{
+  "checkedAt": "2026-10-11T15:58:59.891869+00:00",
+  "fleet": {
+    "desiredReady": 40,
+    "ready": 40
+  },
+  "nodes": [
+    {
+      "name": "rke2-cluster2-cp-1.berger.ph",
+      "capacity": {
+        "cpu": "4",
+        "ephemeral-storage": "45468Mi",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "5800608Ki",
+        "pods": "110"
+      },
+      "bootID": "f2aed80b-f4ad-4d07-8bf8-a3c7077fe9e9",
+      "schedulable": true,
+      "ready": true
+    },
+    {
+      "name": "rke2-cluster2-cp-2.berger.ph",
+      "capacity": {
+        "cpu": "4",
+        "ephemeral-storage": "45468Mi",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "5800608Ki",
+        "pods": "110"
+      },
+      "bootID": "ddda1584-39aa-485d-a543-d1d8636d61ce",
+      "schedulable": true,
+      "ready": true
+    },
+    {
+      "name": "rke2-cluster2-cp-3.berger.ph",
+      "capacity": {
+        "cpu": "4",
+        "ephemeral-storage": "45468Mi",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "5800608Ki",
+        "pods": "110"
+      },
+      "bootID": "5fa88162-0e07-4302-8966-9ddfeeed9b77",
+      "schedulable": true,
+      "ready": true
+    },
+    {
+      "name": "rke2-cluster2-wk-1.berger.ph",
+      "capacity": {
+        "cpu": "4",
+        "ephemeral-storage": "147868Mi",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "16110228Ki",
+        "pods": "110"
+      },
+      "bootID": "116c056b-02b7-4487-a749-79fce834105a",
+      "schedulable": true,
+      "ready": true
+    },
+    {
+      "name": "rke2-cluster2-wk-2.berger.ph",
+      "capacity": {
+        "cpu": "4",
+        "ephemeral-storage": "147868Mi",
+        "hugepages-1Gi": "0",
+        "hugepages-2Mi": "0",
+        "memory": "16110228Ki",
+        "pods": "110"
+      },
+      "bootID": "df25ccdf-54c7-4b0d-a247-1b45bfa27628",
+      "schedulable": true,
+      "ready": true
+    }
+  ],
+  "longhorn": {
+    "attached": 16,
+    "healthy": 16,
+    "faulted": 0
+  },
+  "applications": [
+    {
+      "name": "mandant-a-demo",
+      "sync": "Synced",
+      "health": "Healthy",
+      "revision": "94f3b5495f5d9ba4f5a2dccb5fef9b4f01e59eee"
+    },
+    {
+      "name": "mandant-b-demo",
+      "sync": "Synced",
+      "health": "Healthy",
+      "revision": "3c24a265507bfa24f61cff9cc57c5c2cf015418e"
+    }
+  ],
+  "temporaryArgoUsersRemaining": 0,
+  "oldLoggingPrometheusReplicas": 0,
+  "oldLoggingPvcRetained": true,
+  "notReadyPods": [
+    "cattle-neuvector-system/neuvector-prometheus-exporter-pod-bc465dd65-9mf6s"
+  ]
+}

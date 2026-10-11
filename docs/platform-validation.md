@@ -1,5 +1,8 @@
 # Plattformvalidierung – 10.10.2026
 
+Aktueller Folgestand vom 11.10.2026: [Worker-Ausbau, Monitoring und Argo CD](monitoring-argocd-rollout.md).
+Die folgenden Befunde dokumentieren den historischen Prüfstand vom 10.10.2026.
+
 ## Abschluss nach Folgefreigabe
 
 Am 10.10.2026 wurden die genehmigten Folgearbeiten umgesetzt: Cluster-1-Logging,

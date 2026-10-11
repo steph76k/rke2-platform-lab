@@ -1,7 +1,10 @@
 # Cluster 2: Worker-RAM, Rancher Monitoring und Argo CD
 
-Stand 11.10.2026, laufende Umsetzung. Dieser vorbereitete Ablauf ist noch kein
-vollständiger Installations- oder Berechtigungsnachweis.
+Stand 11.10.2026: Beide Worker mit 4 vCPU / 16 GB RAM wieder Ready und schedulable.
+Rancher Monitoring und Argo CD sind über Fleet installiert; 40/40 Plattform-Bundles
+sind Ready. Beide Demo-Anwendungen sind Synced/Healthy und über ihre DNS-Namen erreichbar.
+OIDC, Tenant-Rechte, direkte Netzwerkisolation und Egress wurden live geprüft.
+Die folgenden Wartungsabschnitte dokumentieren den Ablauf; der Abschluss steht unter Abnahme.
 
 ## Wartungsfolge
 
@@ -24,7 +27,7 @@ weiterlaufen lassen, den anderen reparieren/zurückstarten. Keine weiteren Evict
 wenn Speicher-/Datenbankquorum oder Wiederanlauf nicht gesund sind. Worker nach der
 Prüfung wieder freigeben; dauerhafte Scheduling-Änderungen im Repo dokumentieren.
 
-## Wartungsstand vor dem zweiten RAM-Ausbau
+## Historischer Wartungsstand vor dem zweiten RAM-Ausbau
 
 Am 11.10.2026 ist Worker 1 mit 16 GB RAM zurück, Ready und schedulable.
 Nach dem Wiederaufbau der Longhorn-Replikate wurden PostgreSQL und OpenSearch
@@ -72,8 +75,8 @@ Nur Cluster 2 (`environment=lab`, `role=infrastructure`) ist Ziel.
 - RKE2-Control-Plane-/etcd-Scrapes über Ranchers PushProx. Kein kube-proxy-/Nginx-Scrape,
   da Cluster 2 Cilium mit kube-proxy replacement verwendet.
 - Bestehende AFI-Logging-Service-/PodMonitors und die sieben Alarmregeln werden übernommen.
-  Der bisherige kleine Logging-Prometheus bleibt bis zur positiven Abnahme verfügbar;
-  eine Stilllegung erfolgt erst nach Prüfung von Targets und Regeln. Sein PVC wird behalten.
+  Nach positiver Abnahme ist der bisherige kleine Logging-Prometheus auf null Replikate
+  skaliert. StatefulSet und sein bestehendes 2-GiB-PVC bleiben für einen Rückfall erhalten.
 
 Die zentralen Monitoring-Daten sind Plattformdaten. Diese Installation allein liefert
 keinen nachgewiesenen mandantenweisen PromQL-/Grafana-Zugriffsschutz; dafür wären
@@ -112,8 +115,8 @@ Das gesperrte `default`-AppProject liegt im nachgelagerten Fleet-Bundle
 daher kann das AppProject beim allerersten Helm-Lauf noch nicht mitgebaut werden.
 Das Policy-Bundle darf ausschließlich dieses von Argo gegebenenfalls automatisch
 erzeugte Standardprojekt übernehmen (`helm.takeOwnership=true`). Die Tenant-Abnahme
-erfolgt erst nach erfolgreicher Default-Projektsperre. Insgesamt sind sechs neue
-Bundles und damit 40 Plattform-BundleDeployments vorgesehen.
+erfolgte nach erfolgreicher Default-Projektsperre. Insgesamt sind sechs neue
+Bundles und damit 40 Plattform-BundleDeployments aktiv.
 
 Destination-Namespaces folgen `<mandant>-*`. Die vorhandene Namespace-Admission prüft
 Pflichtpräfix und autorisierte Projektzuordnung. Terraform verhindert überlappende
@@ -138,18 +141,56 @@ zeigen eine unterscheidbare Tenant-Seite; Image per Digest fixiert. Terraform le
 Application an, Argo CD besitzt Deployment/Service/ConfigMap/Ingress.
 
 `mandant-a-demo.berger.ph` und `mandant-b-demo.berger.ph` zeigen HTTP-Demoseiten ohne
-Zugangsdaten; für Browserzugriff müssen beide Namen ebenfalls auf `.195` zeigen.
+Zugangsdaten. Beide DNS-Namen zeigen inzwischen auf `.195`; direkte HTTP-Aufrufe
+über DNS liefern jeweils Status 200 und die passende, unterschiedliche Mandantenseite.
 Alternativ Port-Forward oder `curl --resolve` wie in den Demo-READMEs. Automatischer Sync,
 Prune und Self-Heal sind nur für diese neuen Anwendungsressourcen aktiviert.
 
 ## Abnahme
 
-Vor Abschluss: fünf Nodes mit erwarteter Kapazität Ready, aktive Volumes healthy,
-Fleet-Bundles Ready; Prometheus-Targets und Alarmregeln prüfen, Grafana-/Rancher-Proxy
-prüfen. Argo-OIDC mit frischen A/B-Admin-/Developer-Identitäten, eigene Apps erlaubt,
-fremde Apps/Namespaces/Repos und Plattformrechte verweigert. Beide Apps Synced/Healthy,
-HTTP-Seiten unterschiedlich, Egress-Zuordnung erhalten, Terraform-Nachplan ohne Drift.
-Nur selbst erzeugte Testidentitäten und Prüfressourcen entfernen.
+Die sanitisierten Ergebnisse liegen unter [validation/monitoring-argocd-20261011](validation/monitoring-argocd-20261011).
+
+- Fünf Nodes Ready und schedulable, beide Worker mit 4 vCPU und 16 GB RAM.
+  16 angebundene Longhorn-Volumes healthy, kein faulted Volume. Datenbank-, Redis-,
+  OpenSearch- und replizierte Dienst-Pods sind wieder auf beide Worker verteilt.
+- 40/40 Plattform-BundleDeployments Ready. Beide Argo-Applications Synced/Healthy;
+  jeweils zwei Demo-Pods, einer pro Worker. Keine verbliebenen Argo-Testidentitäten.
+- Alle 55 erfassten Monitoring-Targets up, darunter zwölf Logging- und drei Argo-Targets.
+  Sieben AFI-Logging-Regeln gesund; Grafana über Rancher-Proxy HTTP 200 / database ok.
+  Vorhandene CPU-Throttling-Alarme und der bestehende NeuVector-Exporter-CrashLoop bleiben
+  sichtbar. Ein externer Alertmanager-Empfänger ist weiterhin offen.
+- Fünf frische OIDC-Identitäten geprüft: A/B jeweils Admin und Developer sowie ein Benutzer
+  ohne Tenant-Gruppe. Alle verwenden PKCE S256. Eigene Apps erstellen/ändern/synchronisieren
+  erlaubt; Löschen nur für Admins. Fremde Projekte/Apps und Projektänderungen ergeben 403;
+  fremde Namespaces/Repositories sowie Plattform-Namespaces werden beim Anlegen abgewiesen.
+  Der Benutzer ohne Tenant-Gruppe sieht keine Applications.
+- Beide HTTP-Demoseiten antworten über DNS mit 200. Alle 16 direkten Pod-Verbindungstests
+  bestanden: acht innerhalb desselben Mandanten erlaubt, acht zwischen A/B blockiert,
+  einschließlich beider Worker. Terraform erlaubt den reservierten Cilium-Ingress nur auf
+  TCP 8080 zu den exakt bezeichneten Demo-Pods im jeweils geschützten Rancher-Projekt.
+- Egress nach beiden Neustarts geprüft: A `.200`/`.201`, B `.202`/`.203`, jeweils passend
+  zu Worker 1/2. IP-Aliase blieben nach dem Neustart erhalten.
+- Terraform hat neun Argo-Ressourceninstanzen ergänzt. Abschließender Plan ohne Änderungen.
+  Ein nicht angewendeter Plan für einen zusätzlichen Mandanten C erzeugte 36 neue Ressourcen,
+  fünf notwendige zentrale Aktualisierungen und keine Löschungen. Seine temporäre Deklaration
+  wurde entfernt; die bisherigen Mandanten werden nicht neu angelegt.
+
+Wiederholbare Prüfprogramme im Plattformrepo:
+
+- `scripts/afi-isolation/verify-monitoring.py`: Targets, Regeln und Rancher-Grafana-Zugang.
+- `scripts/afi-isolation/verify-argocd.py`: echte OIDC-Anmeldungen, erlaubte Operationen und
+  Negativtests; erzeugt temporäre Benutzer/unsynchronisierte Apps und entfernt sie anschließend.
+- `scripts/afi-isolation/verify-argocd-network.py`: HTTP-Seiten und direkte Pod-Isolation.
+
+Die Programme dokumentieren ihre erforderlichen Kubeconfig-/CA-/Ausgabeargumente mit
+`--help`. Zugangsdaten werden zur Laufzeit aus der bestehenden OpenBao-Operatorumgebung
+bezogen und nicht ausgegeben. Egress wird im Tenant-Repo mit `scripts/verify-egress.py` geprüft.
+
+Die beim Worker-Start sichtbaren `Lockdown: pathWalker: /dev/mem,kmem,port is restricted`-
+Meldungen stammen vom NeuVector-Prozess. Secure Boot und Kernel-Lockdown im Integrity-Modus
+wurden auf Worker 2 bestätigt. Der Kernel verweigert den direkten Speicherzugriff;
+Node und Enforcer wurden Ready. Secure Boot wurde nicht abgeschaltet. Dies ist kein Nachweis,
+dass jede einzelne NeuVector-Scan-Funktion uneingeschränkt arbeitet.
 
 ## Quellen
 
@@ -177,5 +218,5 @@ Nur selbst erzeugte Testidentitäten und Prüfressourcen entfernen.
   [Fleet-Implementierung](https://github.com/rancher/fleet/blob/v0.15.4/internal/helmdeployer/install.go).
 - Rancher Monitoring erreichte alle 12 Logging-Targets und wertete die sieben
   AFI-Logging-Regeln erfolgreich aus; Grafana war über den authentifizierten Rancher-
-  Proxy gesund. Deshalb wird der alte `afi-logging-prometheus` auf null Replikate
+  Proxy gesund. Deshalb wurde der alte `afi-logging-prometheus` auf null Replikate
   gesetzt. StatefulSet und PVC bleiben für die Rückkehr auf eine Replik erhalten.

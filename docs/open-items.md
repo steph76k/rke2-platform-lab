@@ -1,7 +1,8 @@
-# Offene Punkte – 10.10.2026
+# Offene Punkte – 11.10.2026
 
 Prioritäten: P1 blockiert gewünschte Funktion/Abnahme, P2 Betriebsverbesserung,
 P3 spätere Erweiterung. Aktueller AFI-Stand: [Umsetzung und Abnahme](afi-isolation-validation.md).
+Aktueller Ausbau: [Worker-RAM, Monitoring und Argo CD](monitoring-argocd-rollout.md).
 Befunde außerhalb des AFI-Umfangs stammen aus der früheren Plattformprüfung und wurden
 im Logging-Rollout nicht erneut vollständig geprüft.
 
@@ -10,9 +11,9 @@ im Logging-Rollout nicht erneut vollständig geprüft.
 | P2 | Direkte Cluster-2-Kubeconfig | Teilweise behoben | Nativer administrativer Zugang wurde über SSH geprüft und temporär genutzt; die bisherige lokale Datei separat erneuern. Keine Zugangsdaten in Git |
 | P2 | Dashboards Fremdtenant-Fehlerstatus | Offen | HTTPS, OIDC und eigene Index-Patterns funktionieren; erzwungener Fremdtenant-Zugriff liefert derzeit HTTP 500 ohne Daten statt eines klaren 403 |
 | P2 | NeuVector-Exporter | Fehlgeschlagen | Bestehenden wiederkehrenden BackOff außerhalb Plattform-Bundles separat diagnostizieren/reparieren |
-| P2 | Longhorn-Helm-Status | Fehlgeschlagen | Historischer failed-Release trotz elf gesunder Plattformvolumes; Release-/Systemzustand separat bereinigen, ohne Deinstallation/PVC-Löschung |
+| P2 | Longhorn-Helm-Status | Fehlgeschlagen | Historischer failed-Release, in dieser Runde nicht erneut geprüft; aktuell 16 angebundene Volumes gesund; Release-/Systemzustand separat bereinigen, ohne Deinstallation/PVC-Löschung |
 | P2 | Rancher-Webhook Probe-Timeouts | Fehlgeschlagen | Wiederkehrende Warnungen bei aktuell Ready-Pod; Ressourcen/Latenz gesondert untersuchen |
-| P2 | Worker-Ausfallsicherheit | Noch nicht getestet | PostgreSQL/OpenSearch auf Worker 2 konzentriert; vom Betreiber akzeptierte Lab-Einschränkung, Kapazität/Verteilung später planen |
+| P2 | Worker-Ausfallsicherheit | Geplante Wartung geprüft | Beide Worker mit 4 vCPU/16 GB; Datenbank- und Dienstreplikate auf beide verteilt. Kontrollierte Evictions/Redis-Failover geprüft; harter ungeplanter Ausfall bleibt ungetestet |
 | P2 | Logging-Persistenz | Aktiv, Cluster-2-Abnahme läuft | Beide Cluster mit 20-GiB-Longhorn-Puffer und persistenten Node-Queues; echter 50-Record-Neustarttest auf Cluster 1 bestanden, Cluster 2 folgt |
 | P2 | Logging-Alarme extern zustellen | Offen | Sieben Regeln eingerichtet; für Cluster 2 fehlt noch ein Alertmanager-Empfänger samt Zustelltest |
 | P2 | Logging-CRD-Chart-Metadaten | Fehlgeschlagen (Lint) | Offizieller gepinnter Chart v1+type verursacht bekannten Lintfehler. Render und 38 Ressourcen-Schemas bestehen; Runtime-Abnahme erfolgreich; Metadatenfehler bei späterem Chart-Upgrade erneut prüfen |
@@ -21,7 +22,7 @@ im Logging-Rollout nicht erneut vollständig geprüft.
 | P2 | Zertifikatsrotation | Noch nicht getestet | Lab-Zertifikate Harbor/OpenSearch laufen 10.10.2027 ab; koordinierte Rotation/Security-Index-Änderungen planen |
 | P2 | Keycloak-Altbindungen / Realm-Schutz | Freigabe erforderlich | Stale G_Admin/G_Developer/G_Viewer-Bindungen und unrestricted-Modus prüfen; keine automatische Neuanlage gleichnamiger Admin-Gruppe. Brute-force-Schutz derzeit aus |
 | P2 | Keycloak-Secret-Verwaltung | Freigabe erforderlich | Bootstrap-Admin-/DB-Zugangsdaten liegen als Literal-Env im bestehenden StatefulSet; später kontrolliert in Secret-Verwaltung überführen, ohne ungeprüfte Rotation |
-| P3 | Aktiver Redis-/PostgreSQL-Failover | Freigabe erforderlich | Kein Failover im aktuellen Lauf; Auswirkungen auf Harbor und Wartungsfenster zuerst genehmigen |
+| P3 | Weitere Failover-Tests | Separates Arbeitspaket | Genehmigter Redis-Sentinel-Failover und Datenbankverlagerung im RAM-Wartungsfenster abgeschlossen; zusätzliche Ausfallversuche separat planen |
 
 Der Benutzer hat den Speicherausbau für 180 Tage am 11.10.2026 aus dem Auftrag
 genommen. Er ist kein offener Abnahmepunkt mehr. Die bestehende Retention-Policy
@@ -55,6 +56,8 @@ und Änderungen bestehender Plattform-Berechtigungen wurden nicht ausgeführt.
 AFI-Ergänzung: Harbor-/OpenSearch-OIDC, Mandanten A/B, gemeinsamer MinIO-Verwaltungsstate,
 Namespace-basiertes Logrouting und persistente Collector-Puffer sind aktiv. Alle drei
 Cluster-2-Control-Plane-Nodes wurden auf vier vCPU/6 GB erweitert; etcd und Ready-Status
-sind geprüft. Der frühere CP-2-Zeit-/Zertifikatsfehler ist behoben. Worker 1 wird nach
-Freigabe des persistenten Puffers auf vier vCPU erweitert. Den abschließenden Teststand
-und verbleibende Abnahmegrenzen enthält der oben verlinkte AFI-Bericht.
+sind geprüft. Der frühere CP-2-Zeit-/Zertifikatsfehler ist behoben. Beide Worker besitzen
+inzwischen vier vCPU und 16 GB RAM. Monitoring und Argo CD sind installiert, 40/40
+Plattform-Bundles Ready und Terraform ohne Drift. Beide Demo-Apps sind über DNS erreichbar;
+OIDC-Tenant-Rechte und direkte Netzwerkisolation sind geprüft. Verbleibende Betriebsgrenzen
+stehen im oben verlinkten aktuellen Ausbau-Bericht.

@@ -2,7 +2,7 @@
 
 Rancher Fleet verwaltet die Plattformkomponenten auf `rke2-cluster1` und
 `rke2-cluster2` aus `steph76k/rke2-platform-lab`, Branch `main`. Der aktuelle Stand
-umfasst 34 aktive Bundles für Plattformdienste, Secret-Zustellung, Logging und Monitoring.
+umfasst 40 aktive Bundles für Plattformdienste, Secret-Zustellung, Logging, Monitoring und Argo CD.
 OpenBao bleibt auf K3s; Mandanten und Berechtigungen verwaltet das separate
 Terraform-Repository `rke2-tenants-lab`.
 
@@ -14,6 +14,8 @@ ESO-Zuordnung. Dessen Logging-Routen verwaltet Terraform im Tenant-Repository.
 Historische Migrationsberichte dokumentieren den zuvor freigegebenen Lab-Neuaufbau.
 
 ## Dokumentation
+
+- [Worker-RAM, Rancher Monitoring und Argo CD: Abschluss und Prüfungen](docs/monitoring-argocd-rollout.md)
 
 - [AFI-Mandantentrennung: Umsetzung und Testnachweis](docs/afi-isolation-validation.md)
 - [AFI-Konzept und Zuständigkeiten](docs/afi-isolation-design.md)
@@ -34,6 +36,10 @@ Historische Migrationsberichte dokumentieren den zuvor freigegebenen Lab-Neuaufb
 - [Rancher-Logging-Installationswerte ohne doppelte Sammlung](docs/rancher-logging-installation.md)
 
 ## Betrieb
+
+Argo CD: `https://argocd.berger.ph`, OIDC im Realm `berger`. Die beiden Demo-Anwendungen
+laufen auf Cluster 2; AppProjects, Repository-Freigaben und Tenant-Rechte gehören zum
+Terraform-Repository. Rancher Monitoring ist auf Cluster 2 über Fleet installiert.
 
 Harbor: `https://harbor-ha.berger.ph`. Dashboards: `https://opensearch.berger.ph`.
 Zugangsdaten liegen ausschließlich in OpenBao; die genauen Pfade stehen im

@@ -1,0 +1,200 @@
+{
+  "targetsByJob": {
+    "logging-buffer-volume": {
+      "up": 1,
+      "total": 1
+    },
+    "logging-fluentbit": {
+      "up": 10,
+      "total": 10
+    },
+    "argocd-application-controller-metrics": {
+      "up": 1,
+      "total": 1
+    },
+    "argocd-repo-server-metrics": {
+      "up": 1,
+      "total": 1
+    },
+    "argocd-server-metrics": {
+      "up": 1,
+      "total": 1
+    },
+    "logging-fluentd": {
+      "up": 1,
+      "total": 1
+    },
+    "rancher-monitoring-alertmanager": {
+      "up": 1,
+      "total": 1
+    },
+    "apiserver": {
+      "up": 3,
+      "total": 3
+    },
+    "coredns": {
+      "up": 2,
+      "total": 2
+    },
+    "rancher-monitoring-grafana": {
+      "up": 1,
+      "total": 1
+    },
+    "kube-controller-manager": {
+      "up": 3,
+      "total": 3
+    },
+    "kube-etcd": {
+      "up": 3,
+      "total": 3
+    },
+    "kube-scheduler": {
+      "up": 3,
+      "total": 3
+    },
+    "kube-state-metrics": {
+      "up": 1,
+      "total": 1
+    },
+    "kubelet": {
+      "up": 15,
+      "total": 15
+    },
+    "rancher-monitoring-operator": {
+      "up": 1,
+      "total": 1
+    },
+    "node-exporter": {
+      "up": 5,
+      "total": 5
+    },
+    "rancher-monitoring-prometheus": {
+      "up": 2,
+      "total": 2
+    }
+  },
+  "downTargets": [],
+  "loggingTargets": {
+    "total": 12,
+    "up": 12
+  },
+  "loggingRules": [
+    {
+      "name": "AFILoggingExportRetry",
+      "health": "ok",
+      "state": "inactive"
+    },
+    {
+      "name": "AFILoggingBufferHigh",
+      "health": "ok",
+      "state": "inactive"
+    },
+    {
+      "name": "AFILoggingBufferCritical",
+      "health": "ok",
+      "state": "inactive"
+    },
+    {
+      "name": "AFILoggingExportErrors",
+      "health": "ok",
+      "state": "inactive"
+    },
+    {
+      "name": "AFILoggingRecordsDropped",
+      "health": "ok",
+      "state": "inactive"
+    },
+    {
+      "name": "AFILoggingCollectorUnavailable",
+      "health": "ok",
+      "state": "inactive"
+    },
+    {
+      "name": "AFILoggingBufferFilesystemHigh",
+      "health": "ok",
+      "state": "inactive"
+    }
+  ],
+  "alerts": [
+    {
+      "name": "KubePodCrashLooping",
+      "state": "firing"
+    },
+    {
+      "name": "KubeDeploymentReplicasMismatch",
+      "state": "firing"
+    },
+    {
+      "name": "CPUThrottlingHigh",
+      "state": "pending"
+    },
+    {
+      "name": "CPUThrottlingHigh",
+      "state": "firing"
+    },
+    {
+      "name": "CPUThrottlingHigh",
+      "state": "firing"
+    },
+    {
+      "name": "CPUThrottlingHigh",
+      "state": "firing"
+    },
+    {
+      "name": "CPUThrottlingHigh",
+      "state": "pending"
+    },
+    {
+      "name": "CPUThrottlingHigh",
+      "state": "pending"
+    },
+    {
+      "name": "CPUThrottlingHigh",
+      "state": "firing"
+    },
+    {
+      "name": "CPUThrottlingHigh",
+      "state": "pending"
+    },
+    {
+      "name": "Watchdog",
+      "state": "firing"
+    },
+    {
+      "name": "InfoInhibitor",
+      "state": "firing"
+    },
+    {
+      "name": "InfoInhibitor",
+      "state": "firing"
+    },
+    {
+      "name": "InfoInhibitor",
+      "state": "firing"
+    },
+    {
+      "name": "InfoInhibitor",
+      "state": "firing"
+    },
+    {
+      "name": "InfoInhibitor",
+      "state": "firing"
+    },
+    {
+      "name": "InfoInhibitor",
+      "state": "firing"
+    },
+    {
+      "name": "InfoInhibitor",
+      "state": "firing"
+    },
+    {
+      "name": "InfoInhibitor",
+      "state": "firing"
+    }
+  ],
+  "grafanaRancherProxy": {
+    "httpStatus": 200,
+    "database": "ok"
+  }
+}

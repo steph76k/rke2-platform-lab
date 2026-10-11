@@ -132,7 +132,8 @@ wurden weder umgruppiert noch durch Testbenutzer ersetzt.
 
 Die Cluster-2-Routen wurden ohne Neuanlage ihrer sechs CRs aus Fleet in den gemeinsamen
 Terraform-State übernommen. Die UID-Prüfung bestätigte unveränderte Ressourcen; Namen,
-Indexpräfixe und Pufferpfade bleiben erhalten. Fleet verwaltet 34 aktive Bundles.
+Indexpräfixe und Pufferpfade bleiben erhalten. Fleet verwaltete zu diesem Prüfzeitpunkt 34 aktive Bundles; mit
+[Monitoring und Argo CD](monitoring-argocd-rollout.md) sind inzwischen 40 aktiv.
 Fluent Bit übermittelt Namespace-Labels mit 30 Sekunden Cache. Geschützte Projektlabels
 steuern Logging, Egress und ESO; frei gesetzte Tenant-Labels verleihen keine Rechte.
 

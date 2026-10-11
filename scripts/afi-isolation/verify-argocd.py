@@ -86,6 +86,33 @@ for tenant, role in [('mandant-a','admins'), ('mandant-a','developers'),
                 r=session.get(base+'/api/v1/projects/'+target,timeout=30)
                 assert r.status_code==expected,('project read',group,target,r.status_code)
                 record['ownProjectHttp' if target==tenant else 'foreignProjectHttp']=r.status_code
+                if target==tenant:
+                    own_project=r.json()
+            # A no-op project update must still require platform administration.
+            r=session.put(base+'/api/v1/projects/'+tenant,json={'project':own_project},timeout=30)
+            assert r.status_code==403,('project administration',group,r.status_code)
+            record['projectUpdateDeniedHttp']=r.status_code
+            # Create/update an unsynced application in the existing test namespace.
+            name=username+'-own-app'
+            obj={'apiVersion':'argoproj.io/v1alpha1','kind':'Application',
+                'metadata':{'name':name,'namespace':'argocd'},
+                'spec':{'project':tenant,
+                    'source':{'repoURL':'https://github.com/steph76k/rke2-argocd-lab-'+tenant+'.git','path':'apps/demo','targetRevision':'main'},
+                    'destination':{'server':'https://kubernetes.default.svc','namespace':tenant+'-test'}}}
+            probes.append((name,tenant))
+            r=session.post(base+'/api/v1/applications',json=obj,timeout=60)
+            assert r.status_code==200,('own create',group,r.status_code)
+            record['ownCreateHttp']=r.status_code
+            obj=r.json();obj.pop('status',None)
+            obj['metadata'].setdefault('annotations',{})['afi.berger.ph/rbac-probe']='updated'
+            r=session.put(base+'/api/v1/applications/'+name,params={'project':tenant},json=obj,timeout=30)
+            assert r.status_code==200,('own update',group,r.status_code)
+            record['ownUpdateHttp']=r.status_code
+            r=session.delete(base+'/api/v1/applications/'+name,
+                params={'cascade':'false','project':tenant},
+                headers={'Content-Type':'application/json'},timeout=30)
+            assert r.status_code==(200 if role=='admins' else 403),('own delete',group,r.status_code)
+            record['ownDeleteHttp']=r.status_code
             # These invalid destinations/repos must be rejected before creating an Application.
             for label,project,destination,repo in [
                 ('foreign-project',other,other+'-dev','https://github.com/steph76k/rke2-argocd-lab-'+other+'.git'),
@@ -114,7 +141,8 @@ for tenant, role in [('mandant-a','admins'), ('mandant-a','developers'),
                 assert obj['metadata']['name']==name and name.startswith(username+'-')
                 assert obj['spec']['project']==project and not obj['spec'].get('syncPolicy',{}).get('automated')
                 recovery.delete(base+'/api/v1/applications/'+name,
-                    params={'cascade':'false','project':project},timeout=30).raise_for_status()
+                    params={'cascade':'false','project':project},
+                    headers={'Content-Type':'application/json'},timeout=30).raise_for_status()
         finally:
             if uid:
                 cleanup=keycloak();cleanup.delete(idp+'/users/'+uid,timeout=30).raise_for_status()
