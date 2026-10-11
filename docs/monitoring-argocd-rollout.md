@@ -79,9 +79,13 @@ Nur Cluster 2 (`environment=lab`, `role=infrastructure`) ist Ziel.
   skaliert. StatefulSet und sein bestehendes 2-GiB-PVC bleiben für einen Rückfall erhalten.
 
 Die zentralen Monitoring-Daten sind Plattformdaten. Diese Installation allein liefert
-keinen nachgewiesenen mandantenweisen PromQL-/Grafana-Zugriffsschutz; dafür wären
-separate Datenquellen/Abfragegrenzen erforderlich. Keine zusätzlichen Cluster-Leserechte
-werden allein aus dem Wunsch nach Monitoring für Fachbereiche zugesagt.
+keinen mandantenweisen PromQL-/Grafana-Zugriffsschutz; dafür wären separate
+Datenquellen/Abfragegrenzen erforderlich. Nach ausdrücklicher Folgeentscheidung des
+Betreibers erhalten alle Mandantengruppen gemeinsamen Viewer-Zugriff auf diese
+clusterweiten Daten. Das Tenant-Repository verwaltet dafür `terraform/monitoring.tf`
+und dokumentiert die Grenzen in `docs/monitoring.md`. Monitoring-Konfiguration, Secrets
+und Workloads im Systemnamespace bleiben geschützt. Prometheus Federator bleibt auf
+Wunsch des Betreibers vorerst uninstalliert.
 
 ## Zentrales Argo CD
 
