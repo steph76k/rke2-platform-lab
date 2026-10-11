@@ -11,3 +11,7 @@ overrideTargets:
       role: infrastructure
 dependsOn:
 - name: lab-infra-argocd
+namespaceAnnotations:
+  field.cattle.io/projectId: c-44q9v:p-6qghv
+namespaceLabels:
+  field.cattle.io/projectId: p-6qghv
