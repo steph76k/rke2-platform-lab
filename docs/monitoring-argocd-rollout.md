@@ -24,6 +24,32 @@ weiterlaufen lassen, den anderen reparieren/zurückstarten. Keine weiteren Evict
 wenn Speicher-/Datenbankquorum oder Wiederanlauf nicht gesund sind. Worker nach der
 Prüfung wieder freigeben; dauerhafte Scheduling-Änderungen im Repo dokumentieren.
 
+## Wartungsstand vor dem zweiten RAM-Ausbau
+
+Am 11.10.2026 ist Worker 1 mit 16 GB RAM zurück, Ready und schedulable.
+Nach dem Wiederaufbau der Longhorn-Replikate wurden PostgreSQL und OpenSearch
+nach Worker 1 verlagert. Beim OpenSearch-Umzug wurde die vollständige Shard-Erholung
+abgewartet; Pod-Readiness allein ist dafür kein ausreichendes Kriterium.
+
+Nach ausdrücklicher Betreiberfreigabe wurde genau einmal `SENTINEL FAILOVER mymaster`
+ausgelöst. `redis-replication-1` wurde Master auf Worker 1, der bisherige Master
+`redis-replication-2` anschließend als Replika per Eviction verschoben. Zwei gesunde
+Replica-Links und drei übereinstimmende Sentinels mit Quorum wurden geprüft.
+
+Replizierte Harbor-/Dashboard-/NeuVector-Dienste wurden einzeln verdrängt und jeweils
+auf vollständige Pod-Readiness geprüft. Der anschließende reguläre Drain von Worker 2
+war erfolgreich, ohne `--force` oder `--disable-eviction`. Auf Worker 2 verblieben nur
+DaemonSet-Pods. Alle 14 aktiven Volumes waren danach auf Worker 1 angebunden; kein
+Volume war faulted. MinIO und Fluentd waren Ready, Harbor vollständig healthy,
+PostgreSQL-/Redis-Anwendungszugriffe erfolgreich und OpenSearch green.
+
+[Prüfprotokoll vor dem Ausschalten](validation/worker2-memory-drain-20261011.json).
+Die VM-Aufrüstung von Worker 2 steht zu diesem Zeitpunkt noch aus. Worker 2 bleibt
+cordoned. Nach Rückkehr: neue Boot-ID und 16 GB prüfen, uncordon, Longhorn-Replikate
+wiederherstellen und Datenbank-/Dienstreplikate kontrolliert auf beide Worker verteilen.
+Erst danach die fünf vorbereiteten Monitoring-/Argo-CD-Bundles aktivieren.
+Die zentrale Installation und die Argo-Tenant-Abnahme sind noch nicht erfolgt.
+
 ## Reparierter Ausgangsbefund
 
 Der Fluentd-Sidecar `buffer-metrics-sidecar` wurde wiederholt mit `OOMKilled` beendet:

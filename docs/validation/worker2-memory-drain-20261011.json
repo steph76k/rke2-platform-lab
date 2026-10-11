@@ -1,0 +1,37 @@
+{
+  "redis": {
+    "old_master": "redis-replication-2",
+    "new_master": "redis-replication-1",
+    "node": "rke2-cluster2-wk-1.berger.ph",
+    "replicas": 2,
+    "sentinels": 3,
+    "harbor": "healthy",
+    "opensearch": "green"
+  },
+  "worker2": {
+    "checkedAt": "2026-10-11T15:11:54.768054+00:00",
+    "node": "rke2-cluster2-wk-2.berger.ph",
+    "readyForShutdown": true,
+    "oldBootID": "effe1819-fe35-47c9-b7bb-33b9166eeb95",
+    "worker1Capacity": {
+      "cpu": "4",
+      "ephemeral-storage": "147868Mi",
+      "hugepages-1Gi": "0",
+      "hugepages-2Mi": "0",
+      "memory": "16110228Ki",
+      "pods": "110"
+    },
+    "nonDaemonSetPodsRemaining": [],
+    "activeVolumes": 14,
+    "volumeHealth": {
+      "healthy": 0,
+      "degraded": 14
+    },
+    "postgresql": "healthy",
+    "redis": "healthy",
+    "harbor": "healthy",
+    "opensearch": "green",
+    "minio": "Ready",
+    "fluentd": "Ready"
+  }
+}
