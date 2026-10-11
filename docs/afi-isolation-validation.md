@@ -33,8 +33,10 @@ Details: [Logging-Rollout](afi-logging-rollout.md).
 - ISM-Policy `afi-logs-retention`: 180 Tage für neue AFI-Indizes; eine OpenSearch-Replik.
   Die Policy ändert oder löscht keine alten gemischten Indizes. Kapazitätsgrenze unten beachten.
 - Terraform: A übernommen, B zusätzlich erstellt, Gruppen/Rancher/Namespaces/Harbor/
-  OpenBao/ESO/OpenSearch deklarativ verwaltet. Separate verschlüsselte und versionierte
-  MinIO-States, eigene Backend-Zugänge, natives S3-Locking, geprüfte SOPS-Sicherungen.
+  OpenBao/ESO/OpenSearch deklarativ verwaltet. Seit 11.10.2026 gemeinsamer verschlüsselter und versionierter
+  MinIO-Verwaltungsstate für alle Mandanten, administrativer Backend-Zugang, natives
+  S3-Locking und geprüfte SOPS-Sicherungen. 56 Ressourcen unverändert übernommen;
+  abschließender Plan ohne Änderungen. Die alten Einzelstates sind schreibgeschützte Archive.
 - Prometheus: je zwölf erreichbare Targets auf beiden Clustern einschließlich Journald
   und PVC-Metrics; je sieben gesunde Alarmregeln, ohne aktive Alarme beim geprüften Stand.
 
@@ -72,7 +74,7 @@ nicht verwendet werden; dessen Systemkonfiguration wurde nicht verändert.
 | Separaten Collector-Pod ersetzen | Queue bleibt erhalten | Derselbe PVC, 11.400 persistierte Bytes nach Pod-Ersatz | PASS |
 | Testziel wieder erreichbar | Alles nachliefern | 50/50 eindeutige Marker, 0 Duplikate in diesem Lauf | PASS |
 | Zweiter Terraform-Apply auf Teststate | Lock verhindert Konkurrenz | `Error acquiring the state lock`; erster Apply erfolgreich | PASS |
-| State B liest A | Verweigert | HTTP 403 | PASS |
+| Historische Einzelstates vor Zusammenlegung: B liest A | Verweigert | HTTP 403 | PASS vor Umstellung; aktueller State nur für Plattformadministration |
 | State lesen ohne SSE-C-Key | Verweigert | HTTP 400 | PASS |
 | Recovery einer älteren S3-Version | Terraform kann State lesen | Separater Recovery-Key, `state list` zeigt Testressource | PASS |
 | SOPS-Backup A/B und Backend-Schlüssel | Entschlüsselung identisch | Im Speicher verifiziert, keine Klartextausgabe | PASS |

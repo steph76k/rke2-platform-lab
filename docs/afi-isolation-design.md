@@ -80,3 +80,15 @@ Keine vorhandenen Benutzer, Images, Indizes oder PVCs werden gelöscht.
 - [Terraform S3-Backend](https://developer.hashicorp.com/terraform/language/backend/s3)
 - [Fluent Bit Persistenz](https://kube-logging.dev/docs/logging-infrastructure/fluentbit/)
 - [Fluentd Persistenz](https://kube-logging.dev/docs/logging-infrastructure/fluentd/)
+
+## Vereinfachung der State-Verwaltung am 11.10.2026
+
+Der Benutzer hat die zuvor beschriebene State-Trennung durch einen gemeinsamen
+administrativen State ersetzt. Alle Mandanten werden unter
+`lab/tenants/terraform.tfstate` verwaltet; der Backend-Zugang liegt in OpenBao unter
+`secret/platform/terraform-state/tenants`. Die fachlichen Mandantenrechte in Rancher,
+Harbor, OpenSearch und OpenBao bleiben unverändert. Ein gemeinsames S3-Lock schützt
+alle Terraform-Änderungen. Alte Einzelstates bleiben schreibgeschützte Archive.
+Der Null-Änderungsplan, Lock-Test und neue-Mandanten-Plan stehen im Tenant-Repository
+unter `tests/results/shared-state-*.json`. Diese Festlegung ersetzt die ursprüngliche
+Entscheidung für einen State pro Mandant.

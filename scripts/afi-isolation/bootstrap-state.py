@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Idempotent MinIO state bootstrap. Requires a root OpenBao session and boto3/minio.
-Never prints credentials. Creates new tenant identities, preserving existing keys.
+Never prints credentials. Creates administrative backend identities, preserving existing keys.
 """
 import argparse,base64,json,os,re,secrets,subprocess,tempfile
 from pathlib import Path
@@ -11,10 +11,11 @@ from botocore.exceptions import ClientError
 from minio.minioadmin import MinioAdmin
 from minio.credentials import StaticProvider
 p=argparse.ArgumentParser(description=__doc__)
-p.add_argument('tenant');p.add_argument('--config',type=Path,default=Path(__file__).resolve().parents[2]/'config/afi-isolation/state-backend.json')
+p.add_argument('tenant', nargs='?', default='tenants', help='Administrative state scope; default: tenants');p.add_argument('--config',type=Path,default=Path(__file__).resolve().parents[2]/'config/afi-isolation/state-backend.json')
 a=p.parse_args()
 if not re.fullmatch(r'[a-z][a-z0-9-]{1,39}',a.tenant):p.error('Invalid tenant slug')
 os.umask(0o077);cfg=json.loads(a.config.read_text())
+if a.tenant in cfg.get('retired_scopes', []):p.error('Retired backend scope is read-only; use the shared tenants state')
 bao=os.environ.get('BAO_BIN','/home/tanzu/.local/bin/bao')
 env=dict(os.environ,BAO_ADDR=os.environ.get('BAO_ADDR','https://openbao.berger.ph'),BAO_NAMESPACE='')
 def command(args,data=None,optional=False):

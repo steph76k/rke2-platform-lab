@@ -5,5 +5,10 @@
   "environment": "lab",
   "credentials_path": "secret/platform/terraform-state",
   "minio_root_path": "secret/platform/minio/credentials",
-  "ca_path": "secret/platform/pki/lab-ca"
+  "ca_path": "secret/platform/pki/lab-ca",
+  "administrative_scope": "tenants",
+  "retired_scopes": [
+    "mandant-a",
+    "mandant-b"
+  ]
 }

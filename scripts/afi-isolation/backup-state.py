@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read tenant states over TLS/SSE-C and verify separate SOPS backups.
+"""Read administrative states over TLS/SSE-C and verify SOPS backups.
 
 Requires AFI_RECOVERY_KEY and AFI_BACKUP_DIR outside Git, plus existing OpenBao
 operator access. Never prints state contents, API credentials or encryption keys.
@@ -18,7 +18,7 @@ from botocore.config import Config
 from afi_platform import ROOT, backup, kv
 
 p = argparse.ArgumentParser(description=__doc__)
-p.add_argument('tenants', nargs='+')
+p.add_argument('tenants', nargs='*', default=['tenants'], help='State scopes; default: shared tenants state')
 a = p.parse_args()
 if any(not re.fullmatch(r'[a-z][a-z0-9-]{1,39}', t) for t in a.tenants):
     p.error('Invalid tenant slug')
